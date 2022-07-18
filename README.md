@@ -8,7 +8,7 @@
 
 
 
-<img src="https://img.shields.io/badge/Flutter-#02569B?style=for-the-badge&logo=Flutter&logoColor="white">
+ <img src="https://img.shields.io/badge/Flutter-00CCFF?style=flat-square&logo=Flutter&logoColor="white"/>
  <img src="https://img.shields.io/badge/C-00CCFF?style=flat-square&logo=C&logoColor="white"/>
  <img src="https://img.shields.io/badge/VisualStudioCode-0000FF?style=flat-square&logo=VisualStudioCode&logoColor="black"/>
  <img src="https://img.shields.io/badge/KakaoTalk-FFFF00?style=flat-square&logo=KakaoTalk&logoColor="white"/>
