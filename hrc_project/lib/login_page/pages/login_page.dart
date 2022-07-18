@@ -60,19 +60,39 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         builder: (context) {
           return Dialog(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.white.withOpacity(0),
             child: Container(
                 height: 100,
-                width: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
                       height: 30,
-                      color: Colors.deepPurpleAccent,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
+                        gradient: LinearGradient(
+                            begin: Alignment.bottomRight,
+                            end: Alignment.topLeft,
+                            colors: [
+                              Color.fromRGBO(129, 97, 208, 0.75),
+                              Color.fromRGBO(186, 104, 186, 1)
+                            ]),
+                      ),
                       child: Center(
                         child: Text(
                           '경고',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
@@ -80,6 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                     Center(
                       child: Text(
                         '이메일 혹은 비밀번호를 확인해 주십시오.',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
@@ -136,6 +157,13 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
+                        suffixIcon: GestureDetector(
+                          child: Icon(
+                            Icons.cancel,
+                            color: Color.fromRGBO(129, 97, 208, 0.75),
+                          ),
+                          onTap: () => _emailController.clear(),
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.circular(15),
@@ -161,6 +189,13 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true,
                       controller: _passwordController,
                       decoration: InputDecoration(
+                        suffixIcon: GestureDetector(
+                          child: Icon(
+                            Icons.cancel,
+                            color: Color.fromRGBO(129, 97, 208, 0.75),
+                          ),
+                          onTap: () => _passwordController.clear(),
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.circular(15),
@@ -198,6 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             'Forgot Password?',
                             style: TextStyle(
+                              fontSize: 15,
                               color: Color.fromARGB(255, 158, 232, 249),
                               fontWeight: FontWeight.bold,
                             ),
@@ -262,6 +298,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text(
                                 ' Register now',
                                 style: TextStyle(
+                                  fontSize: 15,
                                   color: Color.fromARGB(255, 158, 232, 249),
                                   fontWeight: FontWeight.bold,
                                 ),

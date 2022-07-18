@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../running_main/showmap.dart';
 import 'email_verify_page.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -21,6 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _userNameController = TextEditingController();
   final _userHeightController = TextEditingController();
   final _userWeightController = TextEditingController();
+  File? userImage;
 
   @override
   void dispose() {
@@ -89,26 +92,47 @@ class _RegisterPageState extends State<RegisterPage> {
             context: context,
             builder: (context) {
               return Dialog(
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.white.withOpacity(0),
                 child: Container(
                     height: 100,
-                    width: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Container(
                           height: 30,
-                          color: Colors.deepPurpleAccent,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15),
+                            ),
+                            gradient: LinearGradient(
+                                begin: Alignment.bottomRight,
+                                end: Alignment.topLeft,
+                                colors: [
+                                  Color.fromRGBO(129, 97, 208, 0.75),
+                                  Color.fromRGBO(186, 104, 186, 1)
+                                ]),
+                          ),
                           child: Center(
                             child: Text(
                               '경고',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 25),
+                        SizedBox(height: 10),
                         Center(
                           child: Text(
-                            '비밀번호를 다시 확인해 주십시오.',
+                            '비밀번호를 다시 확인해 주십시오.\n(7자 이상의 비밀번호를 사용해 주세요)',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
@@ -127,26 +151,47 @@ class _RegisterPageState extends State<RegisterPage> {
           context: context,
           builder: (context) {
             return Dialog(
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.white.withOpacity(0),
               child: Container(
                   height: 100,
-                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Container(
                         height: 30,
-                        color: Colors.deepPurpleAccent,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                          ),
+                          gradient: LinearGradient(
+                              begin: Alignment.bottomRight,
+                              end: Alignment.topLeft,
+                              colors: [
+                                Color.fromRGBO(129, 97, 208, 0.75),
+                                Color.fromRGBO(186, 104, 186, 1)
+                              ]),
+                        ),
                         child: Center(
                           child: Text(
                             '경고',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
                           ),
                         ),
                       ),
                       SizedBox(height: 10),
                       Center(
                         child: Text(
-                          '올바른 이메일 형식이 아닙니다. \n "handong" 이메일이 필요합니다.',
+                          '올바른 이메일 형식이 아닙니다.\n"handong" 이메일이 필요합니다.',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
@@ -164,19 +209,39 @@ class _RegisterPageState extends State<RegisterPage> {
         context: context,
         builder: (context) {
           return Dialog(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.white.withOpacity(0),
             child: Container(
                 height: 100,
-                width: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
                       height: 30,
-                      color: Colors.deepPurpleAccent,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
+                        gradient: LinearGradient(
+                            begin: Alignment.bottomRight,
+                            end: Alignment.topLeft,
+                            colors: [
+                              Color.fromRGBO(129, 97, 208, 0.75),
+                              Color.fromRGBO(186, 104, 186, 1)
+                            ]),
+                      ),
                       child: Center(
                         child: Text(
                           '경고',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
@@ -184,6 +249,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Center(
                       child: Text(
                         '모든 정보를 기입해주세요.',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
@@ -224,7 +290,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool passwordConfirmed() {
     if (_passwordController.text.trim() ==
-        _confrimPasswordController.text.trim()) {
+            _confrimPasswordController.text.trim() &&
+        _passwordController.text.trim().length > 6) {
       return true;
     } else {
       return false;
@@ -293,12 +360,157 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 50.0),
                         child: Center(
-                          child: Container(
-                            height: 120,
-                            width: 120,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey[200],
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    backgroundColor:
+                                        Colors.white.withOpacity(0),
+                                    child: Container(
+                                        height: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          color: Colors.white,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            Container(
+                                              height: 45,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(15),
+                                                  topRight: Radius.circular(15),
+                                                ),
+                                                gradient: LinearGradient(
+                                                    begin:
+                                                        Alignment.bottomRight,
+                                                    end: Alignment.topLeft,
+                                                    colors: [
+                                                      Color.fromRGBO(
+                                                          129, 97, 208, 0.75),
+                                                      Color.fromRGBO(
+                                                          186, 104, 186, 1)
+                                                    ]),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  '프로필 사진 선택',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        final picker =
+                                                            ImagePicker();
+                                                        final image = await picker
+                                                            .pickImage(
+                                                                source:
+                                                                    ImageSource
+                                                                        .camera,
+                                                                imageQuality:
+                                                                    50,
+                                                                maxHeight: 150);
+                                                        setState(() {
+                                                          if (image != null) {
+                                                            userImage = File(
+                                                                image.path);
+                                                          }
+                                                        });
+                                                      },
+                                                      child: Icon(
+                                                        Icons.photo_camera,
+                                                        size: 90,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '카메라로 사진 찍기',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: 2,
+                                                  height: 100,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                        Radius.circular(15),
+                                                      ),
+                                                      gradient: LinearGradient(
+                                                          begin: Alignment
+                                                              .bottomRight,
+                                                          end:
+                                                              Alignment.topLeft,
+                                                          colors: [
+                                                            Color.fromRGBO(129,
+                                                                97, 208, 0.75),
+                                                            Color.fromRGBO(186,
+                                                                104, 186, 1)
+                                                          ]),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        var picker =
+                                                            ImagePicker();
+                                                        var image = await picker
+                                                            .pickImage(
+                                                                source:
+                                                                    ImageSource
+                                                                        .camera);
+                                                      },
+                                                      child: Icon(
+                                                        Icons.image,
+                                                        size: 90,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '갤러리에서 선택하기',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        )),
+                                  );
+                                },
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 62,
+                              backgroundColor: Colors.grey[200],
+                              backgroundImage: userImage != null
+                                  ? FileImage(userImage!)
+                                  : null,
                             ),
                           ),
                         ),
@@ -627,7 +839,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'I am a member!?',
+                        'I am a member?',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white.withOpacity(0.5),
@@ -638,6 +850,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Text(
                           ' Login now',
                           style: TextStyle(
+                            fontSize: 15,
                             color: Color.fromARGB(255, 158, 232, 249),
                             fontWeight: FontWeight.bold,
                           ),
