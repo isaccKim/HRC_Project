@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "112809596576",
+    "project_id": "hrc-project-b4f14",
+    "storage_bucket": "hrc-project-b4f14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112809596576:android:e3478db7abc09598ff5bc5",
+        "android_client_info": {
+          "package_name": "com.example.hrc_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "112809596576-eaq5ublfkjdsnkq4ipm1ejqjmpnqedh6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBveup7ZART-_SSXd3V1ws_OR8EPal9YW8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "112809596576-eaq5ublfkjdsnkq4ipm1ejqjmpnqedh6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
