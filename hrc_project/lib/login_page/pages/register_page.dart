@@ -60,12 +60,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 .child(newUser.user!.uid + '.png');
 
             await _userProfileImage.putFile(_userImage!);
+            final _user_image = await _userProfileImage.getDownloadURL();
 
             //  data set 방식 함수 호출
             addUserDetails(
               newUser,
               _userNameController.text.trim(),
               _emailController.text.trim(),
+              _user_image.trim(),
               double.parse(_userHeightController.text.trim()),
               double.parse(_userWeightController.text.trim()),
             );
@@ -74,6 +76,7 @@ class _RegisterPageState extends State<RegisterPage> {
             // addUserDetails(
             //   _userNameController.text.trim(),
             //   _emailController.text.trim(),
+            //   _user_image.trim(),
             //   double.parse(_userHeightController.text.trim()),
             //   double.parse(_userWeightController.text.trim()),
             // );
@@ -324,26 +327,32 @@ class _RegisterPageState extends State<RegisterPage> {
 
   //  data add 방식
   // Future addUserDetails(
-  //     String username, String email, double height, double weight) async {
+  //     String username, String email, String user_image, double height, double weight) async {
   //   await FirebaseFirestore.instance.collection('users').add({
-  //     'user name': username,
+  //     'user_Fname': username,
   //     'email': email,
+  //     'user_image': user_image,
   //     'height': height,
   //     'weight': weight,
+  //     'sum_distance': 0,
+  //     'sum_time': 0,
   //   });
   // }
 
   //  data set 방식
   Future addUserDetails(UserCredential newUser, String username, String email,
-      double height, double weight) async {
+      String user_image, double height, double weight) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(newUser.user!.uid)
         .set({
-      'user name': username,
+      'user_name': username,
       'email': email,
+      'user_image': user_image,
       'height': height,
       'weight': weight,
+      'sum_distance': 0,
+      'sum_time': 0,
     });
   }
 

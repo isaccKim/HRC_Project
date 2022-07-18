@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/login_page/pages/login_page.dart';
@@ -14,6 +17,24 @@ class EmailVerify extends StatefulWidget {
 }
 
 class _EmailVerifyState extends State<EmailVerify> {
+  String user_name = '';
+  String email = '';
+  File? user_image;
+
+  Future _getUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final userData =
+        await FirebaseFirestore.instance.collection('users').doc(user!.uid);
+
+    await userData.get().then(
+          (value) => {
+            user_name = value['user_name'],
+            email = value['email'],
+            user_image = value['user_image'],
+          },
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,15 +86,57 @@ class _EmailVerifyState extends State<EmailVerify> {
               SizedBox(height: 50),
               Container(
                 child: Text(
-                  '인증 이메일 전송 요청하기',
+                  'Request to send authentication email',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
               ),
+
               SizedBox(height: 40),
+
+              //  Verify Button
+              Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Container(
+                      height: 150,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                        color: Color.fromARGB(255, 46, 36, 80),
+                      ),
+                    ),
+                  ),
+                  FutureBuilder(
+                      future: _getUserData(),
+                      builder: (context, snapshot) {
+                        return Row(
+                          children: [
+                            CircleAvatar(
+                              child: Icon(
+                                Icons.add,
+                                size: 45,
+                                color: Colors.grey,
+                              ),
+                              radius: 62,
+                              backgroundColor: Colors.grey[200],
+                              backgroundImage: user_image != null
+                                  ? FileImage(user_image!)
+                                  : null,
+                            ),
+                            Text('${user_name}'),
+                          ],
+                        );
+                      })
+                ],
+              ),
               ElevatedButton.icon(
                 onPressed: () {
                   FirebaseAuth.instance.currentUser!.sendEmailVerification();
@@ -144,7 +207,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                     ElevatedButton.styleFrom(primary: Colors.deepPurpleAccent),
               ),
 
-              SizedBox(height: MediaQuery.of(context).size.height * 0.25),
+              SizedBox(height: 70),
 
               //  Sign in button
               GestureDetector(
