@@ -1,29 +1,31 @@
 # HRC_Project
 
-# HRC_study
-# 🧊  HRC
+#🏃‍♂️  HRC
 
 <div align="center">
-<p align="center"><img src="https://user-images.githubusercontent.com/98035984/168477541-e8376706-6827-4f61-aa55-2b0f2a247ae2.png" height="300px" width="300px"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/98035984/179438907-a5c8ae27-2a04-4630-ab22-e9d774423d55.png" height="300px" width="300px"></p>
 
 
+![Logo1](https://user-images.githubusercontent.com/98035984/179438786-c614ae0c-8f51-4a95-89bf-51da51499473.png)
 
- <img src="https://img.shields.io/badge/Flutter-00CCFF?style=flat-square&logo=Flutter&logoColor="white"/>
- <img src="https://img.shields.io/badge/C-00CCFF?style=flat-square&logo=C&logoColor="white"/>
- <img src="https://img.shields.io/badge/VisualStudioCode-0000FF?style=flat-square&logo=VisualStudioCode&logoColor="black"/>
+
+ <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=Flutter&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Firebase-FFFF00?style=flat-square&logo=Firebase&logoColor="white"/>
+ <imgsrc="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor="white"/>
+ <img src="https://img.shields.io/badge/VisualStudioCode-007ACC?style=flat-square&logo=VisualStudioCode&logoColor="white"/>
  <img src="https://img.shields.io/badge/KakaoTalk-FFFF00?style=flat-square&logo=KakaoTalk&logoColor="white"/>
  <img src="https://img.shields.io/badge/Markdown-000000?style=flat-square&logo=Markdown&logoColor="white"/>
- 
+
 </div>
   
-## 🧊 CRA 방프
+## 🏃‍♂️ CRA 방프
  - 석원
  - 형진
  - 한결
 
 <br/>
 
-## 🧊 소속
+## 🏃‍♂️ 소속
   - 한동대학교 전산전자 공학부
 
 <br/>
@@ -32,7 +34,7 @@
 
 
 
-# Code_convention
+## 🏃‍♂️Code_convention
 ```dart
 import 'package:flutter/material.dart';
 
