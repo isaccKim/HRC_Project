@@ -3,6 +3,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:hrc_project/login_page/pages/login_page.dart';
 import '../../running_main/showmap.dart';
 import 'email_verify_page.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,17 +21,17 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confrimPasswordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _userNameController = TextEditingController();
   final _userHeightController = TextEditingController();
   final _userWeightController = TextEditingController();
-  File? userImage;
+  File? _userImage;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _confrimPasswordController.dispose();
+    _confirmPasswordController.dispose();
     _userNameController.dispose();
     _userHeightController.dispose();
     _userWeightController.dispose();
@@ -37,37 +39,45 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future signUp() async {
-    if (_emailController.text.isNotEmpty &&
-        _passwordController.text.isNotEmpty &&
-        _confrimPasswordController.text.isNotEmpty &&
-        _userNameController.text.isNotEmpty &&
-        _userHeightController.text.isNotEmpty &&
-        _userWeightController.text.isNotEmpty) {
-      if (_emailController.text.trim().contains('@handong')) {
-        if (passwordConfirmed()) {
-          final newUser =
-              await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim(),
-          );
-
-          addUserDetails(
-            _userNameController.text.trim(),
-            _emailController.text.trim(),
-            double.parse(_userHeightController.text.trim()),
-            double.parse(_userWeightController.text.trim()),
-          );
-
-          if (FirebaseAuth.instance.currentUser!.emailVerified) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return MapSample();
-                },
-              ),
+    if (_userImage != null) {
+      if (_emailController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty &&
+          _confirmPasswordController.text.isNotEmpty &&
+          _userNameController.text.isNotEmpty &&
+          _userHeightController.text.isNotEmpty &&
+          _userWeightController.text.isNotEmpty) {
+        if (_emailController.text.trim().contains('@handong')) {
+          if (passwordConfirmed()) {
+            final newUser =
+                await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
             );
-          } else {
+
+            final _userProfileImage = FirebaseStorage.instance
+                .ref()
+                .child('profile_image')
+                .child(newUser.user!.uid + '.png');
+
+            await _userProfileImage.putFile(_userImage!);
+
+            //  data set 방식 함수 호출
+            addUserDetails(
+              newUser,
+              _userNameController.text.trim(),
+              _emailController.text.trim(),
+              double.parse(_userHeightController.text.trim()),
+              double.parse(_userWeightController.text.trim()),
+            );
+
+            //  data add 방식 함수 호출
+            // addUserDetails(
+            //   _userNameController.text.trim(),
+            //   _emailController.text.trim(),
+            //   double.parse(_userHeightController.text.trim()),
+            //   double.parse(_userWeightController.text.trim()),
+            // );
+
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -76,18 +86,67 @@ class _RegisterPageState extends State<RegisterPage> {
                 },
               ),
             );
+          } else {
+            //  password alert
+            showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  backgroundColor: Colors.white.withOpacity(0),
+                  child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            height: 30,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                              ),
+                              gradient: LinearGradient(
+                                  begin: Alignment.bottomRight,
+                                  end: Alignment.topLeft,
+                                  colors: [
+                                    Color.fromRGBO(129, 97, 208, 0.75),
+                                    Color.fromRGBO(186, 104, 186, 1)
+                                  ]),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '경고',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Center(
+                            child: Text(
+                              '비밀번호를 다시 확인해 주십시오.\n(7자 이상의 비밀번호를 사용해 주세요)',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                );
+              },
+            );
           }
-
-          //  data set 방식 함수 호출
-          // addUserDetails(
-          //   newUser,
-          //   _userNameController.text.trim(),
-          //   _userHeightController.text.trim(),
-          //   _emailController.text.trim(),
-          //   int.parse(_userWeightController.text.trim()),
-          // );
         } else {
-          //  password alert
+          // handong email form alert
           showDialog(
             context: context,
             builder: (context) {
@@ -131,7 +190,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         SizedBox(height: 10),
                         Center(
                           child: Text(
-                            '비밀번호를 다시 확인해 주십시오.\n(7자 이상의 비밀번호를 사용해 주세요)',
+                            '올바른 이메일 형식이 아닙니다.\n"handong" 이메일이 필요합니다.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -146,7 +205,6 @@ class _RegisterPageState extends State<RegisterPage> {
           );
         }
       } else {
-        // handong email form alert
         showDialog(
           context: context,
           builder: (context) {
@@ -187,10 +245,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 25),
                       Center(
                         child: Text(
-                          '올바른 이메일 형식이 아닙니다.\n"handong" 이메일이 필요합니다.',
+                          '모든 정보를 기입해주십시오.\n',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -248,7 +306,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     SizedBox(height: 25),
                     Center(
                       child: Text(
-                        '모든 정보를 기입해주세요.',
+                        '프로필 이미지를 선택해 주십시오.\n',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -264,9 +322,24 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  Future addUserDetails(
-      String username, String email, double height, double weight) async {
-    await FirebaseFirestore.instance.collection('users').add({
+  //  data add 방식
+  // Future addUserDetails(
+  //     String username, String email, double height, double weight) async {
+  //   await FirebaseFirestore.instance.collection('users').add({
+  //     'user name': username,
+  //     'email': email,
+  //     'height': height,
+  //     'weight': weight,
+  //   });
+  // }
+
+  //  data set 방식
+  Future addUserDetails(UserCredential newUser, String username, String email,
+      double height, double weight) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(newUser.user!.uid)
+        .set({
       'user name': username,
       'email': email,
       'height': height,
@@ -274,23 +347,9 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  //  data set 방식
-  // Future addUserDetails(UserCredential newUser, String firstName,
-  //     String lastName, String email, int age) async {
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(newUser.user!.uid)
-  //       .set({
-  //     'first name': firstName,
-  //     'last name': lastName,
-  //     'email': email,
-  //     'age': age,
-  //   });
-  // }
-
   bool passwordConfirmed() {
     if (_passwordController.text.trim() ==
-            _confrimPasswordController.text.trim() &&
+            _confirmPasswordController.text.trim() &&
         _passwordController.text.trim().length > 6) {
       return true;
     } else {
@@ -312,9 +371,27 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 20),
+                  // page back arrow
+                  Padding(
+                    padding: EdgeInsets.only(left: 20, top: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: widget.showLoginPage,
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  //  HRC Logo
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.15,
+                    height: 100,
                     width: MediaQuery.of(context).size.width * 0.4,
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -323,7 +400,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
 
-                  SizedBox(height: 30),
+                  SizedBox(height: 35),
 
                   //  profile section
                   Stack(
@@ -357,8 +434,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
 
+                      // profile image picker dialog
                       Padding(
-                        padding: const EdgeInsets.only(top: 50.0),
+                        padding: const EdgeInsets.only(top: 48.0),
                         child: Center(
                           child: GestureDetector(
                             onTap: () {
@@ -425,20 +503,21 @@ class _RegisterPageState extends State<RegisterPage> {
                                                                     ImageSource
                                                                         .camera,
                                                                 imageQuality:
-                                                                    50,
+                                                                    100,
                                                                 maxHeight: 150);
                                                         setState(() {
                                                           if (image != null) {
-                                                            userImage = File(
+                                                            _userImage = File(
                                                                 image.path);
                                                           }
                                                         });
                                                       },
                                                       child: Icon(
                                                         Icons.photo_camera,
-                                                        size: 90,
+                                                        size: 80,
                                                       ),
                                                     ),
+                                                    SizedBox(height: 5),
                                                     Text(
                                                       '카메라로 사진 찍기',
                                                       style: TextStyle(
@@ -475,19 +554,29 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   children: [
                                                     GestureDetector(
                                                       onTap: () async {
-                                                        var picker =
+                                                        final picker =
                                                             ImagePicker();
-                                                        var image = await picker
+                                                        final image = await picker
                                                             .pickImage(
                                                                 source:
                                                                     ImageSource
-                                                                        .camera);
+                                                                        .gallery,
+                                                                imageQuality:
+                                                                    100,
+                                                                maxHeight: 150);
+                                                        setState(() {
+                                                          if (image != null) {
+                                                            _userImage = File(
+                                                                image.path);
+                                                          }
+                                                        });
                                                       },
                                                       child: Icon(
                                                         Icons.image,
-                                                        size: 90,
+                                                        size: 80,
                                                       ),
                                                     ),
+                                                    SizedBox(height: 5),
                                                     Text(
                                                       '갤러리에서 선택하기',
                                                       style: TextStyle(
@@ -505,11 +594,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               );
                             },
+                            // user image circle
                             child: CircleAvatar(
+                              child: Icon(
+                                Icons.add,
+                                size: 45,
+                                color: Colors.grey,
+                              ),
                               radius: 62,
                               backgroundColor: Colors.grey[200],
-                              backgroundImage: userImage != null
-                                  ? FileImage(userImage!)
+                              backgroundImage: _userImage != null
+                                  ? FileImage(_userImage!)
                                   : null,
                             ),
                           ),
@@ -609,7 +704,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         color: Colors.deepPurpleAccent),
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  hintText: 'Email',
+                                  hintText: 'Email address',
                                   fillColor: Colors.grey[200],
                                   filled: true,
                                 ),
@@ -658,7 +753,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
                                 obscureText: true,
-                                controller: _confrimPasswordController,
+                                controller: _confirmPasswordController,
                                 decoration: InputDecoration(
                                   prefixIcon: Icon(Icons.lock),
                                   suffixIcon: GestureDetector(
@@ -667,7 +762,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       color: Color.fromRGBO(129, 97, 208, 0.75),
                                     ),
                                     onTap: () =>
-                                        _confrimPasswordController.clear(),
+                                        _confirmPasswordController.clear(),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),

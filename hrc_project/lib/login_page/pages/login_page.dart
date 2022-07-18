@@ -139,8 +139,9 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // HRC Logo
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.2,
+                    height: 100,
                     width: MediaQuery.of(context).size.width * 0.4,
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -157,6 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.email),
                         suffixIcon: GestureDetector(
                           child: Icon(
                             Icons.cancel,
@@ -173,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                               BorderSide(color: Colors.deepPurpleAccent),
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        hintText: 'Email',
+                        hintText: 'Email address',
                         fillColor: Colors.grey[200],
                         filled: true,
                       ),
@@ -189,6 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true,
                       controller: _passwordController,
                       decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock),
                         suffixIcon: GestureDetector(
                           child: Icon(
                             Icons.cancel,
@@ -293,15 +296,12 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           GestureDetector(
                             onTap: widget.showRegisterPage,
-                            child: GestureDetector(
-                              onTap: widget.showRegisterPage,
-                              child: Text(
-                                ' Register now',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Color.fromARGB(255, 158, 232, 249),
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            child: Text(
+                              ' Register now',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Color.fromARGB(255, 158, 232, 249),
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
