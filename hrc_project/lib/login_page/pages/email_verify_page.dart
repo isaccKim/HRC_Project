@@ -1,13 +1,11 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:io';
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hrc_project/login_page/pages/login_page.dart';
 import '../../running_main/showmap.dart';
 import '../auth/auth_page.dart';
+import 'dart:io';
 
 class EmailVerify extends StatefulWidget {
   const EmailVerify({Key? key}) : super(key: key);
@@ -19,8 +17,9 @@ class EmailVerify extends StatefulWidget {
 class _EmailVerifyState extends State<EmailVerify> {
   String user_name = '';
   String email = '';
-  File? user_image;
+  String user_image = '';
 
+  // Get user data from cloud Firestore
   Future _getUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     final userData =
@@ -72,10 +71,10 @@ class _EmailVerifyState extends State<EmailVerify> {
           ),
           Column(
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              SizedBox(height: 15),
               //  HRC Logo
               Container(
-                height: 100,
+                height: 75,
                 width: MediaQuery.of(context).size.width * 0.4,
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -83,155 +82,144 @@ class _EmailVerifyState extends State<EmailVerify> {
                       fit: BoxFit.fitWidth),
                 ),
               ),
+
               SizedBox(height: 50),
-              Container(
-                child: Text(
-                  'Request to send authentication email',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+
+              Text(
+                'Request to send authentication email',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+
+              SizedBox(height: 45),
+
+              Text(
+                'The account currently logged in:',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+
+              SizedBox(height: 10),
+
+              //  user profile
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Container(
+                  height: 130,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(30),
+                    ),
+                    color: Color.fromARGB(255, 46, 36, 80),
+                  ),
+                  child: Stack(
+                    children: [
+                      //  profile setting button (modify)
+                      // Padding(
+                      //   padding: const EdgeInsets.only(top: 15, right: 20),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.end,
+                      //     children: [
+                      //       GestureDetector(
+                      //         onTap: () {},
+                      //         child: Icon(
+                      //           Icons.edit,
+                      //           color: Color.fromRGBO(61, 110, 230, 1),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      FutureBuilder(
+                          future: _getUserData(),
+                          builder: (context, snapshot) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, top: 21, bottom: 21),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 45,
+                                    backgroundColor: Colors.grey[200],
+                                    foregroundImage: NetworkImage(user_image),
+                                    child: Icon(
+                                      Icons.account_circle,
+                                      size: 80,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(width: 20),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10, bottom: 20),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text(
+                                          '${user_name}',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          '${email}',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                    ],
                   ),
                 ),
               ),
 
-              SizedBox(height: 40),
+              SizedBox(height: 15),
 
-              //  Verify Button
-              Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Container(
-                      height: 150,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                        color: Color.fromARGB(255, 46, 36, 80),
-                      ),
-                    ),
-                  ),
-                  FutureBuilder(
-                      future: _getUserData(),
-                      builder: (context, snapshot) {
-                        return Row(
-                          children: [
-                            CircleAvatar(
-                              child: Icon(
-                                Icons.add,
-                                size: 45,
-                                color: Colors.grey,
-                              ),
-                              radius: 62,
-                              backgroundColor: Colors.grey[200],
-                              backgroundImage: user_image != null
-                                  ? FileImage(user_image!)
-                                  : null,
-                            ),
-                            Text('${user_name}'),
-                          ],
-                        );
-                      })
-                ],
-              ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  FirebaseAuth.instance.currentUser!.sendEmailVerification();
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        backgroundColor: Colors.white.withOpacity(0),
-                        child: Container(
-                            height: 150,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.white,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Container(
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15),
-                                      topRight: Radius.circular(15),
-                                    ),
-                                    gradient: LinearGradient(
-                                        begin: Alignment.bottomRight,
-                                        end: Alignment.topLeft,
-                                        colors: [
-                                          Color.fromRGBO(129, 97, 208, 0.75),
-                                          Color.fromRGBO(186, 104, 186, 1)
-                                        ]),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      '알림',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 22),
-                                Center(
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 20),
-                                    child: Text(
-                                      '이메일이 발송 되었습니다.\n메일함에 보이지 않는다면 스팸함을 확인하여 주십시오.',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )),
-                      );
-                    },
-                  );
-                },
-                icon: Icon(Icons.email),
-                label: Text('인증 이메일 전송'),
-                style:
-                    ElevatedButton.styleFrom(primary: Colors.deepPurpleAccent),
-              ),
-
-              SizedBox(height: 70),
-
-              //  Sign in button
-              GestureDetector(
-                onTap: () async {
-                  await FirebaseAuth.instance.currentUser!.reload();
-                  if (FirebaseAuth.instance.currentUser!.emailVerified) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return MapSample();
-                        },
-                      ),
+              //  Send email button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: GestureDetector(
+                  onTap: () {
+                    // loading circle
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Center(child: CircularProgressIndicator());
+                      },
                     );
-                  } else {
+                    FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                    //  pop the loading circle
+                    Navigator.of(context).pop();
+                    //  email send alert
                     showDialog(
                       context: context,
                       builder: (context) {
                         return Dialog(
                           backgroundColor: Colors.white.withOpacity(0),
                           child: Container(
-                              height: 100,
+                              height: 150,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(30),
                                 color: Colors.white,
                               ),
                               child: Column(
@@ -241,8 +229,137 @@ class _EmailVerifyState extends State<EmailVerify> {
                                     height: 30,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(15),
-                                        topRight: Radius.circular(15),
+                                        topLeft: Radius.circular(30),
+                                        topRight: Radius.circular(30),
+                                      ),
+                                      gradient: LinearGradient(
+                                          begin: Alignment.bottomRight,
+                                          end: Alignment.topLeft,
+                                          colors: [
+                                            Color.fromRGBO(129, 97, 208, 0.75),
+                                            Color.fromRGBO(186, 104, 186, 1)
+                                          ]),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '알림',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 22),
+                                  Center(
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 20),
+                                      child: Text(
+                                        '이메일이 발송 되었습니다.\n메일함에 보이지 않는다면 스팸함을 확인하여 주십시오.',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30),
+                      ),
+                      gradient: LinearGradient(
+                          begin: Alignment.bottomRight,
+                          end: Alignment.topLeft,
+                          colors: [
+                            Color.fromRGBO(129, 97, 208, 0.45),
+                            Color.fromARGB(255, 61, 90, 230)
+                          ]),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.outgoing_mail,
+                          color: Colors.white,
+                          size: 35,
+                        ),
+                        SizedBox(width: 15),
+                        Text(
+                          'Send authentication mail',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 80),
+
+              //  Sign in button
+              GestureDetector(
+                onTap: () async {
+                  // loading circle
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Center(child: CircularProgressIndicator());
+                    },
+                  );
+                  await FirebaseAuth.instance.currentUser!.reload();
+                  if (FirebaseAuth.instance.currentUser!.emailVerified) {
+                    //  pop the loading circle
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return MapSample();
+                        },
+                      ),
+                    );
+                  } else {
+                    //  pop the loading circle
+                    Navigator.of(context).pop();
+                    //  email verity alert
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          backgroundColor: Colors.white.withOpacity(0),
+                          child: Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Container(
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30),
+                                        topRight: Radius.circular(30),
                                       ),
                                       gradient: LinearGradient(
                                           begin: Alignment.bottomRight,
@@ -286,7 +403,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                   height: 45,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
-                      Radius.circular(15),
+                      Radius.circular(30),
                     ),
                     gradient: LinearGradient(
                         begin: Alignment.bottomRight,

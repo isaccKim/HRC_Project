@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:hrc_project/login_page/pages/login_page.dart';
-import '../../running_main/showmap.dart';
 import 'email_verify_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -38,7 +36,16 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
+  //  Firesbase firecloud data upload
   Future signUp() async {
+    // loading circle
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
     if (_userImage != null) {
       if (_emailController.text.isNotEmpty &&
           _passwordController.text.isNotEmpty &&
@@ -81,6 +88,10 @@ class _RegisterPageState extends State<RegisterPage> {
             //   double.parse(_userWeightController.text.trim()),
             // );
 
+            //  pop the loading circle
+            Navigator.of(context).pop();
+
+            //  email verify page push
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -89,8 +100,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 },
               ),
             );
-          } else {
-            //  password alert
+          }
+          //  password form alert
+          else {
+            //  pop the loading circle
+            Navigator.of(context).pop();
             showDialog(
               context: context,
               builder: (context) {
@@ -99,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Container(
                       height: 100,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(30),
                         color: Colors.white,
                       ),
                       child: Column(
@@ -109,8 +123,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             height: 30,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15),
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30),
                               ),
                               gradient: LinearGradient(
                                   begin: Alignment.bottomRight,
@@ -148,8 +162,11 @@ class _RegisterPageState extends State<RegisterPage> {
               },
             );
           }
-        } else {
-          // handong email form alert
+        }
+        // handong email form alert
+        else {
+          //  pop the loading circle
+          Navigator.of(context).pop();
           showDialog(
             context: context,
             builder: (context) {
@@ -158,7 +175,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Container(
                     height: 100,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(30),
                       color: Colors.white,
                     ),
                     child: Column(
@@ -168,8 +185,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           height: 30,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(15),
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
                             ),
                             gradient: LinearGradient(
                                 begin: Alignment.bottomRight,
@@ -207,7 +224,11 @@ class _RegisterPageState extends State<RegisterPage> {
             },
           );
         }
-      } else {
+      }
+      //  Info. fill alert
+      else {
+        //  pop the loading circle
+        Navigator.of(context).pop();
         showDialog(
           context: context,
           builder: (context) {
@@ -216,7 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Container(
                   height: 100,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(30),
                     color: Colors.white,
                   ),
                   child: Column(
@@ -226,8 +247,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 30,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            topRight: Radius.circular(15),
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
                           ),
                           gradient: LinearGradient(
                               begin: Alignment.bottomRight,
@@ -265,7 +286,11 @@ class _RegisterPageState extends State<RegisterPage> {
           },
         );
       }
-    } else {
+    }
+    //  Profile image select alert
+    else {
+      //  pop the loading circle
+      Navigator.of(context).pop();
       showDialog(
         context: context,
         builder: (context) {
@@ -274,7 +299,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Container(
                 height: 100,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(30),
                   color: Colors.white,
                 ),
                 child: Column(
@@ -284,8 +309,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 30,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
                         ),
                         gradient: LinearGradient(
                             begin: Alignment.bottomRight,
@@ -421,7 +446,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(15),
+                              Radius.circular(30),
                             ),
                             color: Color.fromARGB(255, 46, 36, 80),
                           ),
@@ -459,7 +484,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         height: 200,
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(15),
+                                              BorderRadius.circular(30),
                                           color: Colors.white,
                                         ),
                                         child: Column(
@@ -470,8 +495,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                               height: 45,
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(15),
-                                                  topRight: Radius.circular(15),
+                                                  topLeft: Radius.circular(30),
+                                                  topRight: Radius.circular(30),
                                                 ),
                                                 gradient: LinearGradient(
                                                     begin:
@@ -543,7 +568,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                     decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.all(
-                                                        Radius.circular(15),
+                                                        Radius.circular(30),
                                                       ),
                                                       gradient: LinearGradient(
                                                           begin: Alignment
@@ -603,18 +628,32 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               );
                             },
-                            // user image circle
-                            child: CircleAvatar(
-                              child: Icon(
-                                Icons.add,
-                                size: 45,
-                                color: Colors.grey,
-                              ),
-                              radius: 62,
-                              backgroundColor: Colors.grey[200],
-                              backgroundImage: _userImage != null
-                                  ? FileImage(_userImage!)
-                                  : null,
+                            // User profile image circle
+                            child: Stack(
+                              children: [
+                                CircleAvatar(
+                                  radius: 60,
+                                  backgroundColor: Colors.grey[200],
+                                  backgroundImage: _userImage != null
+                                      ? FileImage(_userImage!)
+                                      : null,
+                                  child: _userImage == null
+                                      ? Icon(
+                                          Icons.add,
+                                          size: 45,
+                                          color: Colors.grey,
+                                        )
+                                      : null,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 10,
+                                    width: 10,
+                                    color: Colors.red,
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
@@ -636,12 +675,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(30),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.deepPurpleAccent),
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(30),
                             ),
                             hintText: 'User Name',
                             fillColor: Colors.grey[200],
@@ -664,7 +703,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(15),
+                              Radius.circular(30),
                             ),
                             color: Color.fromARGB(255, 46, 36, 80),
                           ),
@@ -694,6 +733,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                keyboardType: TextInputType.emailAddress,
                                 controller: _emailController,
                                 decoration: InputDecoration(
                                   prefixIcon: Icon(Icons.email),
@@ -706,12 +746,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   hintText: 'Email address',
                                   fillColor: Colors.grey[200],
@@ -740,12 +780,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   hintText: 'Password',
                                   fillColor: Colors.grey[200],
@@ -775,12 +815,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   hintText: 'Confirm Password',
                                   fillColor: Colors.grey[200],
@@ -806,7 +846,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(15),
+                              Radius.circular(30),
                             ),
                             color: Color.fromARGB(255, 46, 36, 80),
                           ),
@@ -835,6 +875,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                keyboardType: TextInputType.number,
                                 controller: _userHeightController,
                                 decoration: InputDecoration(
                                   prefixIcon: Icon(Icons.height),
@@ -847,12 +888,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   hintText: 'Your height (cm)',
                                   fillColor: Colors.grey[200],
@@ -868,6 +909,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                keyboardType: TextInputType.number,
                                 controller: _userWeightController,
                                 decoration: InputDecoration(
                                   prefixIcon:
@@ -881,12 +923,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   hintText: 'Your weight (kg)',
                                   fillColor: Colors.grey[200],
@@ -912,7 +954,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 45,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(15),
+                            Radius.circular(30),
                           ),
                           gradient: LinearGradient(
                               begin: Alignment.bottomRight,
@@ -938,7 +980,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   SizedBox(height: 20),
 
-                  //  not a member? register now
+                  //  not a member? register now comment
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -963,7 +1005,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
 
-                  SizedBox(height: 30),
+                  SizedBox(height: 45),
                 ],
               ),
             ),

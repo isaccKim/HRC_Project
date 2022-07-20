@@ -19,13 +19,13 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   Future signIn() async {
-    // // loading circle
-    // showDialog(
-    //   context: context,
-    //   builder: (context) {
-    //     return Center(child: CircularProgressIndicator());
-    //   },
-    // );
+    // loading circle
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
 
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -34,6 +34,10 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
+        //  pop the loading circle
+        Navigator.of(context).pop();
+        _emailController.clear();
+        _passwordController.clear();
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -43,6 +47,10 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       } else {
+        //  pop the loading circle
+        Navigator.of(context).pop();
+        _emailController.clear();
+        _passwordController.clear();
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -54,7 +62,8 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (e) {
       // // pop the loading circle
-      // Navigator.of(context).pop();
+      Navigator.of(context).pop();
+
       //  email or password error
       showDialog(
         context: context,
@@ -64,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
                 height: 100,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(30),
                   color: Colors.white,
                 ),
                 child: Column(
@@ -74,8 +83,8 @@ class _LoginPageState extends State<LoginPage> {
                       height: 30,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
                         ),
                         gradient: LinearGradient(
                             begin: Alignment.bottomRight,
@@ -113,9 +122,6 @@ class _LoginPageState extends State<LoginPage> {
         },
       );
     }
-
-    // // pop the loading circle
-    // Navigator.of(context).pop();
   }
 
   @override
@@ -156,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.email),
@@ -168,12 +175,12 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.deepPurpleAccent),
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         hintText: 'Email address',
                         fillColor: Colors.grey[200],
@@ -201,12 +208,12 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.deepPurpleAccent),
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         hintText: 'Password',
                         fillColor: Colors.grey[200],
@@ -217,6 +224,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   SizedBox(height: 15),
 
+                  //  Forgot Password? comment
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: Row(
@@ -224,6 +232,8 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         GestureDetector(
                           onTap: () {
+                            _emailController.clear();
+                            _passwordController.clear();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -248,9 +258,9 @@ class _LoginPageState extends State<LoginPage> {
 
                   SizedBox(height: MediaQuery.of(context).size.height * 0.25),
 
+                  //  Sign in button
                   Column(
                     children: [
-                      //  Sign in button
                       GestureDetector(
                         onTap: signIn,
                         child: Container(
@@ -258,7 +268,7 @@ class _LoginPageState extends State<LoginPage> {
                           height: 45,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(15),
+                              Radius.circular(30),
                             ),
                             gradient: LinearGradient(
                                 begin: Alignment.bottomRight,

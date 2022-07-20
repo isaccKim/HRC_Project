@@ -2,7 +2,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hrc_project/main.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -21,18 +20,30 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   Future passwordReset() async {
+    // loading circle
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: _emailController.text.trim());
+
+      //  pop the loading circle
+      Navigator.of(context).pop();
       showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
+          //  reset password email alert
+          return Dialog(
             backgroundColor: Colors.white.withOpacity(0),
-            content: Container(
+            child: Container(
                 height: 100,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(30),
                   color: Colors.white,
                 ),
                 child: Column(
@@ -42,8 +53,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       height: 30,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
                         ),
                         gradient: LinearGradient(
                             begin: Alignment.bottomRight,
@@ -81,6 +92,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         },
       );
     } on FirebaseAuthException catch (e) {
+      //  pop the loading circle
+      Navigator.of(context).pop();
+      //  email form alert
       showDialog(
         context: context,
         builder: (context) {
@@ -89,7 +103,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             child: Container(
                 height: 100,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(30),
                   color: Colors.white,
                 ),
                 child: Column(
@@ -98,8 +112,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       height: 30,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
                         ),
                         gradient: LinearGradient(
                             begin: Alignment.bottomRight,
@@ -168,6 +182,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       children: [
                         GestureDetector(
                           onTap: () {
+                            FocusScope.of(context).unfocus();
                             Navigator.of(context).pop();
                           },
                           child: Icon(
@@ -190,7 +205,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           fit: BoxFit.fitWidth),
                     ),
                   ),
+
                   SizedBox(height: 50),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Text(
@@ -203,11 +220,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ),
                     ),
                   ),
+
                   SizedBox(height: 30),
+
                   //  email textField
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.email),
@@ -220,12 +240,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.deepPurpleAccent),
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         hintText: 'Email address',
                         fillColor: Colors.grey[200],
@@ -233,7 +253,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 15),
+
+                  //SizedBox(height: 20),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.25),
+
+                  // Reset password button
                   GestureDetector(
                     onTap: passwordReset,
                     child: Container(
@@ -241,7 +265,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       height: 45,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(
-                          Radius.circular(15),
+                          Radius.circular(30),
                         ),
                         gradient: LinearGradient(
                             begin: Alignment.bottomRight,
@@ -253,7 +277,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ),
                       child: Center(
                         child: Text(
-                          'Reset password',
+                          'Send an email',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

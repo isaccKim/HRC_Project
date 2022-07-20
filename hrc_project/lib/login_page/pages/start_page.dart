@@ -11,7 +11,7 @@ class StartpageWidget extends StatelessWidget {
       body: Container(
         child: Stack(
           children: [
-            //background image
+            //  Background image
             Center(
               child: Container(
                 decoration: BoxDecoration(
@@ -23,7 +23,7 @@ class StartpageWidget extends StatelessWidget {
                 ),
               ),
             ),
-            //  Logo image
+            //  HRC Logo
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -65,7 +65,7 @@ class StartpageWidget extends StatelessWidget {
                           height: 45,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(15),
+                              Radius.circular(30),
                             ),
                             gradient: LinearGradient(
                                 begin: Alignment.bottomRight,
