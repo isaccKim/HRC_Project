@@ -42,6 +42,7 @@ dependencies:
   fl_chart: ^0.55.0
   firebase_auth: ^3.4.1
   cloud_firestore: ^3.3.0
+  gradient_ui_widgets: ^1.0.2-nullsafety
 
 dev_dependencies:
   flutter_test:
