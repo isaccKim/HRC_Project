@@ -470,7 +470,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       // profile image picker dialog
                       Padding(
-                        padding: const EdgeInsets.only(top: 48.0),
+                        padding: const EdgeInsets.only(top: 50.0),
                         child: Center(
                           child: GestureDetector(
                             onTap: () {
@@ -628,31 +628,42 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               );
                             },
+
                             // User profile image circle
-                            child: Stack(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CircleAvatar(
-                                  radius: 60,
-                                  backgroundColor: Colors.grey[200],
-                                  backgroundImage: _userImage != null
-                                      ? FileImage(_userImage!)
-                                      : null,
-                                  child: _userImage == null
-                                      ? Icon(
-                                          Icons.add,
-                                          size: 45,
-                                          color: Colors.grey,
-                                        )
-                                      : null,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    height: 10,
-                                    width: 10,
-                                    color: Colors.red,
+                                Container(
+                                  padding: _userImage == null
+                                      ? EdgeInsets.all(0)
+                                      : EdgeInsets.all(6),
+                                  height: 120,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topRight,
+                                      end: Alignment.bottomLeft,
+                                      colors: [
+                                        Color.fromRGBO(248, 103, 248, 0.95),
+                                        Color.fromRGBO(61, 90, 230, 1)
+                                      ],
+                                    ),
                                   ),
-                                )
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.grey[200],
+                                    backgroundImage: _userImage != null
+                                        ? FileImage(_userImage!)
+                                        : null,
+                                    child: _userImage == null
+                                        ? Icon(
+                                            Icons.add,
+                                            size: 45,
+                                            color: Colors.grey,
+                                          )
+                                        : null,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
