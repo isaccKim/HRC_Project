@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hrc_project/nav_bar/navigation_bar.dart';
 import '../../running_main/showmap.dart';
 import '../auth/auth_page.dart';
 import 'dart:io';
@@ -172,7 +173,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(width: 25),
+                                  SizedBox(width: 15),
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         top: 10, bottom: 20),
@@ -348,7 +349,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return MapSample();
+                          return NavigationBarPage();
                         },
                       ),
                     );

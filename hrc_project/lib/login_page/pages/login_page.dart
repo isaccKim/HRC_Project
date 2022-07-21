@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hrc_project/nav_bar/navigation_bar.dart';
 import '../../running_main/showmap.dart';
 import 'email_verify_page.dart';
 import 'forgot_pw_page.dart';
@@ -42,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return MapSample();
+              return NavigationBarPage();
             },
           ),
         );

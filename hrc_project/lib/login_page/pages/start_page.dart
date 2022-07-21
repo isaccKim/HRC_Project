@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import '../auth/auth_page.dart';
 
-class StartpageWidget extends StatelessWidget {
+class StartPageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
