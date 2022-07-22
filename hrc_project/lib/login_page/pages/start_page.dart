@@ -40,6 +40,7 @@ class StartPageWidget extends StatelessWidget {
                 ),
               ],
             ),
+
             //  start button
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

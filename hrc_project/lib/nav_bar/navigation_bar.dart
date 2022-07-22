@@ -2,10 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:hrc_project/login_page/pages/email_verify_page.dart';
 import 'package:hrc_project/login_page/pages/forgot_pw_page.dart';
 import 'package:hrc_project/running_main/showmap.dart';
 import 'package:hrc_project/setting_page/setting_page.dart';
+
+import '../dashboard/daysRun.dart';
 
 class NavigationBarPage extends StatefulWidget {
   const NavigationBarPage({Key? key}) : super(key: key);
@@ -15,25 +16,25 @@ class NavigationBarPage extends StatefulWidget {
 }
 
 class _NavigationBarState extends State<NavigationBarPage> {
-  int _selectedIndex = 1;
+  int selectedIndex = 1;
 
   void _navigateBottomBar(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
   }
 
   final List<Widget> _pages = [
     ForgotPasswordPage(),
     MapSample(),
-    EmailVerify(),
+    RunBox(),
     SettingPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: _pages[selectedIndex],
       extendBody: true,
       // bottomNavigationBar: BottomNavigationBar(
       //   type: BottomNavigationBarType.shifting,
@@ -88,9 +89,11 @@ class _NavigationBarState extends State<NavigationBarPage> {
                 padding: const EdgeInsets.only(
                     left: 20, right: 20, top: 5, bottom: 5),
                 child: GNav(
+                    selectedIndex: 1,
                     tabBorderRadius: 45,
+                    haptic: true,
                     duration:
-                        Duration(milliseconds: 10), // tab animation duration
+                        Duration(milliseconds: 450), // tab animation duration
                     backgroundColor: Color.fromRGBO(46, 36, 70, 1),
                     color: Colors.white,
                     activeColor: Colors.white,
