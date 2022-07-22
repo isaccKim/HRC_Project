@@ -55,51 +55,120 @@ class _RegisterPageState extends State<RegisterPage> {
           _userWeightController.text.isNotEmpty) {
         if (_emailController.text.trim().contains('@handong')) {
           if (passwordConfirmed()) {
-            final newUser =
-                await FirebaseAuth.instance.createUserWithEmailAndPassword(
-              email: _emailController.text.trim(),
-              password: _passwordController.text.trim(),
-            );
+            try {
+              final newUser =
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                email: _emailController.text.trim(),
+                password: _passwordController.text.trim(),
+              );
 
-            final _userProfileImage = FirebaseStorage.instance
-                .ref()
-                .child('profile_image')
-                .child(newUser.user!.uid + '.png');
+              final _userProfileImage = FirebaseStorage.instance
+                  .ref()
+                  .child('profile_image')
+                  .child(newUser.user!.uid + '.png');
 
-            await _userProfileImage.putFile(_userImage!);
-            final _user_image = await _userProfileImage.getDownloadURL();
+              await _userProfileImage.putFile(_userImage!);
+              final _user_image = await _userProfileImage.getDownloadURL();
 
-            //  data set 방식 함수 호출
-            addUserDetails(
-              newUser,
-              _userNameController.text.trim(),
-              _emailController.text.trim(),
-              _user_image.trim(),
-              double.parse(_userHeightController.text.trim()),
-              double.parse(_userWeightController.text.trim()),
-            );
+              //  data set 방식 함수 호출
+              addUserDetails(
+                newUser,
+                _userNameController.text.trim(),
+                _emailController.text.trim(),
+                _user_image.trim(),
+                double.parse(_userHeightController.text.trim()),
+                double.parse(_userWeightController.text.trim()),
+              );
 
-            //  data add 방식 함수 호출
-            // addUserDetails(
-            //   _userNameController.text.trim(),
-            //   _emailController.text.trim(),
-            //   _user_image.trim(),
-            //   double.parse(_userHeightController.text.trim()),
-            //   double.parse(_userWeightController.text.trim()),
-            // );
+              //  data add 방식 함수 호출
+              // addUserDetails(
+              //   _userNameController.text.trim(),
+              //   _emailController.text.trim(),
+              //   _user_image.trim(),
+              //   double.parse(_userHeightController.text.trim()),
+              //   double.parse(_userWeightController.text.trim()),
+              // );
 
-            //  pop the loading circle
-            Navigator.of(context).pop();
+              //  pop the loading circle
+              Navigator.of(context).pop();
 
-            //  email verify page push
-            Navigator.push(
-              context,
-              MaterialPageRoute(
+              //  email verify page push
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return EmailVerify();
+                  },
+                ),
+              );
+            } on FirebaseAuthException catch (e) {
+              //  pop the loading circle
+              Navigator.of(context).pop();
+              //  account creation error alert
+              showDialog(
+                context: context,
                 builder: (context) {
-                  return EmailVerify();
+                  return Dialog(
+                    backgroundColor: Colors.white.withOpacity(0),
+                    child: Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30),
+                                ),
+                                gradient: LinearGradient(
+                                    begin: Alignment.bottomRight,
+                                    end: Alignment.topLeft,
+                                    colors: [
+                                      Color.fromRGBO(129, 97, 208, 0.75),
+                                      Color.fromRGBO(186, 104, 186, 1)
+                                    ]),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '경고',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            //Flexible widget 메시지 내용에 따라 유연하게 Text 위치 조정
+                            Flexible(
+                              fit: FlexFit.tight,
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      e.message.toString(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                  );
                 },
-              ),
-            );
+              );
+            }
           }
           //  password form alert
           else {
@@ -545,6 +614,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                                                 image.path);
                                                           }
                                                         });
+                                                        Navigator.of(context)
+                                                            .pop();
                                                       },
                                                       child: Icon(
                                                         Icons.photo_camera,
@@ -598,12 +669,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                                                 imageQuality:
                                                                     100,
                                                                 maxHeight: 150);
-                                                        setState(() {
-                                                          if (image != null) {
-                                                            _userImage = File(
-                                                                image.path);
-                                                          }
-                                                        });
+                                                        setState(
+                                                          () {
+                                                            if (image != null) {
+                                                              _userImage = File(
+                                                                  image.path);
+                                                            }
+                                                          },
+                                                        );
+                                                        Navigator.of(context)
+                                                            .pop();
                                                       },
                                                       child: Icon(
                                                         Icons.image,
@@ -697,6 +772,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             fillColor: Colors.grey[200],
                             filled: true,
                           ),
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ],
@@ -768,6 +846,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   fillColor: Colors.grey[200],
                                   filled: true,
                                 ),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
 
@@ -801,6 +882,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   hintText: 'Password',
                                   fillColor: Colors.grey[200],
                                   filled: true,
+                                ),
+                                style: TextStyle(
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
@@ -836,6 +920,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   hintText: 'Confirm Password',
                                   fillColor: Colors.grey[200],
                                   filled: true,
+                                ),
+                                style: TextStyle(
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
@@ -889,6 +976,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                 keyboardType: TextInputType.number,
                                 controller: _userHeightController,
                                 decoration: InputDecoration(
+                                  suffixText: '(cm)',
+                                  suffixStyle: TextStyle(
+                                      color: Colors.black, fontSize: 15),
                                   prefixIcon: Icon(Icons.height),
                                   suffixIcon: GestureDetector(
                                     child: Icon(
@@ -910,6 +1000,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   fillColor: Colors.grey[200],
                                   filled: true,
                                 ),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
 
@@ -923,6 +1016,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                 keyboardType: TextInputType.number,
                                 controller: _userWeightController,
                                 decoration: InputDecoration(
+                                  suffixText: '(kg)',
+                                  suffixStyle: TextStyle(
+                                      color: Colors.black, fontSize: 15),
                                   prefixIcon:
                                       Icon(Icons.monitor_weight_outlined),
                                   suffixIcon: GestureDetector(
@@ -944,6 +1040,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   hintText: 'Your weight (kg)',
                                   fillColor: Colors.grey[200],
                                   filled: true,
+                                ),
+                                style: TextStyle(
+                                  color: Colors.black,
                                 ),
                               ),
                             ),

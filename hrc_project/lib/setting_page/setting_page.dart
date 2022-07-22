@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,10 +15,17 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  bool isEdited = false;
+  bool isNameEdited = false;
+  bool isWeightEdited = false;
+  bool isHeightEdited = false;
+  bool isImageEdited = false;
+
   final _userNameController = TextEditingController();
   final _userWeightController = TextEditingController();
   final _userHeightController = TextEditingController();
   File? _userImage;
+
   String user_name = '';
   String email = '';
   String user_image = '';
@@ -41,15 +49,72 @@ class _SettingPageState extends State<SettingPage> {
         );
   }
 
+  Future editProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final deleteUserProfileImage = FirebaseStorage.instance
+        .ref()
+        .child('profile_image')
+        .child('${user!.uid}.png');
+
+    await deleteUserProfileImage.delete();
+
+    final userProfileImage = FirebaseStorage.instance
+        .ref()
+        .child('profile_image')
+        .child('${user.uid}.png');
+
+    await userProfileImage.putFile(_userImage!);
+    final userImage = await userProfileImage.getDownloadURL();
+
+    updateUserDatails(
+      user.uid,
+      _userNameController.text.trim(),
+      userImage.trim(),
+      double.parse(_userHeightController.text.trim()),
+      double.parse(_userWeightController.text.trim()),
+    );
+  }
+
   //  update user data from cloud Firestore
-  Future _updateUserData(String newName) async {
+  Future updateUserDatails(String newUser, String username, String userImage,
+      double height, double weight) async {
     final user = FirebaseAuth.instance.currentUser;
     final userData =
         await FirebaseFirestore.instance.collection('users').doc(user!.uid);
 
     await userData.update({
-      "user_name": "$newName",
+      'user_name': username,
+      'user_image': userImage,
+      'height': height,
+      'weight': weight,
     });
+  }
+
+  @override
+  void initState() {
+    _userNameController.addListener(isUserDataChanged);
+    _userWeightController.addListener(isUserDataChanged);
+    _userHeightController.addListener(isUserDataChanged);
+    super.initState();
+  }
+
+  void isUserDataChanged() {
+    if (_userNameController.text.trim().isNotEmpty ||
+        _userWeightController.text.trim().isNotEmpty ||
+        _userHeightController.text.trim().isNotEmpty ||
+        isImageEdited) {
+      isEdited = true;
+    } else {
+      isEdited = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _userNameController.dispose();
+    _userHeightController.dispose();
+    _userWeightController.dispose();
+    super.dispose();
   }
 
   @override
@@ -60,6 +125,9 @@ class _SettingPageState extends State<SettingPage> {
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
+            isNameEdited = false;
+            isWeightEdited = false;
+            isHeightEdited = false;
           },
           child: SingleChildScrollView(
             child: Column(
@@ -94,6 +162,7 @@ class _SettingPageState extends State<SettingPage> {
                                       children: [
                                         Stack(
                                           children: [
+                                            //  User profile image circle
                                             Container(
                                               padding: EdgeInsets.all(4),
                                               height: 100,
@@ -115,16 +184,22 @@ class _SettingPageState extends State<SettingPage> {
                                                 radius: 45,
                                                 backgroundColor:
                                                     Colors.grey[200],
-                                                foregroundImage:
-                                                    NetworkImage(user_image),
-                                                child: Icon(
-                                                  Icons.account_circle,
-                                                  size: 75,
-                                                  color: Colors.grey,
-                                                ),
+                                                foregroundImage: _userImage ==
+                                                        null
+                                                    ? NetworkImage(user_image)
+                                                    : FileImage(_userImage!)
+                                                        as ImageProvider,
+                                                child: user_image == ''
+                                                    ? Icon(
+                                                        Icons.account_circle,
+                                                        size: 75,
+                                                        color: Colors.grey,
+                                                      )
+                                                    : null,
                                               ),
                                             ),
-                                            //  edit profile image button
+
+                                            //  update profile image button
                                             GestureDetector(
                                               onTap: () {
                                                 showDialog(
@@ -220,8 +295,12 @@ class _SettingPageState extends State<SettingPage> {
                                                                             if (image !=
                                                                                 null) {
                                                                               _userImage = File(image.path);
+                                                                              isImageEdited = true;
+                                                                              isUserDataChanged();
                                                                             }
                                                                           });
+                                                                          Navigator.of(context)
+                                                                              .pop();
                                                                         },
                                                                         child:
                                                                             Icon(
@@ -283,8 +362,12 @@ class _SettingPageState extends State<SettingPage> {
                                                                             if (image !=
                                                                                 null) {
                                                                               _userImage = File(image.path);
+                                                                              isImageEdited = true;
+                                                                              isUserDataChanged();
                                                                             }
                                                                           });
+                                                                          Navigator.of(context)
+                                                                              .pop();
                                                                         },
                                                                         child:
                                                                             Icon(
@@ -315,6 +398,7 @@ class _SettingPageState extends State<SettingPage> {
                                                   },
                                                 );
                                               },
+                                              //  Image edit floating button
                                               child: Padding(
                                                 padding: const EdgeInsets.only(
                                                   top: 65,
@@ -352,40 +436,50 @@ class _SettingPageState extends State<SettingPage> {
                                               height: 40,
                                               width: 250,
                                               child: TextField(
+                                                onTap: () {
+                                                  isNameEdited = true;
+                                                },
+                                                onSubmitted: (value) {
+                                                  isNameEdited = false;
+                                                },
                                                 controller: _userNameController,
                                                 decoration: InputDecoration(
-                                                    enabledBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors.white
-                                                              .withOpacity(0)),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              30),
-                                                    ),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors
-                                                              .deepPurpleAccent
-                                                              .withOpacity(0)),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              30),
-                                                    ),
-                                                    fillColor: Colors.grey
-                                                        .withOpacity(0),
-                                                    filled: true,
-                                                    hintText: '${user_name}',
-                                                    hintStyle: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 25,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    )),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Colors.white
+                                                            .withOpacity(0)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Colors
+                                                            .deepPurpleAccent
+                                                            .withOpacity(0)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                  ),
+                                                  fillColor: Colors.grey
+                                                      .withOpacity(0),
+                                                  filled: true,
+                                                  hintText: '${user_name}',
+                                                  hintStyle: TextStyle(
+                                                    color: isNameEdited
+                                                        ? Colors.white
+                                                            .withOpacity(0)
+                                                        : Colors.white,
+                                                    fontSize: 25,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                  color: Colors.white,
+                                                  color: Color.fromRGBO(
+                                                      186, 104, 186, 1),
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 25,
                                                 ),
@@ -396,7 +490,7 @@ class _SettingPageState extends State<SettingPage> {
                                         Text(
                                           '${email}',
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: Colors.grey[500],
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -463,8 +557,14 @@ class _SettingPageState extends State<SettingPage> {
                                               //  edit user weight textfield
                                               SizedBox(
                                                 height: 40,
-                                                width: 130,
+                                                width: 110,
                                                 child: TextField(
+                                                  onTap: () {
+                                                    isWeightEdited = true;
+                                                  },
+                                                  onSubmitted: (value) {
+                                                    isWeightEdited = false;
+                                                  },
                                                   keyboardType:
                                                       TextInputType.number,
                                                   controller:
@@ -492,27 +592,34 @@ class _SettingPageState extends State<SettingPage> {
                                                     fillColor: Colors.grey
                                                         .withOpacity(0),
                                                     filled: true,
-                                                    floatingLabelBehavior:
-                                                        FloatingLabelBehavior
-                                                            .always,
-                                                    suffixText: 'kg',
-                                                    suffixStyle: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white,
-                                                      fontSize: 20,
+                                                    isDense: true,
+                                                    suffixIcon: Text(
+                                                      'kg',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                      ),
                                                     ),
+                                                    suffixIconConstraints:
+                                                        BoxConstraints(
+                                                            minHeight: 34),
                                                     hintText: '${weight}',
                                                     hintStyle: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      color: Colors.white,
+                                                      color: isWeightEdited
+                                                          ? Colors.white
+                                                              .withOpacity(0)
+                                                          : Colors.white,
                                                       fontSize: 20,
                                                     ),
                                                   ),
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
-                                                    color: Colors.white,
+                                                    color: Color.fromRGBO(
+                                                        186, 104, 186, 1),
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
                                                   ),
@@ -521,7 +628,7 @@ class _SettingPageState extends State<SettingPage> {
                                             ],
                                           ),
 
-                                          SizedBox(width: 20),
+                                          SizedBox(width: 35),
 
                                           //user height
                                           Column(
@@ -546,8 +653,14 @@ class _SettingPageState extends State<SettingPage> {
                                               //  edit user height textfield
                                               SizedBox(
                                                 height: 40,
-                                                width: 130,
+                                                width: 120,
                                                 child: TextField(
+                                                  onTap: () {
+                                                    isHeightEdited = true;
+                                                  },
+                                                  onSubmitted: (value) {
+                                                    isHeightEdited = false;
+                                                  },
                                                   keyboardType:
                                                       TextInputType.number,
                                                   controller:
@@ -577,17 +690,33 @@ class _SettingPageState extends State<SettingPage> {
                                                       fillColor: Colors.grey
                                                           .withOpacity(0),
                                                       filled: true,
-                                                      hintText:
-                                                          '${height} ' + 'cm',
+                                                      isDense: true,
+                                                      suffixIcon: Text(
+                                                        'cm',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.white,
+                                                          fontSize: 20,
+                                                        ),
+                                                      ),
+                                                      suffixIconConstraints:
+                                                          BoxConstraints(
+                                                              minHeight: 34),
+                                                      hintText: '${height}',
                                                       hintStyle: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        color: Colors.white,
+                                                        color: isHeightEdited
+                                                            ? Colors.white
+                                                                .withOpacity(0)
+                                                            : Colors.white,
                                                         fontSize: 20,
                                                       )),
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
-                                                    color: Colors.white,
+                                                    color: Color.fromRGBO(
+                                                        186, 104, 186, 1),
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
                                                   ),
@@ -611,11 +740,96 @@ class _SettingPageState extends State<SettingPage> {
 
                 //  edit profile button
                 GestureDetector(
-                  onTap: () {},
+                  onTap: isEdited
+                      ? () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                backgroundColor: Colors.white.withOpacity(0),
+                                child: Container(
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.white,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Container(
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30),
+                                              topRight: Radius.circular(30),
+                                            ),
+                                            gradient: LinearGradient(
+                                                begin: Alignment.bottomRight,
+                                                end: Alignment.topLeft,
+                                                colors: [
+                                                  Color.fromRGBO(
+                                                      129, 97, 208, 0.75),
+                                                  Color.fromRGBO(
+                                                      186, 104, 186, 1)
+                                                ]),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              '프로필 업데이트',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            SizedBox(height: 20),
+                                            Center(
+                                              child: Text(
+                                                '수정한 내용을 저장하시겠습니까?',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                TextButton(
+                                                    onPressed: editProfile,
+                                                    child: Text('저장하기')),
+                                                SizedBox(width: 50),
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text('취소'))
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    )),
+                              );
+                            },
+                          );
+                        }
+                      : () {},
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Container(
-                      height: 100,
+                      height: 70,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(
@@ -625,8 +839,12 @@ class _SettingPageState extends State<SettingPage> {
                             begin: Alignment.bottomRight,
                             end: Alignment.topLeft,
                             colors: [
-                              Color.fromRGBO(129, 97, 208, 0.45),
-                              Color.fromARGB(255, 61, 90, 230)
+                              isEdited
+                                  ? Color.fromRGBO(129, 97, 208, 0.45)
+                                  : Color.fromARGB(255, 46, 36, 80),
+                              isEdited
+                                  ? Color.fromARGB(255, 61, 90, 230)
+                                  : Color.fromARGB(255, 46, 36, 80),
                             ]),
                       ),
                       child: Row(
@@ -634,14 +852,14 @@ class _SettingPageState extends State<SettingPage> {
                         children: [
                           Icon(
                             Icons.file_download_outlined,
-                            color: Colors.white,
+                            color: isEdited ? Colors.white : Colors.grey[600],
                             size: 35,
                           ),
                           SizedBox(width: 15),
                           Text(
                             'Edit profile',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: isEdited ? Colors.white : Colors.grey[600],
                               fontWeight: FontWeight.bold,
                               fontSize: 23,
                             ),
@@ -668,7 +886,99 @@ class _SettingPageState extends State<SettingPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Container(
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Dialog(
+                                  backgroundColor: Colors.white.withOpacity(0),
+                                  child: Container(
+                                      height: 150,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        color: Colors.white,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          Container(
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(30),
+                                                topRight: Radius.circular(30),
+                                              ),
+                                              gradient: LinearGradient(
+                                                  begin: Alignment.bottomRight,
+                                                  end: Alignment.topLeft,
+                                                  colors: [
+                                                    Color.fromRGBO(
+                                                        129, 97, 208, 0.75),
+                                                    Color.fromRGBO(
+                                                        186, 104, 186, 1)
+                                                  ]),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '로그아웃',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              SizedBox(height: 20),
+                                              Center(
+                                                child: Text(
+                                                  '로그아웃 하시겠습니까?',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 20),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  TextButton(
+                                                      onPressed: () async {
+                                                        await FirebaseAuth
+                                                            .instance
+                                                            .signOut();
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text('예')),
+                                                  SizedBox(width: 50),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text('아니요'))
+                                                ],
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      )),
+                                );
+                              },
+                            );
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -724,7 +1034,7 @@ class _SettingPageState extends State<SettingPage> {
                                   ),
                                 ),
                                 Text(
-                                  '0.1 (beta)',
+                                  '0.0.1 (beta)',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white.withOpacity(0.5),
