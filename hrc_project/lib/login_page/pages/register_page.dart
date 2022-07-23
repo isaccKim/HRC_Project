@@ -25,8 +25,11 @@ class _RegisterPageState extends State<RegisterPage> {
   final _userWeightController = TextEditingController();
   File? _userImage;
 
+  FocusNode textfieldFocus = FocusNode();
+
   @override
   void dispose() {
+    textfieldFocus.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -65,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
               final _userProfileImage = FirebaseStorage.instance
                   .ref()
                   .child('profile_image')
-                  .child(newUser.user!.uid + '.png');
+                  .child(newUser.user!.uid);
 
               await _userProfileImage.putFile(_userImage!);
               final _user_image = await _userProfileImage.getDownloadURL();

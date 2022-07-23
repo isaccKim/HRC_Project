@@ -51,42 +51,209 @@ class _SettingPageState extends State<SettingPage> {
 
   Future editProfile() async {
     final user = FirebaseAuth.instance.currentUser;
-    final deleteUserProfileImage = FirebaseStorage.instance
-        .ref()
-        .child('profile_image')
-        .child('${user!.uid}.png');
+    String newUserImage = '';
 
-    await deleteUserProfileImage.delete();
+    try {
+      // loading circle
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Center(child: CircularProgressIndicator());
+        },
+      );
+      if (isImageEdited) {
+        final deleteUserProfileImage = FirebaseStorage.instance
+            .ref()
+            .child('profile_image')
+            .child(user!.uid);
 
-    final userProfileImage = FirebaseStorage.instance
-        .ref()
-        .child('profile_image')
-        .child('${user.uid}.png');
+        await deleteUserProfileImage.delete();
 
-    await userProfileImage.putFile(_userImage!);
-    final userImage = await userProfileImage.getDownloadURL();
+        final userProfileImage = FirebaseStorage.instance
+            .ref()
+            .child('profile_image')
+            .child(user.uid);
 
-    updateUserDatails(
-      user.uid,
-      _userNameController.text.trim(),
-      userImage.trim(),
-      double.parse(_userHeightController.text.trim()),
-      double.parse(_userWeightController.text.trim()),
-    );
+        await userProfileImage.putFile(_userImage!);
+        newUserImage = await userProfileImage.getDownloadURL();
+      }
+
+      updateUserDatails(
+        _userNameController.text.trim(),
+        newUserImage.trim(),
+        _userHeightController.text.trim().isNotEmpty
+            ? double.parse(_userHeightController.text.trim())
+            : height,
+        _userWeightController.text.trim().isNotEmpty
+            ? double.parse(_userWeightController.text.trim())
+            : weight,
+      );
+
+      //  pop the loading circle
+      Navigator.of(context).pop();
+
+      //  update completion alert
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Colors.white.withOpacity(0),
+            child: Container(
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      height: 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                        gradient: LinearGradient(
+                            begin: Alignment.bottomRight,
+                            end: Alignment.topLeft,
+                            colors: [
+                              Color.fromRGBO(129, 97, 208, 0.75),
+                              Color.fromRGBO(186, 104, 186, 1)
+                            ]),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '알림',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 25),
+                    Center(
+                      child: Text(
+                        '계정 정보가 업데이트되었습니다.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+          );
+        },
+      );
+    } catch (e) {
+      //  pop the loading circle
+      Navigator.of(context).pop();
+      //  update data format alert
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Colors.white.withOpacity(0),
+            child: Container(
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                        gradient: LinearGradient(
+                            begin: Alignment.bottomRight,
+                            end: Alignment.topLeft,
+                            colors: [
+                              Color.fromRGBO(129, 97, 208, 0.75),
+                              Color.fromRGBO(186, 104, 186, 1)
+                            ]),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '경고',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                    //Flexible widget 메시지 내용에 따라 유연하게 Text 위치 조정
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '$e',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+          );
+        },
+      );
+    }
   }
 
   //  update user data from cloud Firestore
-  Future updateUserDatails(String newUser, String username, String userImage,
-      double height, double weight) async {
+  Future updateUserDatails(String newUserName, String newUserImage,
+      double newHeight, double newWeight) async {
     final user = FirebaseAuth.instance.currentUser;
     final userData =
         await FirebaseFirestore.instance.collection('users').doc(user!.uid);
 
-    await userData.update({
-      'user_name': username,
-      'user_image': userImage,
-      'height': height,
-      'weight': weight,
+    if (_userNameController.text.trim().isNotEmpty) {
+      await userData.update({'user_name': newUserName});
+    }
+
+    if (isImageEdited) {
+      await userData.update({'user_image': newUserImage});
+    }
+
+    if (newHeight != height) {
+      await userData.update({'height': newHeight});
+    }
+
+    if (newWeight != weight) {
+      await userData.update({'weight': newWeight});
+    }
+
+    //  reload page
+    setState(() {
+      isEdited = false;
+      isNameEdited = false;
+      isWeightEdited = false;
+      isHeightEdited = false;
+      isImageEdited = false;
+
+      _userNameController.clear();
+      _userHeightController.clear();
+      _userWeightController.clear();
+      _userImage = null;
     });
   }
 
@@ -98,6 +265,7 @@ class _SettingPageState extends State<SettingPage> {
     super.initState();
   }
 
+  //  Check for changed fields
   void isUserDataChanged() {
     if (_userNameController.text.trim().isNotEmpty ||
         _userWeightController.text.trim().isNotEmpty ||
@@ -806,7 +974,12 @@ class _SettingPageState extends State<SettingPage> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 TextButton(
-                                                    onPressed: editProfile,
+                                                    onPressed: () {
+                                                      //  pop the alert
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      editProfile();
+                                                    },
                                                     child: Text('저장하기')),
                                                 SizedBox(width: 50),
                                                 TextButton(
@@ -938,7 +1111,7 @@ class _SettingPageState extends State<SettingPage> {
                                               SizedBox(height: 20),
                                               Center(
                                                 child: Text(
-                                                  '로그아웃 하시겠습니까?',
+                                                  '로그아웃하시겠습니까?',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
@@ -956,6 +1129,7 @@ class _SettingPageState extends State<SettingPage> {
                                                         await FirebaseAuth
                                                             .instance
                                                             .signOut();
+                                                        //  pop the alert
                                                         Navigator.of(context)
                                                             .pop();
                                                         Navigator.of(context)
@@ -999,27 +1173,113 @@ class _SettingPageState extends State<SettingPage> {
                             ],
                           ),
                         ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RadiantGradientMask2(
-                                child: Icon(
-                                  Icons.sentiment_dissatisfied,
-                                  color: Colors.white,
-                                  size: 45,
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Dialog(
+                                  backgroundColor: Colors.white.withOpacity(0),
+                                  child: Container(
+                                      height: 150,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        color: Colors.white,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          Container(
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(30),
+                                                topRight: Radius.circular(30),
+                                              ),
+                                              gradient: LinearGradient(
+                                                  begin: Alignment.bottomRight,
+                                                  end: Alignment.topLeft,
+                                                  colors: [
+                                                    Color.fromRGBO(
+                                                        129, 97, 208, 0.75),
+                                                    Color.fromRGBO(
+                                                        186, 104, 186, 1)
+                                                  ]),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '로그아웃',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              SizedBox(height: 20),
+                                              Center(
+                                                child: Text(
+                                                  '계정을 삭제하시겠습니까?',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 20),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  TextButton(
+                                                      onPressed: () async {},
+                                                      child: Text('예')),
+                                                  SizedBox(width: 50),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text('아니요'))
+                                                ],
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      )),
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                RadiantGradientMask2(
+                                  child: Icon(
+                                    Icons.sentiment_dissatisfied,
+                                    color: Colors.white,
+                                    size: 45,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 15),
-                              Text(
-                                'Leaving the membership',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Color.fromRGBO(255, 125, 125, 1),
+                                SizedBox(width: 15),
+                                Text(
+                                  'Leaving the membership',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Color.fromRGBO(255, 125, 125, 1),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         Container(

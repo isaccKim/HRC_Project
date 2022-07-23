@@ -140,8 +140,10 @@ class _EmailVerifyState extends State<EmailVerify> {
                       //   ),
                       // ),
                       FutureBuilder(
-                          future: _getUserData(),
-                          builder: (context, snapshot) {
+                        future: _getUserData(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
                             return Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, top: 21, bottom: 21),
@@ -204,7 +206,28 @@ class _EmailVerifyState extends State<EmailVerify> {
                                 ],
                               ),
                             );
-                          }),
+                          } else {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, top: 21, bottom: 21),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 100,
+                                    width: 100,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [CircularProgressIndicator()],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
