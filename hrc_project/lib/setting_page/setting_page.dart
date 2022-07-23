@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SettingPage extends StatefulWidget {
@@ -49,6 +50,7 @@ class _SettingPageState extends State<SettingPage> {
         );
   }
 
+  //  Update user data from cloud Firestore
   Future editProfile() async {
     final user = FirebaseAuth.instance.currentUser;
     String newUserImage = '';
@@ -219,7 +221,7 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
-  //  update user data from cloud Firestore
+  //  data update 방식
   Future updateUserDatails(String newUserName, String newUserImage,
       double newHeight, double newWeight) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -255,6 +257,25 @@ class _SettingPageState extends State<SettingPage> {
       _userWeightController.clear();
       _userImage = null;
     });
+  }
+
+  //  Delete user data and account from firebase
+  Future deleteUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final userData =
+        await FirebaseFirestore.instance.collection('users').doc(user!.uid);
+
+    final deleteUserProfileImage =
+        FirebaseStorage.instance.ref().child('profile_image').child(user!.uid);
+
+    //  delete user profile image
+    await deleteUserProfileImage.delete();
+
+    //  delete user data
+    userData.delete();
+
+    //  delete user account
+    user.delete();
   }
 
   @override
@@ -913,88 +934,18 @@ class _SettingPageState extends State<SettingPage> {
                           showDialog(
                             context: context,
                             builder: (context) {
-                              return Dialog(
-                                backgroundColor: Colors.white.withOpacity(0),
-                                child: Container(
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.white,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        Container(
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(30),
-                                              topRight: Radius.circular(30),
-                                            ),
-                                            gradient: LinearGradient(
-                                                begin: Alignment.bottomRight,
-                                                end: Alignment.topLeft,
-                                                colors: [
-                                                  Color.fromRGBO(
-                                                      129, 97, 208, 0.75),
-                                                  Color.fromRGBO(
-                                                      186, 104, 186, 1)
-                                                ]),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              '프로필 업데이트',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            SizedBox(height: 20),
-                                            Center(
-                                              child: Text(
-                                                '수정한 내용을 저장하시겠습니까?',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: 20),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      //  pop the alert
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      editProfile();
-                                                    },
-                                                    child: Text('저장하기')),
-                                                SizedBox(width: 50),
-                                                TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: Text('취소'))
-                                              ],
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    )),
-                              );
+                              return alternativeDialog(
+                                  context,
+                                  150,
+                                  30,
+                                  '프로필 업데이트',
+                                  15,
+                                  '수정한 내용을 저장하시겠습니까?',
+                                  15,
+                                  Navigator.of(context).pop,
+                                  editProfile,
+                                  () {},
+                                  () {});
                             },
                           );
                         }
@@ -1064,92 +1015,18 @@ class _SettingPageState extends State<SettingPage> {
                             showDialog(
                               context: context,
                               builder: (context) {
-                                return Dialog(
-                                  backgroundColor: Colors.white.withOpacity(0),
-                                  child: Container(
-                                      height: 150,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: Colors.white,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          Container(
-                                            height: 30,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(30),
-                                                topRight: Radius.circular(30),
-                                              ),
-                                              gradient: LinearGradient(
-                                                  begin: Alignment.bottomRight,
-                                                  end: Alignment.topLeft,
-                                                  colors: [
-                                                    Color.fromRGBO(
-                                                        129, 97, 208, 0.75),
-                                                    Color.fromRGBO(
-                                                        186, 104, 186, 1)
-                                                  ]),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                '로그아웃',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              SizedBox(height: 20),
-                                              Center(
-                                                child: Text(
-                                                  '로그아웃하시겠습니까?',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(height: 20),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  TextButton(
-                                                      onPressed: () async {
-                                                        await FirebaseAuth
-                                                            .instance
-                                                            .signOut();
-                                                        //  pop the alert
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Text('예')),
-                                                  SizedBox(width: 50),
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Text('아니요'))
-                                                ],
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      )),
-                                );
+                                return alternativeDialog(
+                                    context,
+                                    150,
+                                    30,
+                                    '로그아웃',
+                                    15,
+                                    '로그아웃하시겠습니까?',
+                                    15,
+                                    FirebaseAuth.instance.signOut,
+                                    Navigator.of(context).pop,
+                                    Navigator.of(context).pop,
+                                    () {});
                               },
                             );
                           },
@@ -1178,85 +1055,107 @@ class _SettingPageState extends State<SettingPage> {
                             showDialog(
                               context: context,
                               builder: (context) {
-                                return Dialog(
-                                  backgroundColor: Colors.white.withOpacity(0),
-                                  child: Container(
-                                      height: 150,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: Colors.white,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          Container(
-                                            height: 30,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(30),
-                                                topRight: Radius.circular(30),
-                                              ),
-                                              gradient: LinearGradient(
-                                                  begin: Alignment.bottomRight,
-                                                  end: Alignment.topLeft,
-                                                  colors: [
-                                                    Color.fromRGBO(
-                                                        129, 97, 208, 0.75),
-                                                    Color.fromRGBO(
-                                                        186, 104, 186, 1)
-                                                  ]),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                '로그아웃',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              SizedBox(height: 20),
-                                              Center(
-                                                child: Text(
-                                                  '계정을 삭제하시겠습니까?',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(height: 20),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  TextButton(
-                                                      onPressed: () async {},
-                                                      child: Text('예')),
-                                                  SizedBox(width: 50),
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Text('아니요'))
-                                                ],
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      )),
-                                );
+                                return alternativeDialog(
+                                    context,
+                                    150,
+                                    30,
+                                    '회원탈퇴하기',
+                                    15,
+                                    '계정을 삭제하시겠습니까?',
+                                    15,
+                                    Navigator.of(context).pop,
+                                    Navigator.of(context).pop,
+                                    deleteUserData,
+                                    () {});
                               },
                             );
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (context) {
+                            //     return Dialog(
+                            //       backgroundColor: Colors.white.withOpacity(0),
+                            //       child: Container(
+                            //           height: 150,
+                            //           decoration: BoxDecoration(
+                            //             borderRadius: BorderRadius.circular(30),
+                            //             color: Colors.white,
+                            //           ),
+                            //           child: Column(
+                            //             crossAxisAlignment:
+                            //                 CrossAxisAlignment.stretch,
+                            //             children: [
+                            //               Container(
+                            //                 height: 30,
+                            //                 decoration: BoxDecoration(
+                            //                   borderRadius: BorderRadius.only(
+                            //                     topLeft: Radius.circular(30),
+                            //                     topRight: Radius.circular(30),
+                            //                   ),
+                            //                   gradient: LinearGradient(
+                            //                       begin: Alignment.bottomRight,
+                            //                       end: Alignment.topLeft,
+                            //                       colors: [
+                            //                         Color.fromRGBO(
+                            //                             129, 97, 208, 0.75),
+                            //                         Color.fromRGBO(
+                            //                             186, 104, 186, 1)
+                            //                       ]),
+                            //                 ),
+                            //                 child: Center(
+                            //                   child: Text(
+                            //                     '로그아웃',
+                            //                     textAlign: TextAlign.center,
+                            //                     style: TextStyle(
+                            //                       fontWeight: FontWeight.bold,
+                            //                       fontSize: 15,
+                            //                     ),
+                            //                   ),
+                            //                 ),
+                            //               ),
+                            //               Column(
+                            //                 mainAxisAlignment:
+                            //                     MainAxisAlignment.spaceEvenly,
+                            //                 children: [
+                            //                   SizedBox(height: 20),
+                            //                   Center(
+                            //                     child: Text(
+                            //                       '계정을 삭제하시겠습니까?',
+                            //                       textAlign: TextAlign.center,
+                            //                       style: TextStyle(
+                            //                         fontWeight: FontWeight.bold,
+                            //                         fontSize: 15,
+                            //                       ),
+                            //                     ),
+                            //                   ),
+                            //                   SizedBox(height: 20),
+                            //                   Row(
+                            //                     mainAxisAlignment:
+                            //                         MainAxisAlignment.center,
+                            //                     children: [
+                            //                       TextButton(
+                            //                           onPressed: () async {
+                            //                             //  pop the alert
+                            //                             Navigator.of(context)
+                            //                                 .pop();
+                            //                             //deleteUserData();
+                            //                           },
+                            //                           child: Text('예')),
+                            //                       SizedBox(width: 50),
+                            //                       TextButton(
+                            //                           onPressed: () {
+                            //                             Navigator.of(context)
+                            //                                 .pop();
+                            //                           },
+                            //                           child: Text('아니요'))
+                            //                     ],
+                            //                   )
+                            //                 ],
+                            //               )
+                            //             ],
+                            //           )),
+                            //     );
+                            //   },
+                            // );
                           },
                           child: Container(
                             child: Row(

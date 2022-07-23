@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,7 +49,8 @@ class _EmailVerifyState extends State<EmailVerify> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+                    await FirebaseAuth.instance.signOut();
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                     Navigator.push(
@@ -124,21 +125,24 @@ class _EmailVerifyState extends State<EmailVerify> {
                   child: Stack(
                     children: [
                       //  profile setting button (modify)
-                      // Padding(
-                      //   padding: const EdgeInsets.only(top: 15, right: 20),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.end,
-                      //     children: [
-                      //       GestureDetector(
-                      //         onTap: () {},
-                      //         child: Icon(
-                      //           Icons.edit,
-                      //           color: Color.fromRGBO(61, 110, 230, 1),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: () {},
+                              child: RadiantGradientMask2(
+                                child: Icon(
+                                  Icons.cancel,
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       FutureBuilder(
                         future: _getUserData(),
                         builder: (context, snapshot) {
@@ -469,6 +473,27 @@ class _EmailVerifyState extends State<EmailVerify> {
           ),
         ],
       )),
+    );
+  }
+}
+
+class RadiantGradientMask2 extends StatelessWidget {
+  RadiantGradientMask2({required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (bounds) => LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Color.fromRGBO(255, 125, 125, 1),
+          Color.fromRGBO(255, 125, 125, 0.27),
+        ],
+        tileMode: TileMode.mirror,
+      ).createShader(bounds),
+      child: child,
     );
   }
 }
