@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:hrc_project/login_page/auth/auth_page.dart';
 import 'login_page/pages/start_page.dart';
 
@@ -15,7 +16,14 @@ void main() async {
       '/second': (BuildContext context) => AuthPage(),
     },
   );
+
   runApp(MyApp());
+}
+
+Future hideSmartPhoneBar() async {
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.immersiveSticky,
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,6 +31,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    hideSmartPhoneBar();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: StartPageWidget(),

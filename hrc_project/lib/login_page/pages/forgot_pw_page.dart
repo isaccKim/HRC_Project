@@ -153,9 +153,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ),
 
                   //  SizedBox(height: 20),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.25),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.3),
 
-                  //  Reset password button
+                  //  Reset password email send button
                   GestureDetector(
                     onTap: passwordReset,
                     child: Container(

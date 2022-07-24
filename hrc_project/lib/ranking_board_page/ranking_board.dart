@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hrc_project/ranking_board_page/distance_ranking.dart';
+import 'package:hrc_project/ranking_board_page/time_ranking.dart';
 
 class RankingBoardPage extends StatefulWidget {
   const RankingBoardPage({Key? key}) : super(key: key);
@@ -10,18 +12,37 @@ class RankingBoardPage extends StatefulWidget {
 class _RankingBoardPageState extends State<RankingBoardPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color.fromARGB(255, 35, 25, 60),
-      body: SafeArea(
-          child: Center(
-        child: Text(
-          "Ranking!!!",
-          style: TextStyle(
-            fontSize: 50,
-            color: Colors.white,
-          ),
-        ),
-      )),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            //backgroundColor: Color.fromARGB(255, 35, 25, 60),
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              toolbarHeight: 20,
+              bottom: const TabBar(
+                unselectedLabelColor: Colors.blue,
+                labelColor: Colors.red,
+                indicatorColor: Colors.black,
+                tabs: [
+                  Tab(
+                    icon: Icon(Icons.directions_car),
+                    text: 'Time',
+                  ),
+                  Tab(
+                    icon: Icon(Icons.directions_car),
+                    text: 'Distance',
+                  ),
+                ],
+              ),
+            ),
+            body: const TabBarView(children: [
+              TimeRank(),
+              DistanceRank(),
+            ]),
+          )),
     );
   }
 }
