@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '/dialog_page/show_dialog.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -34,130 +35,24 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
       //  pop the loading circle
       Navigator.of(context).pop();
+
+      //  Reset password email alert
       showDialog(
-        context: context,
-        builder: (context) {
-          //  reset password email alert
-          return Dialog(
-            backgroundColor: Colors.white.withOpacity(0),
-            child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomRight,
-                            end: Alignment.topLeft,
-                            colors: [
-                              Color.fromRGBO(129, 97, 208, 0.75),
-                              Color.fromRGBO(186, 104, 186, 1)
-                            ]),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '알림',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 25),
-                    Center(
-                      child: Text(
-                        '비밀번호 재설정 이메일이 발송되었습니다.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          );
-        },
-      );
+          context: context,
+          builder: (context) {
+            return flexibleDialog(context, 150, 30, '알림', 15,
+                '비밀번호 재설정 이메일이 발송되었습니다.', 15, () {}, () {}, () {}, () {});
+          });
     } on FirebaseAuthException catch (e) {
       //  pop the loading circle
       Navigator.of(context).pop();
-      //  email form alert
+      //  Email form alert
       showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            backgroundColor: Colors.white.withOpacity(0),
-            child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomRight,
-                            end: Alignment.topLeft,
-                            colors: [
-                              Color.fromRGBO(129, 97, 208, 0.75),
-                              Color.fromRGBO(186, 104, 186, 1)
-                            ]),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '경고',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    //Flexible widget 메시지 내용에 따라 유연하게 Text 위치 조정
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              e.message.toString(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          );
-        },
-      );
+          context: context,
+          builder: (context) {
+            return flexibleDialog(context, 150, 30, '알림', 15,
+                e.message.toString(), 15, () {}, () {}, () {}, () {});
+          });
     }
   }
 
@@ -226,7 +121,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   //  email textField
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: TextFormField(
+                    child: TextField(
+                      onSubmitted: ((value) {
+                        passwordReset();
+                      }),
                       keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
                       decoration: InputDecoration(
@@ -254,10 +152,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
 
-                  //SizedBox(height: 20),
+                  //  SizedBox(height: 20),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.25),
 
-                  // Reset password button
+                  //  Reset password button
                   GestureDetector(
                     onTap: passwordReset,
                     child: Container(

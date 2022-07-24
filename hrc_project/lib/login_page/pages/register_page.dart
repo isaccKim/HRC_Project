@@ -1,9 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'email_verify_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -109,316 +110,76 @@ class _RegisterPageState extends State<RegisterPage> {
               Navigator.of(context).pop();
               //  account creation error alert
               showDialog(
-                context: context,
-                builder: (context) {
-                  return Dialog(
-                    backgroundColor: Colors.white.withOpacity(0),
-                    child: Container(
-                        height: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 30,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30),
-                                  topRight: Radius.circular(30),
-                                ),
-                                gradient: LinearGradient(
-                                    begin: Alignment.bottomRight,
-                                    end: Alignment.topLeft,
-                                    colors: [
-                                      Color.fromRGBO(129, 97, 208, 0.75),
-                                      Color.fromRGBO(186, 104, 186, 1)
-                                    ]),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '경고',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            //Flexible widget 메시지 내용에 따라 유연하게 Text 위치 조정
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      e.message.toString(),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
-                  );
-                },
-              );
+                  context: context,
+                  builder: (context) {
+                    return flexibleDialog(context, 150, 30, '알림', 15,
+                        e.message.toString(), 15, () {}, () {}, () {}, () {});
+                  });
             }
-          }
-          //  password form alert
-          else {
+          } else {
             //  pop the loading circle
             Navigator.of(context).pop();
+            //  password form alert
             showDialog(
-              context: context,
-              builder: (context) {
-                return Dialog(
-                  backgroundColor: Colors.white.withOpacity(0),
-                  child: Container(
-                      height: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.white,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Container(
-                            height: 30,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30),
-                              ),
-                              gradient: LinearGradient(
-                                  begin: Alignment.bottomRight,
-                                  end: Alignment.topLeft,
-                                  colors: [
-                                    Color.fromRGBO(129, 97, 208, 0.75),
-                                    Color.fromRGBO(186, 104, 186, 1)
-                                  ]),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '경고',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Center(
-                            child: Text(
-                              '비밀번호를 다시 확인해 주십시오.\n(7자 이상의 비밀번호를 사용해 주세요)',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
-                );
-              },
-            );
+                context: context,
+                builder: (context) {
+                  return flexibleDialog(
+                      context,
+                      150,
+                      30,
+                      '알림',
+                      15,
+                      '비밀번호를 다시 확인해 주십시오.\n(7자 이상의 비밀번호를 사용해 주세요)',
+                      15,
+                      () {},
+                      () {},
+                      () {},
+                      () {});
+                });
           }
-        }
-        // handong email form alert
-        else {
+        } else {
           //  pop the loading circle
           Navigator.of(context).pop();
+          // handong email form alert
           showDialog(
-            context: context,
-            builder: (context) {
-              return Dialog(
-                backgroundColor: Colors.white.withOpacity(0),
-                child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.white,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          height: 30,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
-                            ),
-                            gradient: LinearGradient(
-                                begin: Alignment.bottomRight,
-                                end: Alignment.topLeft,
-                                colors: [
-                                  Color.fromRGBO(129, 97, 208, 0.75),
-                                  Color.fromRGBO(186, 104, 186, 1)
-                                ]),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '경고',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Center(
-                          child: Text(
-                            '올바른 이메일 형식이 아닙니다.\n"handong" 이메일이 필요합니다.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-              );
-            },
-          );
+              context: context,
+              builder: (context) {
+                return flexibleDialog(
+                    context,
+                    150,
+                    30,
+                    '알림',
+                    15,
+                    '올바른 이메일 형식이 아닙니다.\n"@handong" 이메일이 필요합니다.',
+                    15,
+                    () {},
+                    () {},
+                    () {},
+                    () {});
+              });
         }
       }
-      //  Info. fill alert
+      //  Information write error
       else {
         //  pop the loading circle
         Navigator.of(context).pop();
         showDialog(
-          context: context,
-          builder: (context) {
-            return Dialog(
-              backgroundColor: Colors.white.withOpacity(0),
-              child: Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30),
-                          ),
-                          gradient: LinearGradient(
-                              begin: Alignment.bottomRight,
-                              end: Alignment.topLeft,
-                              colors: [
-                                Color.fromRGBO(129, 97, 208, 0.75),
-                                Color.fromRGBO(186, 104, 186, 1)
-                              ]),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '경고',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 25),
-                      Center(
-                        child: Text(
-                          '모든 정보를 기입해주십시오.\n',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-            );
-          },
-        );
+            context: context,
+            builder: (context) {
+              return flexibleDialog(context, 150, 30, '알림', 15,
+                  '모든 정보를 기입해주십시오.', 15, () {}, () {}, () {}, () {});
+            });
       }
-    }
-    //  Profile image select alert
-    else {
+    } else {
       //  pop the loading circle
       Navigator.of(context).pop();
+      //  Profile image select alert
       showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            backgroundColor: Colors.white.withOpacity(0),
-            child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomRight,
-                            end: Alignment.topLeft,
-                            colors: [
-                              Color.fromRGBO(129, 97, 208, 0.75),
-                              Color.fromRGBO(186, 104, 186, 1)
-                            ]),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '경고',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 25),
-                    Center(
-                      child: Text(
-                        '프로필 이미지를 선택해 주십시오.\n',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          );
-        },
-      );
+          context: context,
+          builder: (context) {
+            return flexibleDialog(context, 150, 30, '알림', 15,
+                '프로필 이미지를 선택해 주십시오.', 15, () {}, () {}, () {}, () {});
+          });
     }
   }
 
@@ -463,6 +224,34 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  //  ImagePicker camera function
+  void camera() async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+        source: ImageSource.camera, imageQuality: 100, maxHeight: 150);
+    setState(() {
+      if (image != null) {
+        _userImage = File(image.path);
+      }
+    });
+    Navigator.of(context).pop();
+  }
+
+  //  ImagePicker gallery function
+  void gallery() async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+        source: ImageSource.gallery, imageQuality: 100, maxHeight: 150);
+    setState(
+      () {
+        if (image != null) {
+          _userImage = File(image.path);
+        }
+      },
+    );
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -477,7 +266,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // page back arrow
+                  //  page back arrow
                   Padding(
                     padding: EdgeInsets.only(left: 20, top: 15),
                     child: Row(
@@ -547,164 +336,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: GestureDetector(
                             onTap: () {
                               showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Dialog(
-                                    backgroundColor:
-                                        Colors.white.withOpacity(0),
-                                    child: Container(
-                                        height: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          color: Colors.white,
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: [
-                                            Container(
-                                              height: 45,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(30),
-                                                  topRight: Radius.circular(30),
-                                                ),
-                                                gradient: LinearGradient(
-                                                    begin:
-                                                        Alignment.bottomRight,
-                                                    end: Alignment.topLeft,
-                                                    colors: [
-                                                      Color.fromRGBO(
-                                                          129, 97, 208, 0.75),
-                                                      Color.fromRGBO(
-                                                          186, 104, 186, 1)
-                                                    ]),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  '프로필 사진 선택',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: 20),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        final picker =
-                                                            ImagePicker();
-                                                        final image = await picker
-                                                            .pickImage(
-                                                                source:
-                                                                    ImageSource
-                                                                        .camera,
-                                                                imageQuality:
-                                                                    100,
-                                                                maxHeight: 150);
-                                                        setState(() {
-                                                          if (image != null) {
-                                                            _userImage = File(
-                                                                image.path);
-                                                          }
-                                                        });
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Icon(
-                                                        Icons.photo_camera,
-                                                        size: 80,
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 5),
-                                                    Text(
-                                                      '카메라로 사진 찍기',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                  height: 100,
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                        Radius.circular(30),
-                                                      ),
-                                                      gradient: LinearGradient(
-                                                          begin: Alignment
-                                                              .bottomRight,
-                                                          end:
-                                                              Alignment.topLeft,
-                                                          colors: [
-                                                            Color.fromRGBO(129,
-                                                                97, 208, 0.75),
-                                                            Color.fromRGBO(186,
-                                                                104, 186, 1)
-                                                          ]),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        final picker =
-                                                            ImagePicker();
-                                                        final image = await picker
-                                                            .pickImage(
-                                                                source:
-                                                                    ImageSource
-                                                                        .gallery,
-                                                                imageQuality:
-                                                                    100,
-                                                                maxHeight: 150);
-                                                        setState(
-                                                          () {
-                                                            if (image != null) {
-                                                              _userImage = File(
-                                                                  image.path);
-                                                            }
-                                                          },
-                                                        );
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Icon(
-                                                        Icons.image,
-                                                        size: 80,
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 5),
-                                                    Text(
-                                                      '갤러리에서 선택하기',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        )),
-                                  );
-                                },
-                              );
+                                  context: context,
+                                  builder: (context) {
+                                    return imageDialog(
+                                        context, camera, gallery);
+                                  });
                             },
 
                             // User profile image circle
@@ -752,6 +388,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(100, 180, 100, 0),
                         child: TextField(
+                          textInputAction: TextInputAction.next,
                           controller: _userNameController,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.person),
@@ -825,6 +462,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                textInputAction: TextInputAction.next,
                                 keyboardType: TextInputType.emailAddress,
                                 controller: _emailController,
                                 decoration: InputDecoration(
@@ -862,6 +500,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                textInputAction: TextInputAction.next,
                                 obscureText: true,
                                 controller: _passwordController,
                                 decoration: InputDecoration(
@@ -899,6 +538,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                textInputAction: TextInputAction.next,
                                 obscureText: true,
                                 controller: _confirmPasswordController,
                                 decoration: InputDecoration(
@@ -976,6 +616,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                textInputAction: TextInputAction.next,
                                 keyboardType: TextInputType.number,
                                 controller: _userHeightController,
                                 decoration: InputDecoration(
@@ -1016,6 +657,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                onSubmitted: ((value) {
+                                  signUp();
+                                }),
                                 keyboardType: TextInputType.number,
                                 controller: _userWeightController,
                                 decoration: InputDecoration(

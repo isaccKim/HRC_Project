@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,9 +33,9 @@ class _SettingPageState extends State<SettingPage> {
   double weight = 0;
   double height = 0;
 
-  // Get user data from cloud Firestore
+  //  Get user data from cloud Firestore
   Future _getUserData() async {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = await FirebaseAuth.instance.currentUser;
     final userData =
         await FirebaseFirestore.instance.collection('users').doc(user!.uid);
 
@@ -52,7 +52,7 @@ class _SettingPageState extends State<SettingPage> {
 
   //  Update user data from cloud Firestore
   Future editProfile() async {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = await FirebaseAuth.instance.currentUser;
     String newUserImage = '';
 
     try {
@@ -60,18 +60,18 @@ class _SettingPageState extends State<SettingPage> {
       showDialog(
         context: context,
         builder: (context) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         },
       );
       if (isImageEdited) {
-        final deleteUserProfileImage = FirebaseStorage.instance
+        final deleteUserProfileImage = await FirebaseStorage.instance
             .ref()
             .child('profile_image')
             .child(user!.uid);
 
         await deleteUserProfileImage.delete();
 
-        final userProfileImage = FirebaseStorage.instance
+        final userProfileImage = await FirebaseStorage.instance
             .ref()
             .child('profile_image')
             .child(user.uid);
@@ -96,128 +96,21 @@ class _SettingPageState extends State<SettingPage> {
 
       //  update completion alert
       showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            backgroundColor: Colors.white.withOpacity(0),
-            child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomRight,
-                            end: Alignment.topLeft,
-                            colors: [
-                              Color.fromRGBO(129, 97, 208, 0.75),
-                              Color.fromRGBO(186, 104, 186, 1)
-                            ]),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '알림',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 25),
-                    Center(
-                      child: Text(
-                        '계정 정보가 업데이트되었습니다.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          );
-        },
-      );
+          context: context,
+          builder: (context) {
+            return flexibleDialog(context, 150, 30, '알림', 15,
+                '계정 정보가 업데이트되었습니다.', 15, () {}, () {}, () {}, () {});
+          });
     } catch (e) {
       //  pop the loading circle
       Navigator.of(context).pop();
       //  update data format alert
       showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            backgroundColor: Colors.white.withOpacity(0),
-            child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomRight,
-                            end: Alignment.topLeft,
-                            colors: [
-                              Color.fromRGBO(129, 97, 208, 0.75),
-                              Color.fromRGBO(186, 104, 186, 1)
-                            ]),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '경고',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    //Flexible widget 메시지 내용에 따라 유연하게 Text 위치 조정
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '$e',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          );
-        },
-      );
+          context: context,
+          builder: (context) {
+            return flexibleDialog(context, 150, 30, '알림', 15, e.toString(), 15,
+                () {}, () {}, () {}, () {});
+          });
     }
   }
 
@@ -265,17 +158,21 @@ class _SettingPageState extends State<SettingPage> {
     final userData =
         await FirebaseFirestore.instance.collection('users').doc(user!.uid);
 
-    final deleteUserProfileImage =
-        FirebaseStorage.instance.ref().child('profile_image').child(user!.uid);
+    final deleteUserProfileImage = await FirebaseStorage.instance
+        .ref()
+        .child('profile_image')
+        .child(user.uid);
 
     //  delete user profile image
     await deleteUserProfileImage.delete();
 
     //  delete user data
-    userData.delete();
+    await userData.delete();
 
     //  delete user account
-    user.delete();
+    await user.delete();
+
+    await FirebaseAuth.instance.signOut();
   }
 
   @override
@@ -298,6 +195,36 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
+  //  ImagePicker camera function
+  void camera() async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+        source: ImageSource.camera, imageQuality: 100, maxHeight: 150);
+    setState(() {
+      if (image != null) {
+        _userImage = File(image.path);
+        isImageEdited = true;
+        isUserDataChanged();
+      }
+    });
+    Navigator.of(context).pop();
+  }
+
+  //  ImagePicker gallery function
+  void gallery() async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+        source: ImageSource.gallery, imageQuality: 100, maxHeight: 150);
+    setState(() {
+      if (image != null) {
+        _userImage = File(image.path);
+        isImageEdited = true;
+        isUserDataChanged();
+      }
+    });
+    Navigator.of(context).pop();
+  }
+
   @override
   void dispose() {
     _userNameController.dispose();
@@ -309,7 +236,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 35, 25, 60),
+      backgroundColor: const Color.fromARGB(255, 35, 25, 60),
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
@@ -322,7 +249,7 @@ class _SettingPageState extends State<SettingPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //  user profile
                 Padding(
@@ -330,7 +257,7 @@ class _SettingPageState extends State<SettingPage> {
                   child: Container(
                     height: 225,
                     width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(
                         Radius.circular(30),
                       ),
@@ -353,10 +280,10 @@ class _SettingPageState extends State<SettingPage> {
                                           children: [
                                             //  User profile image circle
                                             Container(
-                                              padding: EdgeInsets.all(4),
+                                              padding: const EdgeInsets.all(4),
                                               height: 100,
                                               width: 100,
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 gradient: LinearGradient(
                                                   begin: Alignment.topRight,
@@ -379,7 +306,7 @@ class _SettingPageState extends State<SettingPage> {
                                                     : FileImage(_userImage!)
                                                         as ImageProvider,
                                                 child: user_image == ''
-                                                    ? Icon(
+                                                    ? const Icon(
                                                         Icons.account_circle,
                                                         size: 75,
                                                         color: Colors.grey,
@@ -392,200 +319,13 @@ class _SettingPageState extends State<SettingPage> {
                                             GestureDetector(
                                               onTap: () {
                                                 showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return Dialog(
-                                                      backgroundColor: Colors
-                                                          .white
-                                                          .withOpacity(0),
-                                                      child: Container(
-                                                          height: 200,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        30),
-                                                            color: Colors.white,
-                                                          ),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .stretch,
-                                                            children: [
-                                                              Container(
-                                                                height: 45,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            30),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            30),
-                                                                  ),
-                                                                  gradient: LinearGradient(
-                                                                      begin: Alignment
-                                                                          .bottomRight,
-                                                                      end: Alignment.topLeft,
-                                                                      colors: [
-                                                                        Color.fromRGBO(
-                                                                            129,
-                                                                            97,
-                                                                            208,
-                                                                            0.75),
-                                                                        Color.fromRGBO(
-                                                                            186,
-                                                                            104,
-                                                                            186,
-                                                                            1)
-                                                                      ]),
-                                                                ),
-                                                                child: Center(
-                                                                  child: Text(
-                                                                    '프로필 사진 선택',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          15,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                  height: 20),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  Column(
-                                                                    children: [
-                                                                      GestureDetector(
-                                                                        onTap:
-                                                                            () async {
-                                                                          final picker =
-                                                                              ImagePicker();
-                                                                          final image = await picker.pickImage(
-                                                                              source: ImageSource.camera,
-                                                                              imageQuality: 100,
-                                                                              maxHeight: 150);
-                                                                          setState(
-                                                                              () {
-                                                                            if (image !=
-                                                                                null) {
-                                                                              _userImage = File(image.path);
-                                                                              isImageEdited = true;
-                                                                              isUserDataChanged();
-                                                                            }
-                                                                          });
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                        },
-                                                                        child:
-                                                                            Icon(
-                                                                          Icons
-                                                                              .photo_camera,
-                                                                          size:
-                                                                              80,
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                          height:
-                                                                              5),
-                                                                      Text(
-                                                                        '카메라로 사진 찍기',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 2,
-                                                                    height: 100,
-                                                                    child:
-                                                                        Container(
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              30),
-                                                                        ),
-                                                                        gradient: LinearGradient(
-                                                                            begin:
-                                                                                Alignment.bottomRight,
-                                                                            end: Alignment.topLeft,
-                                                                            colors: [
-                                                                              Color.fromRGBO(129, 97, 208, 0.75),
-                                                                              Color.fromRGBO(186, 104, 186, 1)
-                                                                            ]),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Column(
-                                                                    children: [
-                                                                      GestureDetector(
-                                                                        onTap:
-                                                                            () async {
-                                                                          final picker =
-                                                                              ImagePicker();
-                                                                          final image = await picker.pickImage(
-                                                                              source: ImageSource.gallery,
-                                                                              imageQuality: 100,
-                                                                              maxHeight: 150);
-                                                                          setState(
-                                                                              () {
-                                                                            if (image !=
-                                                                                null) {
-                                                                              _userImage = File(image.path);
-                                                                              isImageEdited = true;
-                                                                              isUserDataChanged();
-                                                                            }
-                                                                          });
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                        },
-                                                                        child:
-                                                                            Icon(
-                                                                          Icons
-                                                                              .image,
-                                                                          size:
-                                                                              80,
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                          height:
-                                                                              5),
-                                                                      Text(
-                                                                        '갤러리에서 선택하기',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          )),
-                                                    );
-                                                  },
-                                                );
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return imageDialog(
+                                                          context,
+                                                          camera,
+                                                          gallery);
+                                                    });
                                               },
                                               //  Image edit floating button
                                               child: Padding(
@@ -599,7 +339,7 @@ class _SettingPageState extends State<SettingPage> {
                                                   decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
                                                       color: Colors.grey[200],
-                                                      boxShadow: [
+                                                      boxShadow: const [
                                                         BoxShadow(
                                                             color: Colors.black,
                                                             spreadRadius: 0.5,
@@ -617,7 +357,7 @@ class _SettingPageState extends State<SettingPage> {
                                             )
                                           ],
                                         ),
-                                        SizedBox(height: 20),
+                                        const SizedBox(height: 20),
                                         Stack(
                                           children: [
                                             //  edit user name textfield
@@ -666,7 +406,7 @@ class _SettingPageState extends State<SettingPage> {
                                                   ),
                                                 ),
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   color: Color.fromRGBO(
                                                       186, 104, 186, 1),
                                                   fontWeight: FontWeight.bold,
@@ -697,14 +437,14 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //  user body information section
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     height: 180,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(
                         Radius.circular(30),
                       ),
@@ -727,14 +467,14 @@ class _SettingPageState extends State<SettingPage> {
                                           Column(
                                             children: [
                                               RadiantGradientMask(
-                                                child: Icon(
+                                                child: const Icon(
                                                   Icons.monitor_weight_outlined,
                                                   size: 80,
                                                   color: Colors.white,
                                                 ),
                                               ),
-                                              SizedBox(height: 5),
-                                              Text(
+                                              const SizedBox(height: 5),
+                                              const Text(
                                                 'Weight',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
@@ -742,7 +482,7 @@ class _SettingPageState extends State<SettingPage> {
                                                   fontSize: 15,
                                                 ),
                                               ),
-                                              SizedBox(height: 7),
+                                              const SizedBox(height: 7),
                                               //  edit user weight textfield
                                               SizedBox(
                                                 height: 40,
@@ -782,7 +522,7 @@ class _SettingPageState extends State<SettingPage> {
                                                         .withOpacity(0),
                                                     filled: true,
                                                     isDense: true,
-                                                    suffixIcon: Text(
+                                                    suffixIcon: const Text(
                                                       'kg',
                                                       style: TextStyle(
                                                         fontWeight:
@@ -792,7 +532,7 @@ class _SettingPageState extends State<SettingPage> {
                                                       ),
                                                     ),
                                                     suffixIconConstraints:
-                                                        BoxConstraints(
+                                                        const BoxConstraints(
                                                             minHeight: 34),
                                                     hintText: '${weight}',
                                                     hintStyle: TextStyle(
@@ -806,7 +546,7 @@ class _SettingPageState extends State<SettingPage> {
                                                     ),
                                                   ),
                                                   textAlign: TextAlign.center,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     color: Color.fromRGBO(
                                                         186, 104, 186, 1),
                                                     fontWeight: FontWeight.bold,
@@ -817,20 +557,20 @@ class _SettingPageState extends State<SettingPage> {
                                             ],
                                           ),
 
-                                          SizedBox(width: 35),
+                                          const SizedBox(width: 35),
 
                                           //user height
                                           Column(
                                             children: [
                                               RadiantGradientMask(
-                                                child: Icon(
+                                                child: const Icon(
                                                   Icons.height,
                                                   size: 80,
                                                   color: Colors.white,
                                                 ),
                                               ),
-                                              SizedBox(height: 5),
-                                              Text(
+                                              const SizedBox(height: 5),
+                                              const Text(
                                                 'Height',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
@@ -838,7 +578,7 @@ class _SettingPageState extends State<SettingPage> {
                                                   fontSize: 15,
                                                 ),
                                               ),
-                                              SizedBox(height: 7),
+                                              const SizedBox(height: 7),
                                               //  edit user height textfield
                                               SizedBox(
                                                 height: 40,
@@ -880,7 +620,7 @@ class _SettingPageState extends State<SettingPage> {
                                                           .withOpacity(0),
                                                       filled: true,
                                                       isDense: true,
-                                                      suffixIcon: Text(
+                                                      suffixIcon: const Text(
                                                         'cm',
                                                         style: TextStyle(
                                                           fontWeight:
@@ -890,7 +630,7 @@ class _SettingPageState extends State<SettingPage> {
                                                         ),
                                                       ),
                                                       suffixIconConstraints:
-                                                          BoxConstraints(
+                                                          const BoxConstraints(
                                                               minHeight: 34),
                                                       hintText: '${height}',
                                                       hintStyle: TextStyle(
@@ -903,7 +643,7 @@ class _SettingPageState extends State<SettingPage> {
                                                         fontSize: 20,
                                                       )),
                                                   textAlign: TextAlign.center,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     color: Color.fromRGBO(
                                                         186, 104, 186, 1),
                                                     fontWeight: FontWeight.bold,
@@ -925,7 +665,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //  edit profile button
                 GestureDetector(
@@ -956,7 +696,7 @@ class _SettingPageState extends State<SettingPage> {
                       height: 70,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(30),
                         ),
                         gradient: LinearGradient(
@@ -964,11 +704,11 @@ class _SettingPageState extends State<SettingPage> {
                             end: Alignment.topLeft,
                             colors: [
                               isEdited
-                                  ? Color.fromRGBO(129, 97, 208, 0.45)
-                                  : Color.fromARGB(255, 46, 36, 80),
+                                  ? const Color.fromRGBO(129, 97, 208, 0.45)
+                                  : const Color.fromARGB(255, 46, 36, 80),
                               isEdited
-                                  ? Color.fromARGB(255, 61, 90, 230)
-                                  : Color.fromARGB(255, 46, 36, 80),
+                                  ? const Color.fromARGB(255, 61, 90, 230)
+                                  : const Color.fromARGB(255, 46, 36, 80),
                             ]),
                       ),
                       child: Row(
@@ -979,7 +719,7 @@ class _SettingPageState extends State<SettingPage> {
                             color: isEdited ? Colors.white : Colors.grey[600],
                             size: 35,
                           ),
-                          SizedBox(width: 15),
+                          const SizedBox(width: 15),
                           Text(
                             'Edit profile',
                             style: TextStyle(
@@ -994,14 +734,14 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-                //  Log in and out section
+                //  Logout and Leaving membership section
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     height: 190,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(
                         Radius.circular(30),
                       ),
@@ -1023,16 +763,16 @@ class _SettingPageState extends State<SettingPage> {
                                     15,
                                     '로그아웃하시겠습니까?',
                                     15,
-                                    FirebaseAuth.instance.signOut,
-                                    Navigator.of(context).pop,
-                                    Navigator.of(context).pop,
-                                    () {});
+                                    FirebaseAuth.instance.signOut, () {
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, '/', (route) => false);
+                                }, () {}, () {});
                               },
                             );
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: const [
                               Icon(
                                 Icons.logout_outlined,
                                 color: Colors.white,
@@ -1064,112 +804,31 @@ class _SettingPageState extends State<SettingPage> {
                                     '계정을 삭제하시겠습니까?',
                                     15,
                                     Navigator.of(context).pop,
-                                    Navigator.of(context).pop,
-                                    deleteUserData,
+                                    confirmDialog(
+                                        context,
+                                        email,
+                                        Navigator.of(context).pop,
+                                        deleteUserData,
+                                        () {},
+                                        () {}),
+                                    () {},
                                     () {});
                               },
                             );
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (context) {
-                            //     return Dialog(
-                            //       backgroundColor: Colors.white.withOpacity(0),
-                            //       child: Container(
-                            //           height: 150,
-                            //           decoration: BoxDecoration(
-                            //             borderRadius: BorderRadius.circular(30),
-                            //             color: Colors.white,
-                            //           ),
-                            //           child: Column(
-                            //             crossAxisAlignment:
-                            //                 CrossAxisAlignment.stretch,
-                            //             children: [
-                            //               Container(
-                            //                 height: 30,
-                            //                 decoration: BoxDecoration(
-                            //                   borderRadius: BorderRadius.only(
-                            //                     topLeft: Radius.circular(30),
-                            //                     topRight: Radius.circular(30),
-                            //                   ),
-                            //                   gradient: LinearGradient(
-                            //                       begin: Alignment.bottomRight,
-                            //                       end: Alignment.topLeft,
-                            //                       colors: [
-                            //                         Color.fromRGBO(
-                            //                             129, 97, 208, 0.75),
-                            //                         Color.fromRGBO(
-                            //                             186, 104, 186, 1)
-                            //                       ]),
-                            //                 ),
-                            //                 child: Center(
-                            //                   child: Text(
-                            //                     '로그아웃',
-                            //                     textAlign: TextAlign.center,
-                            //                     style: TextStyle(
-                            //                       fontWeight: FontWeight.bold,
-                            //                       fontSize: 15,
-                            //                     ),
-                            //                   ),
-                            //                 ),
-                            //               ),
-                            //               Column(
-                            //                 mainAxisAlignment:
-                            //                     MainAxisAlignment.spaceEvenly,
-                            //                 children: [
-                            //                   SizedBox(height: 20),
-                            //                   Center(
-                            //                     child: Text(
-                            //                       '계정을 삭제하시겠습니까?',
-                            //                       textAlign: TextAlign.center,
-                            //                       style: TextStyle(
-                            //                         fontWeight: FontWeight.bold,
-                            //                         fontSize: 15,
-                            //                       ),
-                            //                     ),
-                            //                   ),
-                            //                   SizedBox(height: 20),
-                            //                   Row(
-                            //                     mainAxisAlignment:
-                            //                         MainAxisAlignment.center,
-                            //                     children: [
-                            //                       TextButton(
-                            //                           onPressed: () async {
-                            //                             //  pop the alert
-                            //                             Navigator.of(context)
-                            //                                 .pop();
-                            //                             //deleteUserData();
-                            //                           },
-                            //                           child: Text('예')),
-                            //                       SizedBox(width: 50),
-                            //                       TextButton(
-                            //                           onPressed: () {
-                            //                             Navigator.of(context)
-                            //                                 .pop();
-                            //                           },
-                            //                           child: Text('아니요'))
-                            //                     ],
-                            //                   )
-                            //                 ],
-                            //               )
-                            //             ],
-                            //           )),
-                            //     );
-                            //   },
-                            // );
                           },
                           child: Container(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 RadiantGradientMask2(
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.sentiment_dissatisfied,
                                     color: Colors.white,
                                     size: 45,
                                   ),
                                 ),
-                                SizedBox(width: 15),
-                                Text(
+                                const SizedBox(width: 15),
+                                const Text(
                                   'Leaving the membership',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -1207,7 +866,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -1217,6 +876,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 }
 
+//  Icon gradient funcfion1
 class RadiantGradientMask extends StatelessWidget {
   RadiantGradientMask({required this.child});
   final Widget child;
@@ -1224,7 +884,7 @@ class RadiantGradientMask extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
-      shaderCallback: (bounds) => LinearGradient(
+      shaderCallback: (bounds) => const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
@@ -1238,6 +898,7 @@ class RadiantGradientMask extends StatelessWidget {
   }
 }
 
+//  Icon gradient funcfion2
 class RadiantGradientMask2 extends StatelessWidget {
   RadiantGradientMask2({required this.child});
   final Widget child;
@@ -1245,7 +906,7 @@ class RadiantGradientMask2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
-      shaderCallback: (bounds) => LinearGradient(
+      shaderCallback: (bounds) => const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [

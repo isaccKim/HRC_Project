@@ -3,9 +3,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/nav_bar/navigation_bar.dart';
-import '../../running_main/showmap.dart';
 import 'email_verify_page.dart';
 import 'forgot_pw_page.dart';
+import '/dialog_page/show_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  //  Signin
   Future signIn() async {
     // loading circle
     showDialog(
@@ -61,67 +62,17 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       }
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       // // pop the loading circle
       Navigator.of(context).pop();
 
       //  email or password error
       showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            backgroundColor: Colors.white.withOpacity(0),
-            child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomRight,
-                            end: Alignment.topLeft,
-                            colors: [
-                              Color.fromRGBO(129, 97, 208, 0.75),
-                              Color.fromRGBO(186, 104, 186, 1)
-                            ]),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '경고',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 25),
-                    Center(
-                      child: Text(
-                        '이메일 혹은 비밀번호를 확인해 주십시오.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          );
-        },
-      );
+          context: context,
+          builder: (context) {
+            return flexibleDialog(context, 150, 30, '알림', 15,
+                e.message.toString(), 15, () {}, () {}, () {}, () {});
+          });
     }
   }
 
@@ -146,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // HRC Logo
+                  //  HRC Logo
                   Container(
                     height: 100,
                     width: MediaQuery.of(context).size.width * 0.4,
@@ -162,7 +113,8 @@ class _LoginPageState extends State<LoginPage> {
                   //  email textField
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: TextFormField(
+                    child: TextField(
+                      textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
                       decoration: InputDecoration(
@@ -196,6 +148,9 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: TextField(
+                      onSubmitted: ((value) {
+                        signIn();
+                      }),
                       obscureText: true,
                       controller: _passwordController,
                       decoration: InputDecoration(

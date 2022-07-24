@@ -2,12 +2,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hrc_project/login_page/auth/auth_page.dart';
 import 'login_page/pages/start_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  MaterialApp(
+    initialRoute: '/',
+    routes: {
+      '/': (BuildContext context) => StartPageWidget(),
+      '/second': (BuildContext context) => AuthPage(),
+    },
+  );
   runApp(MyApp());
 }
 

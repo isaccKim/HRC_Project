@@ -1,8 +1,6 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:hrc_project/login_page/pages/forgot_pw_page.dart';
+import 'package:hrc_project/ranking_board_page/ranking_board.dart';
 import 'package:hrc_project/running_main/showmap.dart';
 import 'package:hrc_project/setting_page/setting_page.dart';
 
@@ -25,10 +23,10 @@ class _NavigationBarState extends State<NavigationBarPage> {
   }
 
   final List<Widget> _pages = [
-    ForgotPasswordPage(),
+    const RankingBoardPage(),
     MapSample(),
     RunBox(),
-    SettingPage(),
+    const SettingPage(),
   ];
 
   @override
@@ -36,6 +34,8 @@ class _NavigationBarState extends State<NavigationBarPage> {
     return Scaffold(
       body: _pages[selectedIndex],
       extendBody: true,
+
+      //  Test navi
       // bottomNavigationBar: BottomNavigationBar(
       //   type: BottomNavigationBarType.shifting,
       //   currentIndex: _selectedIndex,
@@ -66,9 +66,10 @@ class _NavigationBarState extends State<NavigationBarPage> {
       //   ],
       // )
 
+      //  Gnav bar
       bottomNavigationBar: Container(
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30),
               topRight: Radius.circular(30),
@@ -78,7 +79,7 @@ class _NavigationBarState extends State<NavigationBarPage> {
           child: Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
@@ -92,12 +93,12 @@ class _NavigationBarState extends State<NavigationBarPage> {
                     selectedIndex: 1,
                     tabBorderRadius: 45,
                     haptic: true,
-                    duration:
-                        Duration(milliseconds: 450), // tab animation duration
-                    backgroundColor: Color.fromRGBO(46, 36, 70, 1),
+                    duration: const Duration(
+                        milliseconds: 450), // tab animation duration
+                    backgroundColor: const Color.fromRGBO(46, 36, 70, 1),
                     color: Colors.white,
                     activeColor: Colors.white,
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                         left: 15, right: 15, top: 16, bottom: 16),
                     gap: 8,
                     iconSize: 35,
