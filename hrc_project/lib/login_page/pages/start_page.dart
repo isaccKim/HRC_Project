@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hrc_project/test.dart';
 import '../auth/auth_page.dart';
 
 class StartPageWidget extends StatelessWidget {
