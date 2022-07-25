@@ -162,6 +162,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       width: (MediaQuery.of(context).size.width * 0.6),
                       height: 45,
                       decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black,
+                            spreadRadius: 0.5,
+                            blurRadius: 2,
+                            offset: Offset(0, 1),
+                          )
+                        ],
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
                         ),

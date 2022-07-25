@@ -40,10 +40,12 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
                 ],
               ),
             ),
-            body: const TabBarView(children: [
-              TimeRank(),
-              DistanceRank(),
-            ]),
+            body: const TabBarView(
+              children: [
+                TimeRank(),
+                DistanceRank(),
+              ],
+            ),
           )),
     );
   }

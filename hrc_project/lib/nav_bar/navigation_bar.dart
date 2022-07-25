@@ -70,6 +70,14 @@ class _NavigationBarState extends State<NavigationBarPage> {
       bottomNavigationBar: Container(
         child: Container(
           decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black,
+                spreadRadius: 0.2,
+                blurRadius: 4,
+                offset: Offset(0, 1),
+              )
+            ],
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30),
               topRight: Radius.circular(30),

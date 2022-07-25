@@ -175,7 +175,7 @@ Dialog flexibleDialog(
                 Flexible(
                   fit: FlexFit.tight,
                   child: Container(
-                    height: 60,
+                    height: 50,
                     color: Colors.white.withOpacity(0),
                     child: ElevatedButton(
                       onPressed: () async {

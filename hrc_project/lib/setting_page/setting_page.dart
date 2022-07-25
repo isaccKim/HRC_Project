@@ -315,7 +315,7 @@ class _SettingPageState extends State<SettingPage> {
                                               ),
                                             ),
 
-                                            //  update profile image button
+                                            //  Image edit floating button
                                             GestureDetector(
                                               onTap: () {
                                                 showDialog(
@@ -327,7 +327,6 @@ class _SettingPageState extends State<SettingPage> {
                                                           gallery);
                                                     });
                                               },
-                                              //  Image edit floating button
                                               child: Padding(
                                                 padding: const EdgeInsets.only(
                                                   top: 65,
@@ -692,10 +691,21 @@ class _SettingPageState extends State<SettingPage> {
                       : () {},
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Container(
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 325),
                       height: 70,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
+                        boxShadow: [
+                          isEdited
+                              ? const BoxShadow(
+                                  color: Colors.black,
+                                  spreadRadius: 0.5,
+                                  blurRadius: 2,
+                                  offset: Offset(0, 1),
+                                )
+                              : const BoxShadow(),
+                        ],
                         borderRadius: const BorderRadius.all(
                           Radius.circular(15),
                         ),

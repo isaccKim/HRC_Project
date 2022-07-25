@@ -321,7 +321,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                                   30,
                                   '알림',
                                   15,
-                                  '이메일이 발송되었습니다.\n메일함에 보이지 않는다면\n스팸함을 확인하여 주십시오.',
+                                  '이메일이 발송되었습니다.\n(메일함에 보이지 않는다면\n스팸함을 확인하여 주십시오.)',
                                   15,
                                   () {},
                                   () {},
@@ -333,6 +333,14 @@ class _EmailVerifyState extends State<EmailVerify> {
                         height: 60,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black,
+                              spreadRadius: 0.5,
+                              blurRadius: 2,
+                              offset: Offset(0, 1),
+                            )
+                          ],
                           borderRadius: BorderRadius.all(
                             Radius.circular(15),
                           ),
@@ -419,6 +427,14 @@ class _EmailVerifyState extends State<EmailVerify> {
                       width: (MediaQuery.of(context).size.width * 0.6),
                       height: 45,
                       decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black,
+                            spreadRadius: 0.5,
+                            blurRadius: 2,
+                            offset: Offset(0, 1),
+                          )
+                        ],
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
                         ),
