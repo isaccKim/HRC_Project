@@ -66,7 +66,7 @@ class StartPageWidget extends StatelessWidget {
                         height: 45,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(30),
+                            Radius.circular(15),
                           ),
                           gradient: LinearGradient(
                               begin: Alignment.bottomRight,

@@ -35,7 +35,7 @@ class _NavigationBarState extends State<NavigationBarPage> {
       body: _pages[selectedIndex],
       extendBody: true,
 
-      //  Test navi
+      //  Test navigation
       // bottomNavigationBar: BottomNavigationBar(
       //   type: BottomNavigationBarType.shifting,
       //   currentIndex: _selectedIndex,
@@ -88,7 +88,7 @@ class _NavigationBarState extends State<NavigationBarPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 5, bottom: 5),
+                    left: 15, right: 15, top: 5, bottom: 5),
                 child: GNav(
                     selectedIndex: 1,
                     tabBorderRadius: 45,
@@ -101,7 +101,7 @@ class _NavigationBarState extends State<NavigationBarPage> {
                     padding: const EdgeInsets.only(
                         left: 15, right: 15, top: 16, bottom: 16),
                     gap: 8,
-                    iconSize: 35,
+                    iconSize: 30,
                     onTabChange: _navigateBottomBar,
                     tabs: const [
                       GButton(
@@ -115,6 +115,11 @@ class _NavigationBarState extends State<NavigationBarPage> {
                       GButton(
                         icon: Icons.person,
                         text: 'Dashboard',
+                        textStyle: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                       GButton(
                         icon: Icons.settings,

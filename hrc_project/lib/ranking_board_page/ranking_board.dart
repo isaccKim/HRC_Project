@@ -17,15 +17,17 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
       home: DefaultTabController(
           length: 2,
           child: Scaffold(
-            //backgroundColor: Color.fromARGB(255, 35, 25, 60),
+            backgroundColor: Color.fromARGB(255, 35, 25, 60),
             appBar: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: Color.fromARGB(255, 35, 25, 60),
               elevation: 0,
-              toolbarHeight: 20,
+              toolbarHeight: 10,
               bottom: const TabBar(
                 unselectedLabelColor: Colors.blue,
                 labelColor: Colors.red,
-                indicatorColor: Colors.black,
+                indicator: BoxDecoration(
+                  color: Colors.black,
+                ),
                 tabs: [
                   Tab(
                     icon: Icon(Icons.directions_car),

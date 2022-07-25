@@ -98,8 +98,8 @@ class _SettingPageState extends State<SettingPage> {
       showDialog(
           context: context,
           builder: (context) {
-            return flexibleDialog(context, 150, 30, '알림', 15,
-                '계정 정보가 업데이트되었습니다.', 15, () {}, () {}, () {}, () {});
+            return flexibleDialog(context, 200, 30, '알림', 15,
+                '계정 정보가 업데이트되었습니다.', 17, () {}, () {}, () {}, () {});
           });
     } catch (e) {
       //  pop the loading circle
@@ -108,7 +108,7 @@ class _SettingPageState extends State<SettingPage> {
       showDialog(
           context: context,
           builder: (context) {
-            return flexibleDialog(context, 150, 30, '알림', 15, e.toString(), 15,
+            return flexibleDialog(context, 200, 30, '알림', 15, e.toString(), 20,
                 () {}, () {}, () {}, () {});
           });
     }
@@ -259,7 +259,7 @@ class _SettingPageState extends State<SettingPage> {
                     width: MediaQuery.of(context).size.width,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(30),
+                        Radius.circular(15),
                       ),
                       color: Color.fromARGB(255, 46, 36, 80),
                     ),
@@ -446,7 +446,7 @@ class _SettingPageState extends State<SettingPage> {
                     height: 180,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(30),
+                        Radius.circular(15),
                       ),
                       color: Color.fromARGB(255, 46, 36, 80),
                     ),
@@ -603,7 +603,7 @@ class _SettingPageState extends State<SettingPage> {
                                                                     0)),
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(30),
+                                                                .circular(15),
                                                       ),
                                                       focusedBorder:
                                                           OutlineInputBorder(
@@ -614,7 +614,7 @@ class _SettingPageState extends State<SettingPage> {
                                                                     0)),
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(30),
+                                                                .circular(15),
                                                       ),
                                                       fillColor: Colors.grey
                                                           .withOpacity(0),
@@ -676,12 +676,12 @@ class _SettingPageState extends State<SettingPage> {
                             builder: (context) {
                               return alternativeDialog(
                                   context,
-                                  150,
+                                  200,
                                   30,
                                   '프로필 업데이트',
                                   15,
                                   '수정한 내용을 저장하시겠습니까?',
-                                  15,
+                                  17,
                                   Navigator.of(context).pop,
                                   editProfile,
                                   () {},
@@ -697,7 +697,7 @@ class _SettingPageState extends State<SettingPage> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(30),
+                          Radius.circular(15),
                         ),
                         gradient: LinearGradient(
                             begin: Alignment.bottomRight,
@@ -743,26 +743,30 @@ class _SettingPageState extends State<SettingPage> {
                     height: 190,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(30),
+                        Radius.circular(15),
                       ),
                       color: Color.fromARGB(255, 46, 36, 80),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        GestureDetector(
-                          onTap: () {
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            primary: const Color.fromARGB(255, 46, 36, 80),
+                          ),
+                          onPressed: () {
                             showDialog(
                               context: context,
                               builder: (context) {
                                 return alternativeDialog(
                                     context,
-                                    150,
+                                    200,
                                     30,
                                     '로그아웃',
                                     15,
                                     '로그아웃하시겠습니까?',
-                                    15,
+                                    17,
                                     FirebaseAuth.instance.signOut, () {
                                   Navigator.pushNamedAndRemoveUntil(
                                       context, '/', (route) => false);
@@ -770,39 +774,37 @@ class _SettingPageState extends State<SettingPage> {
                               },
                             );
                           },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.logout_outlined,
-                                color: Colors.white,
-                                size: 40,
-                              ),
-                              SizedBox(width: 15),
-                              Text(
-                                'Logout',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              )
-                            ],
+                          icon: const Icon(
+                            Icons.logout_outlined,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                          label: const Text(
+                            'Logout',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            primary: const Color.fromARGB(255, 46, 36, 80),
+                          ),
+                          onPressed: () {
                             showDialog(
                               context: context,
                               builder: (context) {
                                 return alternativeDialog(
                                     context,
-                                    150,
+                                    200,
                                     30,
                                     '회원탈퇴하기',
                                     15,
                                     '계정을 삭제하시겠습니까?',
-                                    15,
+                                    17,
                                     Navigator.of(context).pop,
                                     confirmDialog(
                                         context,
@@ -816,51 +818,91 @@ class _SettingPageState extends State<SettingPage> {
                               },
                             );
                           },
-                          child: Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                RadiantGradientMask2(
-                                  child: const Icon(
-                                    Icons.sentiment_dissatisfied,
-                                    color: Colors.white,
-                                    size: 45,
-                                  ),
-                                ),
-                                const SizedBox(width: 15),
-                                const Text(
-                                  'Leaving the membership',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Color.fromRGBO(255, 125, 125, 1),
-                                  ),
-                                ),
-                              ],
+                          icon: RadiantGradientMask2(
+                            child: const Icon(
+                              Icons.sentiment_dissatisfied,
+                              color: Colors.white,
+                              size: 45,
+                            ),
+                          ),
+                          label: const Text(
+                            'Leaving the membership',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              color: Color.fromRGBO(255, 125, 125, 1),
                             ),
                           ),
                         ),
-                        Container(
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Version : ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white.withOpacity(0.5),
-                                  ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     showDialog(
+                        //       context: context,
+                        //       builder: (context) {
+                        //         return alternativeDialog(
+                        //             context,
+                        //             200,
+                        //             30,
+                        //             '회원탈퇴하기',
+                        //             15,
+                        //             '계정을 삭제하시겠습니까?',
+                        //             17,
+                        //             Navigator.of(context).pop,
+                        //             confirmDialog(
+                        //                 context,
+                        //                 email,
+                        //                 Navigator.of(context).pop,
+                        //                 deleteUserData,
+                        //                 () {},
+                        //                 () {}),
+                        //             () {},
+                        //             () {});
+                        //       },
+                        //     );
+                        //   },
+                        //   child: Container(
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: [
+                        //         RadiantGradientMask2(
+                        //           child: const Icon(
+                        //             Icons.sentiment_dissatisfied,
+                        //             color: Colors.white,
+                        //             size: 45,
+                        //           ),
+                        //         ),
+                        //         const SizedBox(width: 15),
+                        //         const Text(
+                        //           'Leaving the membership',
+                        //           style: TextStyle(
+                        //             fontWeight: FontWeight.bold,
+                        //             fontSize: 20,
+                        //             color: Color.fromRGBO(255, 125, 125, 1),
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Version : ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white.withOpacity(0.5),
                                 ),
-                                Text(
-                                  '0.0.1 (beta)',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white.withOpacity(0.5),
-                                    fontSize: 16,
-                                  ),
+                              ),
+                              Text(
+                                '0.0.1 (beta)',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white.withOpacity(0.5),
+                                  fontSize: 16,
                                 ),
-                              ]),
-                        )
+                              ),
+                            ])
                       ],
                     ),
                   ),

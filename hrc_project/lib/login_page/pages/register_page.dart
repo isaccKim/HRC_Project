@@ -112,8 +112,8 @@ class _RegisterPageState extends State<RegisterPage> {
               showDialog(
                   context: context,
                   builder: (context) {
-                    return flexibleDialog(context, 150, 30, '알림', 15,
-                        e.message.toString(), 15, () {}, () {}, () {}, () {});
+                    return flexibleDialog(context, 200, 30, '알림', 15,
+                        e.message.toString(), 17, () {}, () {}, () {}, () {});
                   });
             }
           } else {
@@ -125,7 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 builder: (context) {
                   return flexibleDialog(
                       context,
-                      150,
+                      200,
                       30,
                       '알림',
                       15,
@@ -146,12 +146,12 @@ class _RegisterPageState extends State<RegisterPage> {
               builder: (context) {
                 return flexibleDialog(
                     context,
-                    150,
+                    200,
                     30,
                     '알림',
                     15,
                     '올바른 이메일 형식이 아닙니다.\n"@handong" 이메일이 필요합니다.',
-                    15,
+                    16,
                     () {},
                     () {},
                     () {},
@@ -166,8 +166,8 @@ class _RegisterPageState extends State<RegisterPage> {
         showDialog(
             context: context,
             builder: (context) {
-              return flexibleDialog(context, 150, 30, '알림', 15,
-                  '모든 정보를 기입해주십시오.', 15, () {}, () {}, () {}, () {});
+              return flexibleDialog(context, 200, 30, '알림', 15,
+                  '모든 정보를 기입해주십시오.', 17, () {}, () {}, () {}, () {});
             });
       }
     } else {
@@ -177,8 +177,8 @@ class _RegisterPageState extends State<RegisterPage> {
       showDialog(
           context: context,
           builder: (context) {
-            return flexibleDialog(context, 150, 30, '알림', 15,
-                '프로필 이미지를 선택해 주십시오.', 15, () {}, () {}, () {}, () {});
+            return flexibleDialog(context, 200, 30, '알림', 15,
+                '프로필 이미지를 선택해 주십시오.', 17, () {}, () {}, () {}, () {});
           });
     }
   }
@@ -307,7 +307,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(30),
+                              Radius.circular(15),
                             ),
                             color: Color.fromARGB(255, 46, 36, 80),
                           ),
@@ -386,7 +386,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       //  User name textField
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(100, 180, 100, 0),
+                        padding: const EdgeInsets.fromLTRB(70, 180, 70, 0),
                         child: TextField(
                           textInputAction: TextInputAction.next,
                           controller: _userNameController,
@@ -401,12 +401,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.deepPurpleAccent),
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                             hintText: 'User Name',
                             fillColor: Colors.grey[200],
@@ -432,7 +432,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(30),
+                              Radius.circular(15),
                             ),
                             color: Color.fromARGB(255, 46, 36, 80),
                           ),
@@ -476,12 +476,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                   hintText: 'Email address',
                                   fillColor: Colors.grey[200],
@@ -514,12 +514,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                   hintText: 'Password',
                                   fillColor: Colors.grey[200],
@@ -553,12 +553,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                   hintText: 'Confirm Password',
                                   fillColor: Colors.grey[200],
@@ -587,7 +587,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(30),
+                              Radius.circular(15),
                             ),
                             color: Color.fromARGB(255, 46, 36, 80),
                           ),
@@ -633,12 +633,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                   hintText: 'Your height (cm)',
                                   fillColor: Colors.grey[200],
@@ -677,12 +677,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                   hintText: 'Your weight (kg)',
                                   fillColor: Colors.grey[200],
@@ -711,7 +711,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 45,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(30),
+                            Radius.circular(15),
                           ),
                           gradient: LinearGradient(
                               begin: Alignment.bottomRight,

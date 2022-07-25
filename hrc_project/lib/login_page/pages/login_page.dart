@@ -70,8 +70,8 @@ class _LoginPageState extends State<LoginPage> {
       showDialog(
           context: context,
           builder: (context) {
-            return flexibleDialog(context, 150, 30, '알림', 15,
-                e.message.toString(), 15, () {}, () {}, () {}, () {});
+            return flexibleDialog(context, 200, 30, '알림', 15,
+                e.message.toString(), 17, () {}, () {}, () {}, () {});
           });
     }
   }
@@ -128,12 +128,12 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.deepPurpleAccent),
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         hintText: 'Email address',
                         fillColor: Colors.grey[200],
@@ -164,12 +164,12 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.deepPurpleAccent),
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         hintText: 'Password',
                         fillColor: Colors.grey[200],
@@ -224,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                           height: 45,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(30),
+                              Radius.circular(15),
                             ),
                             gradient: LinearGradient(
                                 begin: Alignment.bottomRight,

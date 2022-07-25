@@ -18,7 +18,7 @@ class _DistanceRankState extends State<DistanceRank> {
             'distance ranking',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 50,
+              fontSize: 40,
             ),
           ),
         ),

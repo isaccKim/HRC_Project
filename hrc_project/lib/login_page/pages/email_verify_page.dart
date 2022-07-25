@@ -119,7 +119,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                     'Request to send authentication email',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -131,7 +131,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                     'The account currently logged in:',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -146,7 +146,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                       height: 130,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(
-                          Radius.circular(30),
+                          Radius.circular(15),
                         ),
                         color: Color.fromARGB(255, 46, 36, 80),
                       ),
@@ -165,12 +165,12 @@ class _EmailVerifyState extends State<EmailVerify> {
                                       builder: (context) {
                                         return alternativeDialog(
                                             context,
-                                            150,
+                                            200,
                                             30,
                                             '회원 탈퇴하기',
                                             15,
                                             '계정을 삭제하시겠습니까?',
-                                            15,
+                                            17,
                                             Navigator.of(context).pop,
                                             confirmDialog(
                                                 context,
@@ -202,7 +202,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                                   ConnectionState.done) {
                                 return Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 20, top: 21, bottom: 21),
+                                      left: 10, top: 21, bottom: 21),
                                   child: Row(
                                     children: [
                                       Container(
@@ -233,10 +233,10 @@ class _EmailVerifyState extends State<EmailVerify> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 15),
+                                      SizedBox(width: 7),
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 10, bottom: 20),
+                                            top: 20, bottom: 10),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
@@ -245,7 +245,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                                               '${user_name}',
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 25,
+                                                fontSize: 20,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -254,7 +254,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                                               '${email}',
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 16,
+                                                fontSize: 13,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -317,12 +317,12 @@ class _EmailVerifyState extends State<EmailVerify> {
                             builder: (context) {
                               return flexibleDialog(
                                   context,
-                                  150,
+                                  200,
                                   30,
                                   '알림',
                                   15,
-                                  '이메일이 발송되었습니다.\n메일함에 보이지 않는다면 스팸 함을 확인하여 주십시오.',
-                                  14,
+                                  '이메일이 발송되었습니다.\n메일함에 보이지 않는다면\n스팸함을 확인하여 주십시오.',
+                                  15,
                                   () {},
                                   () {},
                                   () {},
@@ -334,7 +334,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(30),
+                            Radius.circular(15),
                           ),
                           gradient: LinearGradient(
                               begin: Alignment.bottomRight,
@@ -367,7 +367,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                     ),
                   ),
 
-                  SizedBox(height: 80),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.15),
 
                   //  Sign in button
                   GestureDetector(
@@ -402,12 +402,12 @@ class _EmailVerifyState extends State<EmailVerify> {
                             builder: (context) {
                               return flexibleDialog(
                                   context,
-                                  150,
+                                  200,
                                   30,
                                   '알림',
                                   15,
                                   '이메일 인증을 완료하여 주십시오.',
-                                  15,
+                                  17,
                                   () {},
                                   () {},
                                   () {},
@@ -420,7 +420,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                       height: 45,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(
-                          Radius.circular(30),
+                          Radius.circular(15),
                         ),
                         gradient: LinearGradient(
                             begin: Alignment.bottomRight,
