@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as grad;
-import 'package:hrc_project/dashboard/chart/lineChart.dart';
+import 'package:hrc_project/dashboard/weekly/weeklyLineChart.dart';
 
 class Weekly extends StatefulWidget {
   Weekly({Key? key}) : super(key: key);
@@ -40,7 +40,7 @@ class _WeeklyState extends State<Weekly> {
           padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.05,
           ),
-          child: LineChartSample2(),
+          child: WeeklyChart(),
         ),
       ],
     );

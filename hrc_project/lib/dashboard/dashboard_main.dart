@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:hrc_project/dashboard/chart/rundata_list.dart';
-import 'package:hrc_project/dashboard/dailyrun.dart';
-import 'package:hrc_project/dashboard/weekly.dart';
+import 'package:hrc_project/dashboard/daily/dailyData.dart';
+import 'package:hrc_project/dashboard/weekly/weeklyData.dart';
+import 'package:hrc_project/dashboard/daily/dailyrun.dart';
+import 'package:hrc_project/dashboard/monthly/monthly.dart';
+import 'package:hrc_project/dashboard/weekly/weekly.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({Key? key}) : super(key: key);
@@ -20,9 +21,48 @@ class _DashBoardState extends State<DashBoard> {
         backgroundColor: const Color.fromARGB(255, 35, 25, 60),
         body: Column(
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    'image/profile_1.png',
+                    width: 40,
+                    height: 40,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'test',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'test',
+                          style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
+            Divider(height: MediaQuery.of(context).size.height * 0.03),
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.05),
@@ -65,6 +105,7 @@ class _DashBoardState extends State<DashBoard> {
                 ),
               ),
             ),
+            Divider(height: MediaQuery.of(context).size.height * 0.02),
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.05),
@@ -75,7 +116,7 @@ class _DashBoardState extends State<DashBoard> {
                     children: [
                       MainBox.getContainer(Daily()),
                       MainBox.getContainer(Weekly()),
-                      MainBox.getContainer(Weekly()),
+                      MainBox.getContainer(Monthly()),
                       MainBox.getContainer(Weekly()),
                     ],
                   ),
@@ -90,8 +131,22 @@ class _DashBoardState extends State<DashBoard> {
                 child: Expanded(
                   child: TabBarView(
                     children: [
-                      DailyRecord(),
-                      Text('test2'),
+                      Column(
+                        children: [
+                          Divider(
+                            height: MediaQuery.of(context).size.height * 0.035,
+                          ),
+                          Expanded(child: DailyRecord()),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Divider(
+                            height: MediaQuery.of(context).size.height * 0.035,
+                          ),
+                          WeeklyRecord()
+                        ],
+                      ),
                       Text('test3'),
                       Text('test4'),
                     ],

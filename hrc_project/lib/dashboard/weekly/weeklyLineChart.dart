@@ -1,14 +1,14 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class LineChartSample2 extends StatefulWidget {
-  const LineChartSample2({Key? key}) : super(key: key);
+class WeeklyChart extends StatefulWidget {
+  const WeeklyChart({Key? key}) : super(key: key);
 
   @override
-  _LineChartSample2State createState() => _LineChartSample2State();
+  _WeeklyChartState createState() => _WeeklyChartState();
 }
 
-class _LineChartSample2State extends State<LineChartSample2> {
+class _WeeklyChartState extends State<WeeklyChart> {
   List<Color> gradientColors = [
     const Color(0xff23b6e6),
     const Color(0xff02d39a),

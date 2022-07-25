@@ -10,6 +10,24 @@ class DailyRecord extends StatelessWidget {
 }
 
 Widget _MyListView(BuildContext context) {
+  final TextStyle _textStyle = TextStyle(
+    color: Colors.white.withOpacity(0.9),
+    fontWeight: FontWeight.bold,
+    fontSize: 13,
+  );
+  Image Distance = Image.asset('image/distance.png',
+      width: MediaQuery.of(context).size.width * 0.1,
+      height: MediaQuery.of(context).size.width * 0.1);
+
+  Image Running_duration = Image.asset('image/hourglass.png',
+      color: Colors.black.withOpacity(0.7),
+      width: MediaQuery.of(context).size.width * 0.1,
+      height: MediaQuery.of(context).size.width * 0.1);
+
+  Image Running_pace = Image.asset('image/running-shoe.png',
+      color: Colors.black.withOpacity(0.7),
+      width: MediaQuery.of(context).size.width * 0.1,
+      height: MediaQuery.of(context).size.width * 0.1);
   return ListView.separated(
     // scrollDirection: Axis.horizontal,
 
@@ -47,25 +65,46 @@ Widget _MyListView(BuildContext context) {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          Icon(Icons.run_circle_outlined, size: 50),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text('test'),
-                        ],
-                      ),
+                    Row(
+                      children: [
+                        Distance,
+                        const Divider(
+                          indent: 10,
+                        ),
+                        Text(
+                          '12 km',
+                          style: _textStyle,
+                        ),
+                      ],
                     ),
-                    Icon(Icons.run_circle_outlined, size: 50),
-                    Icon(Icons.run_circle_outlined, size: 50),
+                    Row(
+                      children: [
+                        Running_duration,
+                        const Divider(),
+                        Text(
+                          '00:00:12',
+                          style: _textStyle,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Running_pace,
+                        const Divider(
+                          indent: 10,
+                        ),
+                        Text(
+                          '5\'22\'\'',
+                          style: _textStyle,
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ],
