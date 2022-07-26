@@ -3,10 +3,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../ranking_board_design/ranking_borad_design.dart';
+
 class GetPersonData extends StatelessWidget {
   final String documentId;
+  final int number;
+  final bool isTime;
 
-  GetPersonData({Key? key, required this.documentId}) : super(key: key);
+  GetPersonData(
+      {Key? key,
+      required this.documentId,
+      required this.number,
+      required this.isTime})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +26,10 @@ class GetPersonData extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
-
-          return Text('${data['user_image']}' +
-              '@^@' +
-              '${data['user_name']}' +
-              '@^@' +
-              '${data['sum_time']}' +
-              '@^@' +
-              '${data['sum_distance']}');
+          if (number < 3) {
+            return rankingTopTreeDesign(data, number + 1, isTime, documentId);
+          }
+          return rankingDesign(data, number + 1, isTime, documentId);
         }
 
         return Text('loading...');

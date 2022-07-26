@@ -204,61 +204,69 @@ class _EmailVerifyState extends State<EmailVerify> {
                                   padding: const EdgeInsets.only(
                                       left: 10, top: 21, bottom: 21),
                                   child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(
-                                        padding: EdgeInsets.all(4),
-                                        height: 100,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topRight,
-                                            end: Alignment.bottomLeft,
-                                            colors: [
-                                              Color.fromRGBO(
-                                                  248, 103, 248, 0.95),
-                                              Color.fromRGBO(61, 90, 230, 1)
-                                            ],
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15.0),
+                                        child: Container(
+                                          padding: EdgeInsets.all(4),
+                                          height: 100,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            gradient: LinearGradient(
+                                              begin: Alignment.topRight,
+                                              end: Alignment.bottomLeft,
+                                              colors: [
+                                                Color.fromRGBO(
+                                                    248, 103, 248, 0.95),
+                                                Color.fromRGBO(61, 90, 230, 1)
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        child: CircleAvatar(
-                                          radius: 45,
-                                          backgroundColor: Colors.grey[200],
-                                          foregroundImage:
-                                              NetworkImage(user_image),
-                                          child: Icon(
-                                            Icons.account_circle,
-                                            size: 75,
-                                            color: Colors.grey,
+                                          child: CircleAvatar(
+                                            radius: 45,
+                                            backgroundColor: Colors.grey[200],
+                                            foregroundImage:
+                                                NetworkImage(user_image),
+                                            child: Icon(
+                                              Icons.account_circle,
+                                              size: 75,
+                                              color: Colors.grey,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 7),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 20, bottom: 10),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              '${user_name}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
+                                      Flexible(
+                                        fit: FlexFit.tight,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 20, bottom: 10, right: 25),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Text(
+                                                '${user_name}',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(height: 10),
-                                            Text(
-                                              '${email}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.bold,
+                                              SizedBox(height: 10),
+                                              Text(
+                                                '${email}',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ],

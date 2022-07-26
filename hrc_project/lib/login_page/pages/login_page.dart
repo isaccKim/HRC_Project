@@ -38,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
         //  pop the loading circle
         Navigator.of(context).pop();
+        Navigator.of(context).pop();
         _emailController.clear();
         _passwordController.clear();
         Navigator.push(
@@ -85,209 +86,227 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 35, 25, 60),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  //  HRC Logo
-                  Container(
-                    height: 100,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('image/Logo1.png'),
-                          fit: BoxFit.fitWidth),
-                    ),
-                  ),
-
-                  SizedBox(height: 50),
-
-                  //  email textField
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: TextField(
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.emailAddress,
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.email),
-                        suffixIcon: GestureDetector(
-                          child: Icon(
-                            Icons.cancel,
-                            color: Color.fromRGBO(129, 97, 208, 0.75),
-                          ),
-                          onTap: () => _emailController.clear(),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.deepPurpleAccent),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        hintText: 'Email address',
-                        fillColor: Colors.grey[200],
-                        filled: true,
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 15),
-
-                  //  password textField
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: TextField(
-                      onSubmitted: ((value) {
-                        signIn();
-                      }),
-                      obscureText: true,
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.lock),
-                        suffixIcon: GestureDetector(
-                          child: Icon(
-                            Icons.cancel,
-                            color: Color.fromRGBO(129, 97, 208, 0.75),
-                          ),
-                          onTap: () => _passwordController.clear(),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.deepPurpleAccent),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        hintText: 'Password',
-                        fillColor: Colors.grey[200],
-                        filled: true,
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 15),
-
-                  //  Forgot Password? comment
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _emailController.clear();
-                            _passwordController.clear();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return ForgotPasswordPage();
-                                },
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Color.fromARGB(255, 158, 232, 249),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.25),
-
-                  //  Sign in button
-                  Column(
-                    children: [
-                      GestureDetector(
-                        onTap: signIn,
-                        child: Container(
-                          width: (MediaQuery.of(context).size.width * 0.6),
-                          height: 45,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black,
-                                spreadRadius: 0.5,
-                                blurRadius: 2,
-                                offset: Offset(0, 1),
-                              )
-                            ],
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                            gradient: LinearGradient(
-                                begin: Alignment.bottomRight,
-                                end: Alignment.topLeft,
-                                colors: [
-                                  Color.fromRGBO(129, 97, 208, 0.75),
-                                  Color.fromRGBO(186, 104, 186, 1)
-                                ]),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Sign in',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: 20),
-
-                      //  not a member? register now
-                      Row(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return NavigationBarPage();
+          } else {
+            return Scaffold(
+              backgroundColor: Color.fromARGB(255, 35, 25, 60),
+              body: SafeArea(
+                child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Not a member? ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white.withOpacity(0.5),
+                          //  HRC Logo
+                          Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage('image/Logo1.png'),
+                                  fit: BoxFit.fitWidth),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: widget.showRegisterPage,
-                            child: Text(
-                              ' Register now',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Color.fromARGB(255, 158, 232, 249),
-                                fontWeight: FontWeight.bold,
+
+                          SizedBox(height: 50),
+
+                          //  email textField
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 40.0),
+                            child: TextField(
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.emailAddress,
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.email),
+                                suffixIcon: GestureDetector(
+                                  child: Icon(
+                                    Icons.cancel,
+                                    color: Color.fromRGBO(129, 97, 208, 0.75),
+                                  ),
+                                  onTap: () => _emailController.clear(),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.deepPurpleAccent),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                hintText: 'Email address',
+                                fillColor: Colors.grey[200],
+                                filled: true,
                               ),
                             ),
+                          ),
+
+                          SizedBox(height: 15),
+
+                          //  password textField
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 40.0),
+                            child: TextField(
+                              onSubmitted: ((value) {
+                                signIn();
+                              }),
+                              obscureText: true,
+                              controller: _passwordController,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.lock),
+                                suffixIcon: GestureDetector(
+                                  child: Icon(
+                                    Icons.cancel,
+                                    color: Color.fromRGBO(129, 97, 208, 0.75),
+                                  ),
+                                  onTap: () => _passwordController.clear(),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.deepPurpleAccent),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                hintText: 'Password',
+                                fillColor: Colors.grey[200],
+                                filled: true,
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(height: 15),
+
+                          //  Forgot Password? comment
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _emailController.clear();
+                                    _passwordController.clear();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return ForgotPasswordPage();
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Forgot Password?',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Color.fromARGB(255, 158, 232, 249),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.25),
+
+                          //  Sign in button
+                          Column(
+                            children: [
+                              GestureDetector(
+                                onTap: signIn,
+                                child: Container(
+                                  width:
+                                      (MediaQuery.of(context).size.width * 0.6),
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black,
+                                        spreadRadius: 0.5,
+                                        blurRadius: 2,
+                                        offset: Offset(0, 1),
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                    gradient: LinearGradient(
+                                        begin: Alignment.bottomRight,
+                                        end: Alignment.topLeft,
+                                        colors: [
+                                          Color.fromRGBO(129, 97, 208, 0.75),
+                                          Color.fromRGBO(186, 104, 186, 1)
+                                        ]),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Sign in',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              SizedBox(height: 20),
+
+                              //  not a member? register now
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Not a member? ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white.withOpacity(0.5),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: widget.showRegisterPage,
+                                    child: Text(
+                                      ' Register now',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color:
+                                            Color.fromARGB(255, 158, 232, 249),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
+            );
+          }
+        },
       ),
     );
   }

@@ -263,7 +263,7 @@ Dialog imageDialog(
                     Text(
                       '카메라로 사진 찍기',
                       style: TextStyle(
-                        fontSize: 13,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                     )
@@ -302,7 +302,7 @@ Dialog imageDialog(
                     Text(
                       '갤러리에서 선택하기',
                       style: TextStyle(
-                        fontSize: 13,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                     )

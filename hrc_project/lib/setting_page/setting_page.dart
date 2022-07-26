@@ -56,13 +56,6 @@ class _SettingPageState extends State<SettingPage> {
     String newUserImage = '';
 
     try {
-      // loading circle
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(child: CircularProgressIndicator());
-        },
-      );
       if (isImageEdited) {
         final deleteUserProfileImage = await FirebaseStorage.instance
             .ref()
@@ -91,9 +84,6 @@ class _SettingPageState extends State<SettingPage> {
             : weight,
       );
 
-      //  pop the loading circle
-      Navigator.of(context).pop();
-
       //  update completion alert
       showDialog(
           context: context,
@@ -102,8 +92,6 @@ class _SettingPageState extends State<SettingPage> {
                 '계정 정보가 업데이트되었습니다.', 17, () {}, () {}, () {}, () {});
           });
     } catch (e) {
-      //  pop the loading circle
-      Navigator.of(context).pop();
       //  update data format alert
       showDialog(
           context: context,
@@ -207,7 +195,9 @@ class _SettingPageState extends State<SettingPage> {
         isUserDataChanged();
       }
     });
-    Navigator.of(context).pop();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.of(context).pop();
+    });
   }
 
   //  ImagePicker gallery function
@@ -222,7 +212,9 @@ class _SettingPageState extends State<SettingPage> {
         isUserDataChanged();
       }
     });
-    Navigator.of(context).pop();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.of(context).pop();
+    });
   }
 
   @override

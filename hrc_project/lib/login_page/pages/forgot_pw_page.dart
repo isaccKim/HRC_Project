@@ -21,20 +21,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   Future passwordReset() async {
-    // loading circle
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Center(child: CircularProgressIndicator());
-      },
-    );
-
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: _emailController.text.trim());
-
-      //  pop the loading circle
-      Navigator.of(context).pop();
 
       //  Reset password email alert
       showDialog(
@@ -43,9 +32,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             return flexibleDialog(context, 200, 30, '알림', 15,
                 '비밀번호 재설정 이메일이\n발송되었습니다.', 17, () {}, () {}, () {}, () {});
           });
-    } on FirebaseAuthException catch (e) {
-      //  pop the loading circle
+
       Navigator.of(context).pop();
+    } on FirebaseAuthException catch (e) {
       //  Email form alert
       showDialog(
           context: context,

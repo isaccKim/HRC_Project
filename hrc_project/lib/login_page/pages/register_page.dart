@@ -234,7 +234,9 @@ class _RegisterPageState extends State<RegisterPage> {
         _userImage = File(image.path);
       }
     });
-    Navigator.of(context).pop();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.of(context).pop();
+    });
   }
 
   //  ImagePicker gallery function
@@ -249,7 +251,9 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       },
     );
-    Navigator.of(context).pop();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.of(context).pop();
+    });
   }
 
   @override
