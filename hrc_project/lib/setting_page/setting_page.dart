@@ -241,7 +241,7 @@ class _SettingPageState extends State<SettingPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
 
                 //  user profile
                 Padding(
@@ -348,12 +348,12 @@ class _SettingPageState extends State<SettingPage> {
                                             )
                                           ],
                                         ),
-                                        const SizedBox(height: 20),
+                                        const SizedBox(height: 30),
                                         Stack(
                                           children: [
                                             //  edit user name textfield
                                             Container(
-                                              height: 40,
+                                              height: 25,
                                               width: 250,
                                               child: TextField(
                                                 onTap: () {
@@ -910,7 +910,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
               ],
             ),
           ),

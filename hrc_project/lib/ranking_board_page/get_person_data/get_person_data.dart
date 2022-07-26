@@ -9,13 +9,15 @@ class GetPersonData extends StatelessWidget {
   final String documentId;
   final int number;
   final bool isTime;
+  BuildContext context;
 
-  GetPersonData(
-      {Key? key,
-      required this.documentId,
-      required this.number,
-      required this.isTime})
-      : super(key: key);
+  GetPersonData({
+    Key? key,
+    required this.documentId,
+    required this.number,
+    required this.isTime,
+    required this.context,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +29,10 @@ class GetPersonData extends StatelessWidget {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
           if (number < 3) {
-            return rankingTopTreeDesign(data, number + 1, isTime, documentId);
+            return rankingTopTreeDesign(
+                data, number + 1, isTime, documentId, context);
           }
-          return rankingDesign(data, number + 1, isTime, documentId);
+          return rankingDesign(data, number + 1, isTime, documentId, context);
         }
 
         return Text('loading...');

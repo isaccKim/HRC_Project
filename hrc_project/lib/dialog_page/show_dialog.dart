@@ -590,3 +590,154 @@ Function confirmDialog(
     );
   };
 }
+
+Container userProfile(
+  BuildContext context,
+  String user_name,
+  String user_image,
+  String email,
+  Function executableFuc1,
+  Function executableFuc2,
+  Function executableFuc3,
+  Function executableFuc4,
+) {
+  return Container(
+    child: Stack(
+      children: [
+        Dialog(
+          backgroundColor: Colors.white.withOpacity(0),
+          child: Stack(
+            children: [
+              Container(
+                height: 240,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(height: 70),
+
+                    //  user name, email
+                    Column(
+                      children: [
+                        Text(
+                          '${user_name}',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 23,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          email = email.replaceRange(3, '${email}'.indexOf('@'),
+                              '*' * ('${email}'.indexOf('@') - 3)),
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: Container(
+                            height: 50,
+                            color: Colors.white.withOpacity(0),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                //  pop the alert
+                                Future.delayed(
+                                    const Duration(milliseconds: 200), () {
+                                  Navigator.of(context).pop();
+                                });
+                                executableFuc1();
+                                executableFuc2();
+                                executableFuc3();
+                                executableFuc4();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  onPrimary: Colors.white,
+                                  elevation: 0,
+                                  primary: Colors.deepPurpleAccent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10),
+                                    ),
+                                  )),
+                              child: Text(
+                                '닫기',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        //  User profile image circle
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 200.0),
+            child: Stack(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  height: 120,
+                  width: 120,
+                  decoration: const BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black,
+                        spreadRadius: 0.25,
+                        blurRadius: 4,
+                        offset: Offset(0, 1),
+                      )
+                    ],
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        Color.fromRGBO(248, 103, 248, 0.95),
+                        Color.fromRGBO(61, 90, 230, 1)
+                      ],
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    radius: 45,
+                    backgroundColor: Colors.grey[200],
+                    foregroundImage: NetworkImage(user_image),
+                    child: const Icon(
+                      Icons.account_circle,
+                      size: 75,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}

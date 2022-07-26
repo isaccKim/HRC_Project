@@ -48,6 +48,7 @@ class _TimeRankState extends State<TimeRank> {
                         documentId: docIDs[index],
                         number: index,
                         isTime: true,
+                        context: context,
                       );
                     },
                     separatorBuilder: (context, index) {

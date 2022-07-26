@@ -48,6 +48,7 @@ class _DistanceRankState extends State<DistanceRank> {
                         documentId: docIDs[index],
                         number: index,
                         isTime: false,
+                        context: context,
                       );
                     },
                     separatorBuilder: (context, index) {

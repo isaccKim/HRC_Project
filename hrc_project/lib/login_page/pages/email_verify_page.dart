@@ -207,35 +207,31 @@ class _EmailVerifyState extends State<EmailVerify> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15.0),
-                                        child: Container(
-                                          padding: EdgeInsets.all(4),
-                                          height: 100,
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            gradient: LinearGradient(
-                                              begin: Alignment.topRight,
-                                              end: Alignment.bottomLeft,
-                                              colors: [
-                                                Color.fromRGBO(
-                                                    248, 103, 248, 0.95),
-                                                Color.fromRGBO(61, 90, 230, 1)
-                                              ],
-                                            ),
+                                      Container(
+                                        padding: EdgeInsets.all(4),
+                                        height: 100,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topRight,
+                                            end: Alignment.bottomLeft,
+                                            colors: [
+                                              Color.fromRGBO(
+                                                  248, 103, 248, 0.95),
+                                              Color.fromRGBO(61, 90, 230, 1)
+                                            ],
                                           ),
-                                          child: CircleAvatar(
-                                            radius: 45,
-                                            backgroundColor: Colors.grey[200],
-                                            foregroundImage:
-                                                NetworkImage(user_image),
-                                            child: Icon(
-                                              Icons.account_circle,
-                                              size: 75,
-                                              color: Colors.grey,
-                                            ),
+                                        ),
+                                        child: CircleAvatar(
+                                          radius: 45,
+                                          backgroundColor: Colors.grey[200],
+                                          foregroundImage:
+                                              NetworkImage(user_image),
+                                          child: Icon(
+                                            Icons.account_circle,
+                                            size: 75,
+                                            color: Colors.grey,
                                           ),
                                         ),
                                       ),
@@ -261,7 +257,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                                                 '${email}',
                                                 style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 13,
+                                                  fontSize: 12,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),

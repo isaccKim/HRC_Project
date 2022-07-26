@@ -32,8 +32,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             return flexibleDialog(context, 200, 30, '알림', 15,
                 '비밀번호 재설정 이메일이\n발송되었습니다.', 17, () {}, () {}, () {}, () {});
           });
-
-      Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
       //  Email form alert
       showDialog(
