@@ -17,27 +17,38 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
       home: DefaultTabController(
           length: 2,
           child: Scaffold(
-            backgroundColor: Color.fromARGB(255, 35, 25, 60),
+            backgroundColor: const Color.fromARGB(255, 35, 25, 60),
             appBar: AppBar(
-              backgroundColor: Color.fromARGB(255, 35, 25, 60),
-              elevation: 0,
-              toolbarHeight: 10,
-              bottom: const TabBar(
-                unselectedLabelColor: Colors.blue,
-                labelColor: Colors.red,
-                indicator: BoxDecoration(
-                  color: Colors.black,
+              backgroundColor: const Color.fromARGB(255, 35, 25, 60),
+              elevation: 0.8,
+              toolbarHeight: 0,
+              bottom: PreferredSize(
+                preferredSize: const Size(0, 63),
+                child: TabBar(
+                  overlayColor:
+                      MaterialStateProperty.all(Colors.black.withOpacity(0)),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  unselectedLabelColor: Colors.grey[500],
+                  labelColor: Colors.white,
+                  labelPadding: EdgeInsets.only(bottom: 5),
+                  labelStyle:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                  indicatorPadding: EdgeInsets.only(bottom: 5),
+                  indicator: const BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                    color: Color.fromRGBO(248, 103, 248, 0),
+                  ),
+                  tabs: const [
+                    Tab(
+                      text: 'Time',
+                    ),
+                    Tab(
+                      text: 'Distance',
+                    ),
+                  ],
                 ),
-                tabs: [
-                  Tab(
-                    icon: Icon(Icons.directions_car),
-                    text: 'Time',
-                  ),
-                  Tab(
-                    icon: Icon(Icons.directions_car),
-                    text: 'Distance',
-                  ),
-                ],
               ),
             ),
             body: const TabBarView(

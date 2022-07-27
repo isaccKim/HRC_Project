@@ -702,8 +702,8 @@ Container userProfile(
               children: [
                 Container(
                   padding: const EdgeInsets.all(4),
-                  height: 130,
-                  width: 130,
+                  height: 120,
+                  width: 120,
                   decoration: const BoxDecoration(
                     boxShadow: [
                       BoxShadow(

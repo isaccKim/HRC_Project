@@ -5,16 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-//  1st, ranking type
-Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
-    String documentId, BuildContext context) {
+Widget noData(bool isTime, BuildContext context) {
   return Padding(
-    padding: const EdgeInsets.only(top: 100.0),
+    padding: const EdgeInsets.only(top: 90.0),
     child: Column(
       children: [
         //  ranking type
         Align(
-          heightFactor: 0.55,
+          heightFactor: 0.4,
           child: Stack(
             children: [
               Center(
@@ -55,7 +53,7 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
                           y2: 1,
                           child: const Icon(
                             Icons.timer_outlined,
-                            size: 200,
+                            size: 170,
                             color: Colors.white,
                           ),
                         )
@@ -70,7 +68,7 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
                           y2: 1,
                           child: const Icon(
                             Icons.north,
-                            size: 200,
+                            size: 170,
                             color: Colors.white,
                           ),
                         ),
@@ -86,7 +84,7 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
                           'Time',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 90,
+                            fontSize: 70,
                             fontWeight: FontWeight.bold,
                           ),
                         )
@@ -94,7 +92,7 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
                           'Distance',
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 65,
+                            fontSize: 55,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -103,6 +101,154 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
             ],
           ),
         ),
+
+        Padding(
+          padding: const EdgeInsets.only(top: 100.0),
+          child: Column(
+            children: [
+              RadiantGradientMask(
+                  color1: Color.fromRGBO(255, 125, 125, 1),
+                  color2: Color.fromRGBO(255, 125, 125, 0.7),
+                  color3: Color.fromRGBO(255, 125, 125, 0.4),
+                  color4: Color.fromRGBO(255, 125, 125, 0.1),
+                  x1: 0,
+                  y1: -1,
+                  x2: 0,
+                  y2: 1,
+                  child: const Icon(
+                    Icons.sentiment_dissatisfied,
+                    size: 80,
+                    color: Colors.white,
+                  )),
+              const Text(
+                'No Data',
+                style: TextStyle(
+                  color: Color.fromRGBO(255, 125, 125, 1),
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+//  1st, ranking type
+Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
+    String documentId, BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 90.0),
+    child: Column(
+      children: [
+        //  ranking type
+        Align(
+          heightFactor: 0.4,
+          child: Stack(
+            children: [
+              Center(
+                child: SizedBox(
+                  height: 400,
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  child: RadiantGradientMask(
+                    color1: const Color.fromRGBO(248, 103, 248, 1),
+                    color2: const Color.fromRGBO(220, 76, 220, 0.8),
+                    color3: const Color.fromRGBO(201, 92, 201, 0.6),
+                    color4: const Color.fromRGBO(186, 104, 186, 0.4),
+                    x1: 1,
+                    y1: -1,
+                    x2: -1,
+                    y2: 1,
+                    child: SvgPicture.asset(
+                      'image/ranking_board/type.svg',
+                      width: 200,
+                      height: 200,
+                    ),
+                  ),
+                ),
+              ),
+
+              //  Time, Distance icon
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 80.0),
+                  child: isTime
+                      ? RadiantGradientMask(
+                          color1: const Color.fromRGBO(50, 44, 255, 1),
+                          color2: const Color.fromRGBO(100, 44, 255, 0.8),
+                          color3: const Color.fromRGBO(186, 104, 186, 0.5),
+                          color4: const Color.fromRGBO(186, 104, 186, 0.1),
+                          x1: 1,
+                          y1: -1,
+                          x2: -1,
+                          y2: 1,
+                          child: const Icon(
+                            Icons.timer_outlined,
+                            size: 170,
+                            color: Colors.white,
+                          ),
+                        )
+                      : RadiantGradientMask(
+                          color1: const Color.fromRGBO(50, 44, 255, 1),
+                          color2: const Color.fromRGBO(100, 44, 255, 0.8),
+                          color3: const Color.fromRGBO(186, 104, 186, 0.5),
+                          color4: const Color.fromRGBO(186, 104, 186, 0.1),
+                          x1: 1,
+                          y1: -1,
+                          x2: -1,
+                          y2: 1,
+                          child: const Icon(
+                            Icons.north,
+                            size: 170,
+                            color: Colors.white,
+                          ),
+                        ),
+                ),
+              ),
+
+              //  Time, Distacne text
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 150.0),
+                  child: isTime
+                      ? const Text.rich(TextSpan(
+                          text: 'Time',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 60,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: [
+                              TextSpan(
+                                  text: '\n Top 100',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                  ))
+                            ]))
+                      : const Text.rich(TextSpan(
+                          text: 'Distance',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 55,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: [
+                              TextSpan(
+                                  text: '\n Top 100',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                  ))
+                            ])),
+                ),
+              ),
+            ],
+          ),
+        ),
+
         //  1st
         Stack(
           children: [
@@ -131,17 +277,17 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
             //  User profile
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 95, right: 150),
-                child: UserImage(data, documentId, context, 140, 140, 6),
+                padding: const EdgeInsets.only(top: 110, right: 150),
+                child: UserImage(data, documentId, context, 120, 120, 6),
               ),
             ),
 
             //  User name, statistic
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 120, left: 150),
-                child: UserNameEmail(data, isTime, context, Colors.white, 27,
-                    Colors.white, 37, Colors.white, 27),
+                padding: const EdgeInsets.only(top: 130, left: 130),
+                child: UserNameEmail(data, isTime, context, Colors.white, 25,
+                    Colors.white, 35, Colors.white, 25),
               ),
             ),
 
@@ -154,13 +300,13 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
                     text: '$number',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 70,
+                      fontSize: 60,
                       fontWeight: FontWeight.bold,
                     ),
                     children: const <TextSpan>[
                       TextSpan(
                         text: ' st',
-                        style: TextStyle(fontSize: 50),
+                        style: TextStyle(fontSize: 40),
                       ),
                     ],
                   ),
@@ -178,7 +324,7 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
 Widget ranking2nd(Map<String, dynamic> data, int number, bool isTime,
     String documentId, BuildContext context) {
   return Align(
-    heightFactor: 0.55,
+    heightFactor: 0.4,
     child: Stack(
       children: [
         Center(
@@ -206,17 +352,17 @@ Widget ranking2nd(Map<String, dynamic> data, int number, bool isTime,
         //  User profile
         Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 95, left: 150),
-            child: UserImage(data, documentId, context, 140, 140, 6),
+            padding: const EdgeInsets.only(top: 110, left: 150),
+            child: UserImage(data, documentId, context, 120, 120, 6),
           ),
         ),
 
         //  User name, statistic
         Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 120, right: 150),
-            child: UserNameEmail(data, isTime, context, Colors.white, 27,
-                Colors.white, 37, Colors.white, 27),
+            padding: const EdgeInsets.only(top: 130, right: 130),
+            child: UserNameEmail(data, isTime, context, Colors.white, 25,
+                Colors.white, 35, Colors.white, 25),
           ),
         ),
 
@@ -229,13 +375,13 @@ Widget ranking2nd(Map<String, dynamic> data, int number, bool isTime,
                 text: '$number',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 70,
+                  fontSize: 60,
                   fontWeight: FontWeight.bold,
                 ),
                 children: const <TextSpan>[
                   TextSpan(
                     text: ' nd',
-                    style: TextStyle(fontSize: 50),
+                    style: TextStyle(fontSize: 40),
                   ),
                 ],
               ),
@@ -277,17 +423,17 @@ Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
       //  User profile
       Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 95, right: 150),
-          child: UserImage(data, documentId, context, 140, 140, 6),
+          padding: const EdgeInsets.only(top: 110, right: 150),
+          child: UserImage(data, documentId, context, 120, 120, 6),
         ),
       ),
 
       //  User name, statistic
       Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 120, left: 150),
-          child: UserNameEmail(data, isTime, context, Colors.white, 27,
-              Colors.white, 37, Colors.white, 27),
+          padding: const EdgeInsets.only(top: 130, left: 130),
+          child: UserNameEmail(data, isTime, context, Colors.white, 25,
+              Colors.white, 35, Colors.white, 25),
         ),
       ),
 
@@ -300,13 +446,13 @@ Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
               text: '$number',
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 70,
+                fontSize: 60,
                 fontWeight: FontWeight.bold,
               ),
               children: const <TextSpan>[
                 TextSpan(
                   text: ' rd',
-                  style: TextStyle(fontSize: 50),
+                  style: TextStyle(fontSize: 40),
                 ),
               ],
             ),
@@ -448,19 +594,19 @@ Widget UserImage(Map<String, dynamic> data, String documentId,
       padding: EdgeInsets.all(circlePadding),
       height: height,
       width: width,
-      decoration: BoxDecoration(
-        boxShadow: [
-          isMe
-              ? const BoxShadow(
-                  color: Colors.black,
-                  spreadRadius: 0.25,
-                  blurRadius: 2,
-                  offset: Offset(0, 1),
-                )
-              : const BoxShadow(),
-        ],
+      decoration: const BoxDecoration(
+        // boxShadow: [
+        //   isMe
+        //       ? const BoxShadow(
+        //           color: Colors.black,
+        //           spreadRadius: 0.25,
+        //           blurRadius: 2,
+        //           offset: Offset(0, 1),
+        //         )
+        //       : const BoxShadow(),
+        // ],
         shape: BoxShape.circle,
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [

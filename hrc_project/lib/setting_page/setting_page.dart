@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
+import 'package:hrc_project/login_page/pages/email_verify_page.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SettingPage extends StatefulWidget {
@@ -105,7 +106,7 @@ class _SettingPageState extends State<SettingPage> {
   //  data update 방식
   Future updateUserDatails(String newUserName, String newUserImage,
       double newHeight, double newWeight) async {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = await FirebaseAuth.instance.currentUser;
     final userData =
         await FirebaseFirestore.instance.collection('users').doc(user!.uid);
 
@@ -160,7 +161,7 @@ class _SettingPageState extends State<SettingPage> {
     //  delete user account
     await user.delete();
 
-    await FirebaseAuth.instance.signOut();
+    FirebaseAuth.instance.signOut();
   }
 
   @override
@@ -348,12 +349,12 @@ class _SettingPageState extends State<SettingPage> {
                                             )
                                           ],
                                         ),
-                                        const SizedBox(height: 30),
+                                        const SizedBox(height: 20),
                                         Stack(
                                           children: [
                                             //  edit user name textfield
-                                            Container(
-                                              height: 25,
+                                            SizedBox(
+                                              height: 30,
                                               width: 250,
                                               child: TextField(
                                                 onTap: () {
@@ -407,13 +408,26 @@ class _SettingPageState extends State<SettingPage> {
                                             ),
                                           ],
                                         ),
-                                        Text(
-                                          '${email}',
-                                          style: TextStyle(
-                                            color: Colors.grey[500],
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '${email}',
+                                              style: TextStyle(
+                                                color: Colors.grey[500],
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 4.0),
+                                              child: Icon(
+                                                Icons.task_alt,
+                                                color: Colors.lightGreenAccent,
+                                                size: 20,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     );
@@ -684,7 +698,7 @@ class _SettingPageState extends State<SettingPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: AnimatedContainer(
-                      duration: Duration(milliseconds: 325),
+                      duration: const Duration(milliseconds: 325),
                       height: 70,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
