@@ -14,7 +14,7 @@ class TimeRank extends StatefulWidget {
 class _TimeRankState extends State<TimeRank>
     with AutomaticKeepAliveClientMixin {
   final user = FirebaseAuth.instance.currentUser!;
-  bool reload = true;
+
   List<String> docIDs = [];
   List<String> docIDs2 = [];
 
@@ -56,7 +56,8 @@ class _TimeRankState extends State<TimeRank>
 
   Future refreshPage() {
     setState(() {
-      reload = true;
+      docIDs.clear();
+      docIDs2.clear();
     });
     return Future.delayed(Duration(milliseconds: 0));
   }
