@@ -591,6 +591,7 @@ Function confirmDialog(
   };
 }
 
+//  Dialog with user profile
 Container userProfile(
   BuildContext context,
   String user_name,
@@ -628,7 +629,7 @@ Container userProfile(
                           style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 23,
+                            fontSize: 25,
                           ),
                         ),
                         SizedBox(height: 5),
@@ -637,7 +638,7 @@ Container userProfile(
                               '*' * ('${email}'.indexOf('@') - 3)),
                           style: TextStyle(
                             color: Colors.grey[500],
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -701,8 +702,8 @@ Container userProfile(
               children: [
                 Container(
                   padding: const EdgeInsets.all(4),
-                  height: 120,
-                  width: 120,
+                  height: 130,
+                  width: 130,
                   decoration: const BoxDecoration(
                     boxShadow: [
                       BoxShadow(

@@ -45,6 +45,7 @@ dependencies:
   image_picker: ^0.8.5+3
   firebase_storage: ^10.3.2
   google_nav_bar: ^5.0.6
+  flutter_svg: ^1.1.1+1
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +79,10 @@ flutter:
     - image/stop_btn.png
     - image/Backgroundimage.png
     - image/Logo1.png
+    - image/ranking_board/1st.svg
+    - image/ranking_board/2nd.svg
+    - image/ranking_board/3rd.svg
+    - image/ranking_board/type.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

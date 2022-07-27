@@ -836,56 +836,6 @@ class _SettingPageState extends State<SettingPage> {
                             ),
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     showDialog(
-                        //       context: context,
-                        //       builder: (context) {
-                        //         return alternativeDialog(
-                        //             context,
-                        //             200,
-                        //             30,
-                        //             '회원탈퇴하기',
-                        //             15,
-                        //             '계정을 삭제하시겠습니까?',
-                        //             17,
-                        //             Navigator.of(context).pop,
-                        //             confirmDialog(
-                        //                 context,
-                        //                 email,
-                        //                 Navigator.of(context).pop,
-                        //                 deleteUserData,
-                        //                 () {},
-                        //                 () {}),
-                        //             () {},
-                        //             () {});
-                        //       },
-                        //     );
-                        //   },
-                        //   child: Container(
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [
-                        //         RadiantGradientMask2(
-                        //           child: const Icon(
-                        //             Icons.sentiment_dissatisfied,
-                        //             color: Colors.white,
-                        //             size: 45,
-                        //           ),
-                        //         ),
-                        //         const SizedBox(width: 15),
-                        //         const Text(
-                        //           'Leaving the membership',
-                        //           style: TextStyle(
-                        //             fontWeight: FontWeight.bold,
-                        //             fontSize: 20,
-                        //             color: Color.fromRGBO(255, 125, 125, 1),
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

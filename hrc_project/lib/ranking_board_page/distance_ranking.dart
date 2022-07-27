@@ -10,7 +10,8 @@ class DistanceRank extends StatefulWidget {
   State<DistanceRank> createState() => _DistanceRankState();
 }
 
-class _DistanceRankState extends State<DistanceRank> {
+class _DistanceRankState extends State<DistanceRank>
+    with AutomaticKeepAliveClientMixin {
   final user = FirebaseAuth.instance.currentUser!;
   List<String> docIDs = [];
 
@@ -31,6 +32,7 @@ class _DistanceRankState extends State<DistanceRank> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 35, 25, 60),
       body: SafeArea(
@@ -42,14 +44,18 @@ class _DistanceRankState extends State<DistanceRank> {
                 builder: (context, snapshot) {
                   return ListView.separated(
                     scrollDirection: Axis.vertical,
-                    itemCount: docIDs.length,
+                    itemCount: docIDs.length + 1,
                     itemBuilder: (context, index) {
-                      return GetPersonData(
-                        documentId: docIDs[index],
-                        number: index,
-                        isTime: false,
-                        context: context,
-                      );
+                      if (docIDs.length != index) {
+                        return GetPersonData(
+                          documentId: docIDs[index],
+                          number: index,
+                          isTime: false,
+                          context: context,
+                        );
+                      } else {
+                        return const SizedBox(height: 80);
+                      }
                     },
                     separatorBuilder: (context, index) {
                       return const Divider(height: 15);
@@ -63,4 +69,7 @@ class _DistanceRankState extends State<DistanceRank> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

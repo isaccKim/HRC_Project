@@ -28,14 +28,18 @@ class GetPersonData extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
-          if (number < 3) {
-            return rankingTopTreeDesign(
-                data, number + 1, isTime, documentId, context);
+
+          if (number == 0) {
+            return ranking1st(data, number + 1, isTime, documentId, context);
+          } else if (number == 1) {
+            return ranking2nd(data, number + 1, isTime, documentId, context);
+          } else if (number == 2) {
+            return ranking3rd(data, number + 1, isTime, documentId, context);
           }
           return rankingDesign(data, number + 1, isTime, documentId, context);
         }
 
-        return Text('loading...');
+        return const SizedBox.shrink();
       }),
     );
   }

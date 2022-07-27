@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrc_project/test.dart';
 import '../auth/auth_page.dart';
 
 class StartPageWidget extends StatelessWidget {
@@ -37,6 +38,72 @@ class StartPageWidget extends StatelessWidget {
                           image: AssetImage('image/Logo1.png'),
                           fit: BoxFit.fitWidth),
                     )),
+              ),
+            ],
+          ),
+
+          //  Start button
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 300),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const TestPage();
+                            },
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: (MediaQuery.of(context).size.width * 0.6),
+                        height: 45,
+                        decoration: const BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black,
+                              spreadRadius: 0.5,
+                              blurRadius: 2,
+                              offset: Offset(0, 1),
+                            )
+                          ],
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                          gradient: LinearGradient(
+                              begin: Alignment.bottomRight,
+                              end: Alignment.topLeft,
+                              colors: [
+                                Color.fromRGBO(129, 97, 208, 0.75),
+                                Color.fromRGBO(186, 104, 186, 1)
+                              ]),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              'TestPage',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
