@@ -33,13 +33,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        body: SafeArea(
-          child: Text('WOW'),
-        ),
-      ),
-    );
+    return Scaffold(body: Column(children: []));
   }
 }

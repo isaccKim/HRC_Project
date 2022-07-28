@@ -68,8 +68,11 @@ class _DistanceRankState extends State<DistanceRank>
       backgroundColor: const Color.fromARGB(255, 35, 25, 60),
       body: SafeArea(
         child: RefreshIndicator(
+          backgroundColor: const Color.fromARGB(255, 35, 25, 60),
+          color: const Color.fromRGBO(220, 76, 220, 0.8),
           onRefresh: refreshPage,
           child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
                 FutureBuilder(

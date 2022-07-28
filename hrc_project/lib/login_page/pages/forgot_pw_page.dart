@@ -109,9 +109,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: TextField(
-                      onSubmitted: ((value) {
-                        passwordReset();
-                      }),
+                      // onSubmitted: ((value) {
+                      //   passwordReset();
+                      // }),
                       keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
                       decoration: InputDecoration(
@@ -149,7 +149,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       width: (MediaQuery.of(context).size.width * 0.6),
                       height: 45,
                       decoration: BoxDecoration(
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Colors.black,
                             spreadRadius: 0.5,
@@ -163,7 +163,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         gradient: LinearGradient(
                             begin: Alignment.bottomRight,
                             end: Alignment.topLeft,
-                            colors: [
+                            colors: const [
                               Color.fromRGBO(129, 97, 208, 0.75),
                               Color.fromRGBO(186, 104, 186, 1)
                             ]),

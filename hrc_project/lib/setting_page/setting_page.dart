@@ -90,7 +90,7 @@ class _SettingPageState extends State<SettingPage> {
           context: context,
           builder: (context) {
             return flexibleDialog(context, 200, 30, '알림', 15,
-                '계정 정보가 업데이트되었습니다.', 17, () {}, () {}, () {}, () {});
+                '계정 정보가 업데이트되었습니다.', 15, () {}, () {}, () {}, () {});
           });
     } catch (e) {
       //  update data format alert
@@ -161,7 +161,8 @@ class _SettingPageState extends State<SettingPage> {
     //  delete user account
     await user.delete();
 
-    FirebaseAuth.instance.signOut();
+    //  signOut
+    await FirebaseAuth.instance.signOut();
   }
 
   @override
@@ -354,8 +355,8 @@ class _SettingPageState extends State<SettingPage> {
                                           children: [
                                             //  edit user name textfield
                                             SizedBox(
-                                              height: 30,
-                                              width: 250,
+                                              height: 32,
+                                              width: 300,
                                               child: TextField(
                                                 onTap: () {
                                                   isNameEdited = true;
@@ -491,7 +492,7 @@ class _SettingPageState extends State<SettingPage> {
                                               //  edit user weight textfield
                                               SizedBox(
                                                 height: 40,
-                                                width: 110,
+                                                width: 130,
                                                 child: TextField(
                                                   onTap: () {
                                                     isWeightEdited = true;
@@ -538,7 +539,7 @@ class _SettingPageState extends State<SettingPage> {
                                                     ),
                                                     suffixIconConstraints:
                                                         const BoxConstraints(
-                                                            minHeight: 34),
+                                                            minHeight: 39),
                                                     hintText: '${weight}',
                                                     hintStyle: TextStyle(
                                                       fontWeight:
@@ -561,8 +562,6 @@ class _SettingPageState extends State<SettingPage> {
                                               ),
                                             ],
                                           ),
-
-                                          const SizedBox(width: 35),
 
                                           //user height
                                           Column(
@@ -587,7 +586,7 @@ class _SettingPageState extends State<SettingPage> {
                                               //  edit user height textfield
                                               SizedBox(
                                                 height: 40,
-                                                width: 120,
+                                                width: 130,
                                                 child: TextField(
                                                   onTap: () {
                                                     isHeightEdited = true;
@@ -636,7 +635,7 @@ class _SettingPageState extends State<SettingPage> {
                                                       ),
                                                       suffixIconConstraints:
                                                           const BoxConstraints(
-                                                              minHeight: 34),
+                                                              minHeight: 39),
                                                       hintText: '${height}',
                                                       hintStyle: TextStyle(
                                                         fontWeight:
@@ -686,7 +685,7 @@ class _SettingPageState extends State<SettingPage> {
                                   '프로필 업데이트',
                                   15,
                                   '수정한 내용을 저장하시겠습니까?',
-                                  17,
+                                  15,
                                   Navigator.of(context).pop,
                                   editProfile,
                                   () {},

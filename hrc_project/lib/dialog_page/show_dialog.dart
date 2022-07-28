@@ -634,8 +634,12 @@ Container userProfile(
                         ),
                         SizedBox(height: 5),
                         Text(
-                          email = email.replaceRange(3, '${email}'.indexOf('@'),
-                              '*' * ('${email}'.indexOf('@') - 3)),
+                          email.lastIndexOf('@') < 3
+                              ? '${email}'
+                              : email = email.replaceRange(
+                                  3,
+                                  '${email}'.indexOf('@'),
+                                  '*' * ('${email}'.indexOf('@') - 3)),
                           style: TextStyle(
                             color: Colors.grey[500],
                             fontSize: 18,
