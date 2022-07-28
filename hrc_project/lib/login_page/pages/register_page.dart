@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, non_constant_identifier_names
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'email_verify_page.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,11 +28,20 @@ class _RegisterPageState extends State<RegisterPage> {
   final _userWeightController = TextEditingController();
   File? _userImage;
 
-  FocusNode textfieldFocus = FocusNode();
+  @override
+  void initState() {
+    BackButtonInterceptor.add(myInterceptor);
+    super.initState();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    widget.showLoginPage();
+    return true;
+  }
 
   @override
   void dispose() {
-    textfieldFocus.dispose();
+    BackButtonInterceptor.remove(myInterceptor);
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -289,17 +300,20 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   //  HRC Logo
-                  Container(
-                    height: 100,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('image/Logo1.png'),
-                          fit: BoxFit.fitWidth),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 19),
+                        child: SvgPicture.asset(
+                          'image/Logo.svg',
+                          height: 80,
+                        ),
+                      ),
+                    ],
                   ),
 
-                  SizedBox(height: 35),
+                  SizedBox(height: 50),
 
                   //  profile section
                   Stack(

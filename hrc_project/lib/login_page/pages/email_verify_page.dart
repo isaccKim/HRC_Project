@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:hrc_project/nav_bar/navigation_bar.dart';
 import '../auth/auth_page.dart';
@@ -19,6 +21,27 @@ class _EmailVerifyState extends State<EmailVerify> {
   String user_name = '';
   String email = '';
   String user_image = '';
+
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  Future<bool> myInterceptor(
+      bool stopDefaultButtonEvent, RouteInfo info) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+
+    return true;
+  }
 
   //  Get user data from cloud Firestore
   Future _getUserData() async {
@@ -102,19 +125,21 @@ class _EmailVerifyState extends State<EmailVerify> {
               ),
               Column(
                 children: [
-                  SizedBox(height: 15),
                   //  HRC Logo
-                  Container(
-                    height: 75,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('image/Logo1.png'),
-                          fit: BoxFit.fitWidth),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: SvgPicture.asset(
+                          'image/Logo.svg',
+                          height: 80,
+                        ),
+                      ),
+                    ],
                   ),
 
-                  SizedBox(height: 50),
+                  SizedBox(height: 30),
 
                   Text(
                     'Request to send authentication email',
@@ -165,23 +190,25 @@ class _EmailVerifyState extends State<EmailVerify> {
                                       context: context,
                                       builder: (context) {
                                         return alternativeDialog(
-                                            context,
-                                            200,
-                                            30,
-                                            '회원 탈퇴하기',
-                                            15,
-                                            '계정을 삭제하시겠습니까?',
-                                            17,
-                                            Navigator.of(context).pop,
-                                            confirmDialog(
-                                                context,
-                                                email,
-                                                Navigator.of(context).pop,
-                                                deleteUserData,
-                                                () {},
-                                                () {}),
-                                            () {},
-                                            () {});
+                                          context,
+                                          200,
+                                          30,
+                                          '회원 탈퇴하기',
+                                          15,
+                                          '계정을 삭제하시겠습니까?',
+                                          17,
+                                          Navigator.of(context).pop,
+                                          confirmDialog(
+                                              context,
+                                              email,
+                                              Navigator.of(context).pop,
+                                              deleteUserData,
+                                              () {},
+                                              () {}),
+                                          () {},
+                                          () {},
+                                          () {},
+                                        );
                                       },
                                     );
                                   },

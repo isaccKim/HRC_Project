@@ -15,6 +15,7 @@ Dialog alternativeDialog(
   Function executableFuc2,
   Function executableFuc3,
   Function executableFuc4,
+  Function executableFuc5,
 ) {
   return Dialog(
     backgroundColor: Colors.white.withOpacity(0),
@@ -91,6 +92,7 @@ Dialog alternativeDialog(
                     color: Colors.white.withOpacity(0),
                     child: ElevatedButton(
                       onPressed: () {
+                        executableFuc5();
                         //  pop the alert
                         Navigator.of(context).pop();
                       },
@@ -597,6 +599,7 @@ Container userProfile(
   String user_name,
   String user_image,
   String email,
+  String rank,
   Function executableFuc1,
   Function executableFuc2,
   Function executableFuc3,
@@ -699,9 +702,9 @@ Container userProfile(
           ),
         ),
         //  User profile image circle
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 200.0),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 180.0),
+          child: Center(
             child: Stack(
               children: [
                 Container(
@@ -738,6 +741,31 @@ Container userProfile(
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 80, left: 80),
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: rankBadge(rank),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '$rank',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -745,4 +773,34 @@ Container userProfile(
       ],
     ),
   );
+}
+
+//  Rank badget color
+List<Color> rankBadge(String rank) {
+  if (rank == '1') {
+    return [
+      const Color.fromRGBO(186, 104, 186, 1),
+      const Color.fromRGBO(159, 101, 190, 1),
+      const Color.fromRGBO(147, 99, 201, 1),
+      const Color.fromRGBO(129, 97, 208, 1),
+    ];
+  } else if (rank == '2') {
+    return [
+      const Color.fromRGBO(186, 104, 186, 1),
+      const Color.fromRGBO(159, 101, 190, 1),
+      const Color.fromRGBO(129, 97, 208, 1),
+      const Color.fromRGBO(99, 97, 210, 1),
+      const Color.fromRGBO(76, 93, 220, 1),
+      const Color.fromRGBO(61, 90, 230, 1),
+    ];
+  } else if (rank == '3') {
+    return [
+      const Color.fromRGBO(129, 97, 208, 1),
+      const Color.fromRGBO(95, 93, 215, 1),
+      const Color.fromRGBO(76, 93, 220, 1),
+      const Color.fromRGBO(61, 90, 230, 1),
+    ];
+  } else {
+    return [];
+  }
 }

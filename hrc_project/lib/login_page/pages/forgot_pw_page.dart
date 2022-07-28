@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '/dialog_page/show_dialog.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -15,9 +17,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+  @override
   void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
     _emailController.dispose();
     super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Navigator.of(context).pop();
+    return true;
   }
 
   Future passwordReset() async {
@@ -77,15 +91,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+
                   //  HRC Logo
-                  Container(
-                    height: 100,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('image/Logo1.png'),
-                          fit: BoxFit.fitWidth),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: SvgPicture.asset(
+                          'image/Logo.svg',
+                          height: 80,
+                        ),
+                      ),
+                    ],
                   ),
 
                   SizedBox(height: 50),

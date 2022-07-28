@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hrc_project/ranking_board_page/distance_ranking.dart';
-import 'package:hrc_project/ranking_board_page/time_ranking.dart';
 
 void main() {
   runApp(const TestPage());

@@ -278,7 +278,7 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 110, right: 150),
-                child: UserImage(data, documentId, context, 120, 120, 6),
+                child: UserImage(data, documentId, context, 120, 120, 6, '1'),
               ),
             ),
 
@@ -353,7 +353,7 @@ Widget ranking2nd(Map<String, dynamic> data, int number, bool isTime,
         Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 110, left: 150),
-            child: UserImage(data, documentId, context, 120, 120, 6),
+            child: UserImage(data, documentId, context, 120, 120, 6, '2'),
           ),
         ),
 
@@ -424,7 +424,7 @@ Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
       Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 110, right: 150),
-          child: UserImage(data, documentId, context, 120, 120, 6),
+          child: UserImage(data, documentId, context, 120, 120, 6, '3'),
         ),
       ),
 
@@ -516,7 +516,7 @@ Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
               ),
 
               //  User profile image
-              UserImage(data, documentId, context, 90, 90, 4),
+              UserImage(data, documentId, context, 90, 90, 4, '4~'),
             ],
           ),
         ],
@@ -566,8 +566,14 @@ class RadiantGradientMask extends StatelessWidget {
 }
 
 //  User profile slot
-Widget UserImage(Map<String, dynamic> data, String documentId,
-    BuildContext context, double height, double width, double circlePadding) {
+Widget UserImage(
+    Map<String, dynamic> data,
+    String documentId,
+    BuildContext context,
+    double height,
+    double width,
+    double circlePadding,
+    String rank) {
   bool isMe = false;
   final user = FirebaseAuth.instance.currentUser;
   if (documentId == user!.uid) {
@@ -584,6 +590,7 @@ Widget UserImage(Map<String, dynamic> data, String documentId,
                 '${data['user_name']}',
                 '${data['user_image']}',
                 '${data['email']}',
+                rank,
                 () {},
                 () {},
                 () {},

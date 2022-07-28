@@ -2,10 +2,13 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrc_project/nav_bar/navigation_bar.dart';
 import 'email_verify_page.dart';
 import 'forgot_pw_page.dart';
 import '/dialog_page/show_dialog.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -107,14 +110,17 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           //  HRC Logo
-                          Container(
-                            height: 100,
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage('image/Logo1.png'),
-                                  fit: BoxFit.fitWidth),
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: SvgPicture.asset(
+                                  'image/Logo.svg',
+                                  height: 80,
+                                ),
+                              ),
+                            ],
                           ),
 
                           SizedBox(height: 50),

@@ -679,17 +679,19 @@ class _SettingPageState extends State<SettingPage> {
                             context: context,
                             builder: (context) {
                               return alternativeDialog(
-                                  context,
-                                  200,
-                                  30,
-                                  '프로필 업데이트',
-                                  15,
-                                  '수정한 내용을 저장하시겠습니까?',
-                                  15,
-                                  Navigator.of(context).pop,
-                                  editProfile,
-                                  () {},
-                                  () {});
+                                context,
+                                200,
+                                30,
+                                '프로필 업데이트',
+                                15,
+                                '수정한 내용을 저장하시겠습니까?',
+                                15,
+                                Navigator.of(context).pop,
+                                editProfile,
+                                () {},
+                                () {},
+                                () {},
+                              );
                             },
                           );
                         }
@@ -775,17 +777,22 @@ class _SettingPageState extends State<SettingPage> {
                               context: context,
                               builder: (context) {
                                 return alternativeDialog(
-                                    context,
-                                    200,
-                                    30,
-                                    '로그아웃',
-                                    15,
-                                    '로그아웃하시겠습니까?',
-                                    17,
-                                    FirebaseAuth.instance.signOut, () {
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context, '/', (route) => false);
-                                }, () {}, () {});
+                                  context,
+                                  200,
+                                  30,
+                                  '로그아웃',
+                                  15,
+                                  '로그아웃하시겠습니까?',
+                                  17,
+                                  FirebaseAuth.instance.signOut,
+                                  () {
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, '/', (route) => false);
+                                  },
+                                  () {},
+                                  () {},
+                                  () {},
+                                );
                               },
                             );
                           },
@@ -813,23 +820,25 @@ class _SettingPageState extends State<SettingPage> {
                               context: context,
                               builder: (context) {
                                 return alternativeDialog(
-                                    context,
-                                    200,
-                                    30,
-                                    '회원탈퇴하기',
-                                    15,
-                                    '계정을 삭제하시겠습니까?',
-                                    17,
-                                    Navigator.of(context).pop,
-                                    confirmDialog(
-                                        context,
-                                        email,
-                                        Navigator.of(context).pop,
-                                        deleteUserData,
-                                        () {},
-                                        () {}),
-                                    () {},
-                                    () {});
+                                  context,
+                                  200,
+                                  30,
+                                  '회원탈퇴하기',
+                                  15,
+                                  '계정을 삭제하시겠습니까?',
+                                  17,
+                                  Navigator.of(context).pop,
+                                  confirmDialog(
+                                      context,
+                                      email,
+                                      Navigator.of(context).pop,
+                                      deleteUserData,
+                                      () {},
+                                      () {}),
+                                  () {},
+                                  () {},
+                                  () {},
+                                );
                               },
                             );
                           },

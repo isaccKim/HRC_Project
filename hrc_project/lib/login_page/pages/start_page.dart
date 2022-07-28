@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hrc_project/test.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../auth/auth_page.dart';
 
 class StartPageWidget extends StatelessWidget {
@@ -29,15 +29,11 @@ class StartPageWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 150),
-                child: Container(
-                    width: 202,
-                    height: 108,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('image/Logo1.png'),
-                          fit: BoxFit.fitWidth),
-                    )),
+                padding: const EdgeInsets.only(top: 125),
+                child: SvgPicture.asset(
+                  'image/Logo.svg',
+                  height: 108,
+                ),
               ),
             ],
           ),
