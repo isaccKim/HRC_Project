@@ -56,6 +56,14 @@ class _SettingPageState extends State<SettingPage> {
     final user = await FirebaseAuth.instance.currentUser;
     String newUserImage = '';
 
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
     try {
       if (isImageEdited) {
         final deleteUserProfileImage = await FirebaseStorage.instance
@@ -85,21 +93,35 @@ class _SettingPageState extends State<SettingPage> {
             : weight,
       );
 
+      // pop the loading circle
+      Future.delayed(const Duration(milliseconds: 500), () {
+        Navigator.of(context, rootNavigator: true).pop();
+      });
+
       //  update completion alert
-      showDialog(
-          context: context,
-          builder: (context) {
-            return flexibleDialog(context, 200, 30, '알림', 15,
-                '계정 정보가 업데이트되었습니다.', 15, () {}, () {}, () {}, () {});
-          });
+      Future.delayed(const Duration(milliseconds: 900), () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return flexibleDialog(context, 200, 30, '알림', 15,
+                  '계정 정보가 수정되었습니다.', 15, () {}, () {}, () {}, () {});
+            });
+      });
     } catch (e) {
+      // pop the loading circle
+      Future.delayed(const Duration(milliseconds: 500), () {
+        Navigator.of(context, rootNavigator: true).pop();
+      });
+
       //  update data format alert
-      showDialog(
-          context: context,
-          builder: (context) {
-            return flexibleDialog(context, 200, 30, '알림', 15, e.toString(), 20,
-                () {}, () {}, () {}, () {});
-          });
+      Future.delayed(const Duration(milliseconds: 900), () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return flexibleDialog(context, 200, 30, '알림', 15, e.toString(),
+                  20, () {}, () {}, () {}, () {});
+            });
+      });
     }
   }
 
@@ -198,7 +220,7 @@ class _SettingPageState extends State<SettingPage> {
       }
     });
     Future.delayed(const Duration(milliseconds: 300), () {
-      Navigator.of(context).pop();
+      Navigator.of(context, rootNavigator: true).pop();
     });
   }
 
@@ -215,7 +237,7 @@ class _SettingPageState extends State<SettingPage> {
       }
     });
     Future.delayed(const Duration(milliseconds: 300), () {
-      Navigator.of(context).pop();
+      Navigator.of(context, rootNavigator: true).pop();
     });
   }
 

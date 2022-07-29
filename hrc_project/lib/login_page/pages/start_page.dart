@@ -43,20 +43,55 @@ class StartPageWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 100),
+                padding: const EdgeInsets.only(bottom: 90),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const AuthPage();
-                            },
-                          ),
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return Center(
+                                child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                CircularProgressIndicator(),
+                                DefaultTextStyle(
+                                  style: TextStyle(),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 17.0),
+                                    child: Text(
+                                      '로그인 정보를 확인중입니다...',
+                                      style: TextStyle(
+                                        color: Color.fromRGBO(159, 101, 230, 1),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ));
+                          },
                         );
+
+                        // pop the loading circle
+                        Future.delayed(const Duration(milliseconds: 900), () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        });
+
+                        Future.delayed(const Duration(milliseconds: 1100), () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const AuthPage();
+                              },
+                            ),
+                          );
+                        });
                       },
                       child: Container(
                         width: (MediaQuery.of(context).size.width * 0.6),
