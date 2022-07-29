@@ -485,39 +485,42 @@ Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
       ),
       child: Stack(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              //  Ranking
-              Center(
-                child: Text.rich(
-                  TextSpan(
-                    text: '$number',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    children: const <TextSpan>[
-                      TextSpan(
-                        text: ' th',
-                        style: TextStyle(fontSize: 23),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                //  Ranking
+                Center(
+                  child: Text.rich(
+                    TextSpan(
+                      text: '$number',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: ' th',
+                          style: TextStyle(fontSize: 23),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              //  User name, statistic
-              Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 20, right: 5),
-                child: UserNameEmail(data, isTime, context, Colors.grey[500],
-                    18, Colors.white, 30, Colors.white, 23),
-              ),
+                //  User name, statistic
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, bottom: 20, right: 5),
+                  child: UserNameEmail(data, isTime, context, Colors.grey[500],
+                      18, Colors.white, 30, Colors.white, 23),
+                ),
 
-              //  User profile image
-              UserImage(data, documentId, context, 90, 90, 4, '4~'),
-            ],
+                //  User profile image
+                UserImage(data, documentId, context, 90, 90, 4, '4~'),
+              ],
+            ),
           ),
         ],
       ),
@@ -667,14 +670,16 @@ Widget UserNameEmail(
                 text: '${data['sum_time']}',
                 style: TextStyle(
                   color: staticColor,
-                  fontSize: staticSize,
+                  fontSize:
+                      ('${data['sum_time']}'.length > 3) ? 27 : staticSize,
                   fontWeight: FontWeight.bold,
                 ),
                 children: <TextSpan>[
                   TextSpan(
                     text: ' hr',
                     style: TextStyle(
-                      fontSize: unitSize,
+                      fontSize:
+                          ('${data['sum_time']}'.length > 3) ? 21 : unitSize,
                       color: unitColor,
                     ),
                   ),
@@ -686,14 +691,17 @@ Widget UserNameEmail(
                 text: '${data['sum_distance']}',
                 style: TextStyle(
                   color: staticColor,
-                  fontSize: staticSize,
+                  fontSize:
+                      ('${data['sum_distance']}'.length > 3) ? 27 : staticSize,
                   fontWeight: FontWeight.bold,
                 ),
                 children: <TextSpan>[
                   TextSpan(
                     text: ' km',
                     style: TextStyle(
-                      fontSize: unitSize,
+                      fontSize: ('${data['sum_distacne']}'.length > 3)
+                          ? 21
+                          : unitSize,
                       color: unitColor,
                     ),
                   ),

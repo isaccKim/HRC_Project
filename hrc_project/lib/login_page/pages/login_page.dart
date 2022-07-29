@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   Future signIn() async {
     // loading circle
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return Center(child: CircularProgressIndicator());
@@ -67,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     } on FirebaseAuthException catch (e) {
-      // // pop the loading circle
+      // pop the loading circle
       Navigator.of(context).pop();
 
       //  email or password error
@@ -243,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                                       (MediaQuery.of(context).size.width * 0.6),
                                   height: 45,
                                   decoration: BoxDecoration(
-                                    boxShadow: [
+                                    boxShadow: const [
                                       BoxShadow(
                                         color: Colors.black,
                                         spreadRadius: 0.5,
@@ -257,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
                                     gradient: LinearGradient(
                                         begin: Alignment.bottomRight,
                                         end: Alignment.topLeft,
-                                        colors: [
+                                        colors: const [
                                           Color.fromRGBO(129, 97, 208, 0.75),
                                           Color.fromRGBO(186, 104, 186, 1)
                                         ]),

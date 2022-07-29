@@ -334,6 +334,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                       onTap: () {
                         // loading circle
                         showDialog(
+                          barrierDismissible: false,
                           context: context,
                           builder: (context) {
                             return Center(child: CircularProgressIndicator());
@@ -414,6 +415,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                     onTap: () async {
                       // loading circle
                       showDialog(
+                        barrierDismissible: false,
                         context: context,
                         builder: (context) {
                           return Center(child: CircularProgressIndicator());

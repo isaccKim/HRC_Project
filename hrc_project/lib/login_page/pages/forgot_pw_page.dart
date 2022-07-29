@@ -35,25 +35,45 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   Future passwordReset() async {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: _emailController.text.trim());
 
-      //  Reset password email alert
-      showDialog(
-          context: context,
-          builder: (context) {
-            return flexibleDialog(context, 200, 30, '알림', 15,
-                '비밀번호 재설정 이메일이\n발송되었습니다.', 17, () {}, () {}, () {}, () {});
-          });
+      // pop the loading circle
+      Future.delayed(const Duration(milliseconds: 500), () {
+        Navigator.of(context, rootNavigator: true).pop();
+      });
+
+      Future.delayed(const Duration(milliseconds: 900), () {
+        //  Reset password email alert
+        showDialog(
+            context: context,
+            builder: (context) {
+              return flexibleDialog(context, 200, 30, '알림', 15,
+                  '비밀번호 재설정 이메일이\n발송되었습니다.', 17, () {}, () {}, () {}, () {});
+            });
+      });
     } on FirebaseAuthException catch (e) {
-      //  Email form alert
-      showDialog(
-          context: context,
-          builder: (context) {
-            return flexibleDialog(context, 200, 30, '알림', 15,
-                e.message.toString(), 15, () {}, () {}, () {}, () {});
-          });
+      // pop the loading circle
+      Future.delayed(const Duration(milliseconds: 500), () {
+        Navigator.of(context, rootNavigator: true).pop();
+      });
+      Future.delayed(const Duration(milliseconds: 900), () {
+        //  Email form alert
+        showDialog(
+            context: context,
+            builder: (context) {
+              return flexibleDialog(context, 200, 30, '알림', 15,
+                  e.message.toString(), 15, () {}, () {}, () {}, () {});
+            });
+      });
     }
   }
 
@@ -162,7 +182,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
                   //  Reset password email send button
                   GestureDetector(
-                    onTap: passwordReset,
+                    onTap: () {
+                      // WidgetsBinding.instance.addPostFrameCallback(
+                      //   (_) async {
+                      //     await showDialog(
+                      //       barrierDismissible: false,
+                      //       context: context,
+                      //       builder: (context) {
+                      //         return Center(child: CircularProgressIndicator());
+                      //       },
+                      //     );
+                      //   },
+                      // );
+
+                      passwordReset();
+                    },
                     child: Container(
                       width: (MediaQuery.of(context).size.width * 0.6),
                       height: 45,

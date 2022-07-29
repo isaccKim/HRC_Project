@@ -55,6 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Future signUp() async {
     // loading circle
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return Center(child: CircularProgressIndicator());
