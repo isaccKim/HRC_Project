@@ -167,7 +167,10 @@ class _DistanceRankState extends State<DistanceRank>
                       },
                       separatorBuilder: (context, index) {
                         if (index > 2) {
-                          return const Divider(height: 15);
+                          return Divider(
+                            height: 15,
+                            color: Colors.white.withOpacity(0),
+                          );
                         } else {
                           return const SizedBox.shrink();
                         }

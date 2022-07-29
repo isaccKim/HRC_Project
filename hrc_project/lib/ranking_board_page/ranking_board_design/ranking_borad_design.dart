@@ -145,7 +145,7 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
       children: [
         //  ranking type
         Align(
-          heightFactor: 0.4,
+          heightFactor: 0.35,
           child: Stack(
             children: [
               Center(
