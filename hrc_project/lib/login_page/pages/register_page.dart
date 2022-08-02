@@ -1,10 +1,15 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, non_constant_identifier_names
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../running_main/showmap.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'email_verify_page.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -17,218 +22,250 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confrimPasswordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _userNameController = TextEditingController();
   final _userHeightController = TextEditingController();
   final _userWeightController = TextEditingController();
+  File? _userImage;
+
+  @override
+  void initState() {
+    BackButtonInterceptor.add(myInterceptor);
+    super.initState();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    widget.showLoginPage();
+    return true;
+  }
 
   @override
   void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
     _emailController.dispose();
     _passwordController.dispose();
-    _confrimPasswordController.dispose();
+    _confirmPasswordController.dispose();
     _userNameController.dispose();
     _userHeightController.dispose();
     _userWeightController.dispose();
     super.dispose();
   }
 
+  //  Firesbase firecloud data upload
   Future signUp() async {
-    if (_emailController.text.isNotEmpty &&
-        _passwordController.text.isNotEmpty &&
-        _confrimPasswordController.text.isNotEmpty &&
-        _userNameController.text.isNotEmpty &&
-        _userHeightController.text.isNotEmpty &&
-        _userWeightController.text.isNotEmpty) {
-      if (_emailController.text.trim().contains('@handong')) {
-        if (passwordConfirmed()) {
-          final newUser =
-              await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim(),
-          );
+    // loading circle
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
 
-          addUserDetails(
-            _userNameController.text.trim(),
-            _emailController.text.trim(),
-            double.parse(_userHeightController.text.trim()),
-            double.parse(_userWeightController.text.trim()),
-          );
+    if (_userImage != null) {
+      if (_emailController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty &&
+          _confirmPasswordController.text.isNotEmpty &&
+          _userNameController.text.isNotEmpty &&
+          _userHeightController.text.isNotEmpty &&
+          _userWeightController.text.isNotEmpty) {
+        if (_emailController.text.trim().contains('@handong')) {
+          if (passwordConfirmed()) {
+            try {
+              final newUser =
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                email: _emailController.text.trim(),
+                password: _passwordController.text.trim(),
+              );
 
-          if (FirebaseAuth.instance.currentUser!.emailVerified) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return MapSample();
-                },
-              ),
-            );
+              final _userProfileImage = FirebaseStorage.instance
+                  .ref()
+                  .child('profile_image')
+                  .child(newUser.user!.uid);
+
+              await _userProfileImage.putFile(_userImage!);
+              final _user_image = await _userProfileImage.getDownloadURL();
+
+              //  data set 방식 함수 호출
+              addUserDetails(
+                newUser,
+                _userNameController.text.trim(),
+                _emailController.text.trim(),
+                _user_image.trim(),
+                double.parse(_userHeightController.text.trim()),
+                double.parse(_userWeightController.text.trim()),
+              );
+
+              //  data add 방식 함수 호출
+              // addUserDetails(
+              //   _userNameController.text.trim(),
+              //   _emailController.text.trim(),
+              //   _user_image.trim(),
+              //   double.parse(_userHeightController.text.trim()),
+              //   double.parse(_userWeightController.text.trim()),
+              // );
+
+              //  pop the loading circle
+              Navigator.of(context).pop();
+
+              //  email verify page push
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return EmailVerify();
+                  },
+                ),
+              );
+            } on FirebaseAuthException catch (e) {
+              //  pop the loading circle
+              Navigator.of(context).pop();
+              //  account creation error alert
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return flexibleDialog(context, 200, 30, '알림', 15,
+                        e.message.toString(), 17, () {}, () {}, () {}, () {});
+                  });
+            }
           } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
+            //  pop the loading circle
+            Navigator.of(context).pop();
+            //  password form alert
+            showDialog(
+                context: context,
                 builder: (context) {
-                  return EmailVerify();
-                },
-              ),
-            );
+                  return flexibleDialog(
+                      context,
+                      200,
+                      30,
+                      '알림',
+                      15,
+                      '비밀번호를 다시 확인해 주십시오.\n(7자 이상의 비밀번호를 사용해 주세요)',
+                      15,
+                      () {},
+                      () {},
+                      () {},
+                      () {});
+                });
           }
-
-          //  data set 방식 함수 호출
-          // addUserDetails(
-          //   newUser,
-          //   _userNameController.text.trim(),
-          //   _userHeightController.text.trim(),
-          //   _emailController.text.trim(),
-          //   int.parse(_userWeightController.text.trim()),
-          // );
         } else {
-          //  password alert
+          //  pop the loading circle
+          Navigator.of(context).pop();
+          // handong email form alert
           showDialog(
+              context: context,
+              builder: (context) {
+                return flexibleDialog(
+                    context,
+                    200,
+                    30,
+                    '알림',
+                    15,
+                    '올바른 이메일 형식이 아닙니다.\n"@handong" 이메일이 필요합니다.',
+                    16,
+                    () {},
+                    () {},
+                    () {},
+                    () {});
+              });
+        }
+      }
+      //  Information write error
+      else {
+        //  pop the loading circle
+        Navigator.of(context).pop();
+        showDialog(
             context: context,
             builder: (context) {
-              return Dialog(
-                backgroundColor: Colors.white,
-                child: Container(
-                    height: 100,
-                    width: 100,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          height: 30,
-                          color: Colors.deepPurpleAccent,
-                          child: Center(
-                            child: Text(
-                              '경고',
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 25),
-                        Center(
-                          child: Text(
-                            '비밀번호를 다시 확인해 주십시오.',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-              );
-            },
-          );
-        }
-      } else {
-        // handong email form alert
-        showDialog(
-          context: context,
-          builder: (context) {
-            return Dialog(
-              backgroundColor: Colors.white,
-              child: Container(
-                  height: 100,
-                  width: 100,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        height: 30,
-                        color: Colors.deepPurpleAccent,
-                        child: Center(
-                          child: Text(
-                            '경고',
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Center(
-                        child: Text(
-                          '올바른 이메일 형식이 아닙니다. \n "handong" 이메일이 필요합니다.',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-            );
-          },
-        );
+              return flexibleDialog(context, 200, 30, '알림', 15,
+                  '모든 정보를 기입해주십시오.', 17, () {}, () {}, () {}, () {});
+            });
       }
     } else {
+      //  pop the loading circle
+      Navigator.of(context).pop();
+      //  Profile image select alert
       showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            backgroundColor: Colors.white,
-            child: Container(
-                height: 100,
-                width: 100,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: 30,
-                      color: Colors.deepPurpleAccent,
-                      child: Center(
-                        child: Text(
-                          '경고',
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 25),
-                    Center(
-                      child: Text(
-                        '모든 정보를 기입해주세요.',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          );
-        },
-      );
+          context: context,
+          builder: (context) {
+            return flexibleDialog(context, 200, 30, '알림', 15,
+                '프로필 이미지를 선택해 주십시오.', 17, () {}, () {}, () {}, () {});
+          });
     }
   }
 
-  Future addUserDetails(
-      String username, String email, double height, double weight) async {
-    await FirebaseFirestore.instance.collection('users').add({
-      'user name': username,
-      'email': email,
-      'height': height,
-      'weight': weight,
-    });
-  }
-
-  //  data set 방식
-  // Future addUserDetails(UserCredential newUser, String firstName,
-  //     String lastName, String email, int age) async {
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(newUser.user!.uid)
-  //       .set({
-  //     'first name': firstName,
-  //     'last name': lastName,
+  //  data add 방식
+  // Future addUserDetails(
+  //     String username, String email, String user_image, double height, double weight) async {
+  //   await FirebaseFirestore.instance.collection('users').add({
+  //     'user_Fname': username,
   //     'email': email,
-  //     'age': age,
+  //     'user_image': user_image,
+  //     'height': height,
+  //     'weight': weight,
+  //     'sum_distance': 0,
+  //     'sum_time': 0,
   //   });
   // }
 
+  //  data set 방식
+  Future addUserDetails(UserCredential newUser, String username, String email,
+      String user_image, double height, double weight) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(newUser.user!.uid)
+        .set({
+      'user_name': username,
+      'email': email,
+      'user_image': user_image,
+      'height': height,
+      'weight': weight,
+      'sum_distance': 0,
+      'sum_time': 0,
+    });
+  }
+
   bool passwordConfirmed() {
     if (_passwordController.text.trim() ==
-        _confrimPasswordController.text.trim()) {
+            _confirmPasswordController.text.trim() &&
+        _passwordController.text.trim().length > 6) {
       return true;
     } else {
       return false;
     }
+  }
+
+  //  ImagePicker camera function
+  void camera() async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+        source: ImageSource.camera, imageQuality: 100, maxHeight: 150);
+    setState(() {
+      if (image != null) {
+        _userImage = File(image.path);
+      }
+    });
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.of(context).pop();
+    });
+  }
+
+  //  ImagePicker gallery function
+  void gallery() async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+        source: ImageSource.gallery, imageQuality: 100, maxHeight: 150);
+    setState(
+      () {
+        if (image != null) {
+          _userImage = File(image.path);
+        }
+      },
+    );
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.of(context).pop();
+    });
   }
 
   @override
@@ -245,18 +282,39 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 20),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('image/Logo1.png'),
-                          fit: BoxFit.fitWidth),
+                  //  page back arrow
+                  Padding(
+                    padding: EdgeInsets.only(left: 20, top: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: widget.showLoginPage,
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
 
-                  SizedBox(height: 30),
+                  //  HRC Logo
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 19),
+                        child: SvgPicture.asset(
+                          'image/Logo.svg',
+                          height: 80,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 50),
 
                   //  profile section
                   Stack(
@@ -290,15 +348,56 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
 
+                      // profile image picker dialog
                       Padding(
                         padding: const EdgeInsets.only(top: 50.0),
                         child: Center(
-                          child: Container(
-                            height: 120,
-                            width: 120,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey[200],
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return imageDialog(
+                                        context, camera, gallery);
+                                  });
+                            },
+
+                            // User profile image circle
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: _userImage == null
+                                      ? EdgeInsets.all(0)
+                                      : EdgeInsets.all(6),
+                                  height: 120,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topRight,
+                                      end: Alignment.bottomLeft,
+                                      colors: [
+                                        Color.fromRGBO(248, 103, 248, 0.95),
+                                        Color.fromRGBO(61, 90, 230, 1)
+                                      ],
+                                    ),
+                                  ),
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.grey[200],
+                                    backgroundImage: _userImage != null
+                                        ? FileImage(_userImage!)
+                                        : null,
+                                    child: _userImage == null
+                                        ? Icon(
+                                            Icons.add,
+                                            size: 45,
+                                            color: Colors.grey,
+                                          )
+                                        : null,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -306,8 +405,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       //  User name textField
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(100, 180, 100, 0),
+                        padding: const EdgeInsets.fromLTRB(70, 180, 70, 0),
                         child: TextField(
+                          textInputAction: TextInputAction.next,
                           controller: _userNameController,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.person),
@@ -330,6 +430,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: 'User Name',
                             fillColor: Colors.grey[200],
                             filled: true,
+                          ),
+                          style: TextStyle(
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -378,6 +481,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                textInputAction: TextInputAction.next,
+                                keyboardType: TextInputType.emailAddress,
                                 controller: _emailController,
                                 decoration: InputDecoration(
                                   prefixIcon: Icon(Icons.email),
@@ -397,9 +502,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                         color: Colors.deepPurpleAccent),
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  hintText: 'Email',
+                                  hintText: 'Email address',
                                   fillColor: Colors.grey[200],
                                   filled: true,
+                                ),
+                                style: TextStyle(
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
@@ -411,6 +519,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                textInputAction: TextInputAction.next,
                                 obscureText: true,
                                 controller: _passwordController,
                                 decoration: InputDecoration(
@@ -435,6 +544,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   fillColor: Colors.grey[200],
                                   filled: true,
                                 ),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
 
@@ -445,8 +557,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                textInputAction: TextInputAction.next,
                                 obscureText: true,
-                                controller: _confrimPasswordController,
+                                controller: _confirmPasswordController,
                                 decoration: InputDecoration(
                                   prefixIcon: Icon(Icons.lock),
                                   suffixIcon: GestureDetector(
@@ -455,7 +568,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       color: Color.fromRGBO(129, 97, 208, 0.75),
                                     ),
                                     onTap: () =>
-                                        _confrimPasswordController.clear(),
+                                        _confirmPasswordController.clear(),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
@@ -469,6 +582,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   hintText: 'Confirm Password',
                                   fillColor: Colors.grey[200],
                                   filled: true,
+                                ),
+                                style: TextStyle(
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
@@ -519,8 +635,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                textInputAction: TextInputAction.next,
+                                keyboardType: TextInputType.number,
                                 controller: _userHeightController,
                                 decoration: InputDecoration(
+                                  suffixText: '(cm)',
+                                  suffixStyle: TextStyle(
+                                      color: Colors.black, fontSize: 15),
                                   prefixIcon: Icon(Icons.height),
                                   suffixIcon: GestureDetector(
                                     child: Icon(
@@ -542,6 +663,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   fillColor: Colors.grey[200],
                                   filled: true,
                                 ),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
 
@@ -552,8 +676,15 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
                               child: TextField(
+                                onSubmitted: ((value) {
+                                  signUp();
+                                }),
+                                keyboardType: TextInputType.number,
                                 controller: _userWeightController,
                                 decoration: InputDecoration(
+                                  suffixText: '(kg)',
+                                  suffixStyle: TextStyle(
+                                      color: Colors.black, fontSize: 15),
                                   prefixIcon:
                                       Icon(Icons.monitor_weight_outlined),
                                   suffixIcon: GestureDetector(
@@ -576,6 +707,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   fillColor: Colors.grey[200],
                                   filled: true,
                                 ),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ],
@@ -595,6 +729,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         width: (MediaQuery.of(context).size.width * 0.6),
                         height: 45,
                         decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black,
+                              spreadRadius: 0.5,
+                              blurRadius: 2,
+                              offset: Offset(0, 1),
+                            )
+                          ],
                           borderRadius: BorderRadius.all(
                             Radius.circular(15),
                           ),
@@ -622,12 +764,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   SizedBox(height: 20),
 
-                  //  not a member? register now
+                  //  not a member? register now comment
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'I am a member!?',
+                        'I am a member?',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white.withOpacity(0.5),
@@ -638,6 +780,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Text(
                           ' Login now',
                           style: TextStyle(
+                            fontSize: 15,
                             color: Color.fromARGB(255, 158, 232, 249),
                             fontWeight: FontWeight.bold,
                           ),
@@ -646,7 +789,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
 
-                  SizedBox(height: 30),
+                  SizedBox(height: 45),
                 ],
               ),
             ),

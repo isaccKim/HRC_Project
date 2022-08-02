@@ -1,10 +1,12 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../running_main/showmap.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hrc_project/nav_bar/navigation_bar.dart';
 import 'email_verify_page.dart';
 import 'forgot_pw_page.dart';
+import '/dialog_page/show_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -18,14 +20,16 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  //  Signin
   Future signIn() async {
-    // // loading circle
-    // showDialog(
-    //   context: context,
-    //   builder: (context) {
-    //     return Center(child: CircularProgressIndicator());
-    //   },
-    // );
+    // loading circle
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
 
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -34,15 +38,24 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
+        //  pop the loading circle
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        _emailController.clear();
+        _passwordController.clear();
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) {
-              return MapSample();
+              return NavigationBarPage();
             },
           ),
         );
       } else {
+        //  pop the loading circle
+        Navigator.of(context).pop();
+        _emailController.clear();
+        _passwordController.clear();
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -52,49 +65,18 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       }
-    } catch (e) {
-      // // pop the loading circle
-      // Navigator.of(context).pop();
+    } on FirebaseAuthException catch (e) {
+      // pop the loading circle
+      Navigator.of(context).pop();
+
       //  email or password error
       showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            backgroundColor: Colors.white,
-            child: Container(
-                height: 100,
-                width: 100,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: 30,
-                      color: Colors.deepPurpleAccent,
-                      child: Center(
-                        child: Text(
-                          '경고',
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 25),
-                    Center(
-                      child: Text(
-                        '이메일 혹은 비밀번호를 확인해 주십시오.',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          );
-        },
-      );
+          context: context,
+          builder: (context) {
+            return flexibleDialog(context, 200, 30, '알림', 15,
+                e.message.toString(), 17, () {}, () {}, () {}, () {});
+          });
     }
-
-    // // pop the loading circle
-    // Navigator.of(context).pop();
   }
 
   @override
@@ -106,177 +88,230 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 35, 25, 60),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('image/Logo1.png'),
-                          fit: BoxFit.fitWidth),
-                    ),
-                  ),
-
-                  SizedBox(height: 50),
-
-                  //  email textField
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: TextFormField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.deepPurpleAccent),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        hintText: 'Email',
-                        fillColor: Colors.grey[200],
-                        filled: true,
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 15),
-
-                  //  password textField
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: TextField(
-                      obscureText: true,
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.deepPurpleAccent),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        hintText: 'Password',
-                        fillColor: Colors.grey[200],
-                        filled: true,
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 15),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return ForgotPasswordPage();
-                                },
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 158, 232, 249),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.25),
-
-                  Column(
-                    children: [
-                      //  Sign in button
-                      GestureDetector(
-                        onTap: signIn,
-                        child: Container(
-                          width: (MediaQuery.of(context).size.width * 0.6),
-                          height: 45,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                            gradient: LinearGradient(
-                                begin: Alignment.bottomRight,
-                                end: Alignment.topLeft,
-                                colors: [
-                                  Color.fromRGBO(129, 97, 208, 0.75),
-                                  Color.fromRGBO(186, 104, 186, 1)
-                                ]),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Sign in',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: 20),
-
-                      //  not a member? register now
-                      Row(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return NavigationBarPage();
+          } else {
+            return Scaffold(
+              backgroundColor: Color.fromARGB(255, 35, 25, 60),
+              body: SafeArea(
+                child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Not a member? ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white.withOpacity(0.5),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: widget.showRegisterPage,
-                            child: GestureDetector(
-                              onTap: widget.showRegisterPage,
-                              child: Text(
-                                ' Register now',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 158, 232, 249),
-                                  fontWeight: FontWeight.bold,
+                          //  HRC Logo
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: SvgPicture.asset(
+                                  'image/Logo.svg',
+                                  height: 80,
                                 ),
                               ),
+                            ],
+                          ),
+
+                          SizedBox(height: 50),
+
+                          //  email textField
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 40.0),
+                            child: TextField(
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.emailAddress,
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.email),
+                                suffixIcon: GestureDetector(
+                                  child: Icon(
+                                    Icons.cancel,
+                                    color: Color.fromRGBO(129, 97, 208, 0.75),
+                                  ),
+                                  onTap: () => _emailController.clear(),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.deepPurpleAccent),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                hintText: 'Email address',
+                                fillColor: Colors.grey[200],
+                                filled: true,
+                              ),
                             ),
+                          ),
+
+                          SizedBox(height: 15),
+
+                          //  password textField
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 40.0),
+                            child: TextField(
+                              onSubmitted: ((value) {
+                                signIn();
+                              }),
+                              obscureText: true,
+                              controller: _passwordController,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.lock),
+                                suffixIcon: GestureDetector(
+                                  child: Icon(
+                                    Icons.cancel,
+                                    color: Color.fromRGBO(129, 97, 208, 0.75),
+                                  ),
+                                  onTap: () => _passwordController.clear(),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.deepPurpleAccent),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                hintText: 'Password',
+                                fillColor: Colors.grey[200],
+                                filled: true,
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(height: 15),
+
+                          //  Forgot Password? comment
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _emailController.clear();
+                                    _passwordController.clear();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return ForgotPasswordPage();
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Forgot Password?',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Color.fromARGB(255, 158, 232, 249),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.25),
+
+                          //  Sign in button
+                          Column(
+                            children: [
+                              GestureDetector(
+                                onTap: signIn,
+                                child: Container(
+                                  width:
+                                      (MediaQuery.of(context).size.width * 0.6),
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Colors.black,
+                                        spreadRadius: 0.5,
+                                        blurRadius: 2,
+                                        offset: Offset(0, 1),
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                    gradient: LinearGradient(
+                                        begin: Alignment.bottomRight,
+                                        end: Alignment.topLeft,
+                                        colors: const [
+                                          Color.fromRGBO(129, 97, 208, 0.75),
+                                          Color.fromRGBO(186, 104, 186, 1)
+                                        ]),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Sign in',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              SizedBox(height: 20),
+
+                              //  not a member? register now
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Not a member? ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white.withOpacity(0.5),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: widget.showRegisterPage,
+                                    child: Text(
+                                      ' Register now',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color:
+                                            Color.fromARGB(255, 158, 232, 249),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
+            );
+          }
+        },
       ),
     );
   }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hrc_project/dashboard/daily/dailyData.dart';
-import 'package:hrc_project/dashboard/weekly/weeklyData.dart';
-import 'package:hrc_project/dashboard/daily/dailyrun.dart';
-import 'package:hrc_project/dashboard/monthly/monthly.dart';
-import 'package:hrc_project/dashboard/weekly/weekly.dart';
+import 'package:hrc_project/dashboard/record/dailyrun.dart';
+import 'package:hrc_project/dashboard/record/monthly.dart';
+import 'package:hrc_project/dashboard/record/weekly.dart';
+import 'package:hrc_project/dashboard/record/yearly.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({Key? key}) : super(key: key);
@@ -87,7 +86,7 @@ class _DashBoardState extends State<DashBoard> {
                         borderRadius: BorderRadius.circular(25.0)),
                     labelColor: Color.fromARGB(255, 115, 192, 247),
                     unselectedLabelColor: Color.fromARGB(255, 152, 134, 246),
-                    tabs: const [
+                    tabs: [
                       Tab(
                         text: 'Day',
                       ),
@@ -110,45 +109,14 @@ class _DashBoardState extends State<DashBoard> {
               padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.05),
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.55,
+                height: MediaQuery.of(context).size.height * 0.70,
                 child: Expanded(
                   child: TabBarView(
                     children: [
                       MainBox.getContainer(Daily()),
                       MainBox.getContainer(Weekly()),
                       MainBox.getContainer(Monthly()),
-                      MainBox.getContainer(Weekly()),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.05),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.2,
-                child: Expanded(
-                  child: TabBarView(
-                    children: [
-                      Column(
-                        children: [
-                          Divider(
-                            height: MediaQuery.of(context).size.height * 0.035,
-                          ),
-                          Expanded(child: DailyRecord()),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Divider(
-                            height: MediaQuery.of(context).size.height * 0.035,
-                          ),
-                          WeeklyRecord()
-                        ],
-                      ),
-                      Text('test3'),
-                      Text('test4'),
+                      MainBox.getContainer(Yearly()),
                     ],
                   ),
                 ),

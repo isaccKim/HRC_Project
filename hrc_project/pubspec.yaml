@@ -43,6 +43,11 @@ dependencies:
   firebase_auth: ^3.4.1
   cloud_firestore: ^3.3.0
   gradient_ui_widgets: ^1.0.2-nullsafety
+  image_picker: ^0.8.5+3
+  firebase_storage: ^10.3.2
+  google_nav_bar: ^5.0.6
+  flutter_svg: ^1.1.1+1
+  back_button_interceptor: ^6.0.1
 
 dev_dependencies:
   flutter_test:
