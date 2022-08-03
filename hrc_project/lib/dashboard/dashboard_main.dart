@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrc_project/dashboard/widget_source/source.dart';
 import 'package:hrc_project/dashboard/record/dailyrun.dart';
 import 'package:hrc_project/dashboard/record/monthly.dart';
 import 'package:hrc_project/dashboard/record/weekly.dart';
@@ -77,16 +78,10 @@ class _DashBoardState extends State<DashBoard> {
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
-                    indicator: BoxDecoration(
-                        gradient: const LinearGradient(colors: [
-                          Color.fromRGBO(235, 149, 230, 0.33),
-                          Color.fromRGBO(175, 136, 235, 0.38),
-                          Color.fromRGBO(143, 165, 243, 0.31),
-                        ]),
-                        borderRadius: BorderRadius.circular(25.0)),
+                    indicator: tapindicator,
                     labelColor: Color.fromARGB(255, 115, 192, 247),
                     unselectedLabelColor: Color.fromARGB(255, 152, 134, 246),
-                    tabs: [
+                    tabs: const [
                       Tab(
                         text: 'Day',
                       ),
@@ -113,7 +108,7 @@ class _DashBoardState extends State<DashBoard> {
                 child: Expanded(
                   child: TabBarView(
                     children: [
-                      MainBox.getContainer(Daily()),
+                      DailyMain(),
                       MainBox.getContainer(Weekly()),
                       MainBox.getContainer(Monthly()),
                       MainBox.getContainer(Yearly()),
@@ -130,22 +125,11 @@ class _DashBoardState extends State<DashBoard> {
 }
 
 class MainBox extends Container {
-  static BoxDecoration boxdeco = BoxDecoration(
-    gradient: LinearGradient(
-      colors: [
-        const Color.fromARGB(179, 100, 40, 211).withOpacity(0.74),
-        const Color.fromARGB(145, 43, 143, 193)
-      ],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-    ),
-    color: Colors.amber.shade100,
-    borderRadius: const BorderRadius.all(
-      Radius.circular(20.0),
-    ),
-  );
-
   static Widget getContainer(Widget body) {
     return Container(decoration: boxdeco, child: body);
+  }
+
+  static Widget setContainer(Widget body, double heights) {
+    return Container(decoration: boxdeco, height: heights, child: body);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as grad;
 import 'package:fl_chart/fl_chart.dart';
+import 'package:hrc_project/dashboard/widget_source/source.dart';
 
 class Weekly extends StatefulWidget {
   Weekly({Key? key}) : super(key: key);
@@ -26,11 +27,7 @@ class _WeeklyState extends State<Weekly> {
               fontWeight: FontWeight.bold,
             ),
             'Weekly Running',
-            gradient: const LinearGradient(colors: [
-              Color.fromRGBO(255, 255, 255, 1),
-              Color.fromRGBO(255, 255, 255, 1),
-              Color.fromARGB(79, 195, 159, 231)
-            ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+            gradient: textGradient,
           ),
         ),
         const SizedBox(
@@ -64,19 +61,6 @@ class _WeeklyRecordState extends State<WeeklyRecord> {
   @override
   Widget build(BuildContext context) {
     //image
-    Image Distance = Image.asset('image/distance.png',
-        width: MediaQuery.of(context).size.width * 0.1,
-        height: MediaQuery.of(context).size.width * 0.1);
-
-    Image Running_duration = Image.asset('image/hourglass.png',
-        color: Colors.black.withOpacity(0.7),
-        width: MediaQuery.of(context).size.width * 0.1,
-        height: MediaQuery.of(context).size.width * 0.1);
-
-    Image Running_pace = Image.asset('image/running-shoe.png',
-        color: Colors.black.withOpacity(0.7),
-        width: MediaQuery.of(context).size.width * 0.1,
-        height: MediaQuery.of(context).size.width * 0.1);
 
     return Container(
       padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.01),
@@ -108,7 +92,7 @@ class _WeeklyRecordState extends State<WeeklyRecord> {
             children: [
               Row(
                 children: [
-                  Distance,
+                  Distance(context),
                   const Divider(
                     indent: 10,
                   ),
@@ -120,7 +104,7 @@ class _WeeklyRecordState extends State<WeeklyRecord> {
               ),
               Row(
                 children: [
-                  Running_duration,
+                  Running_duration(context),
                   const Divider(),
                   Text(
                     '00:00:12',
@@ -130,7 +114,7 @@ class _WeeklyRecordState extends State<WeeklyRecord> {
               ),
               Row(
                 children: [
-                  Running_pace,
+                  Running_pace(context),
                   const Divider(
                     indent: 10,
                   ),

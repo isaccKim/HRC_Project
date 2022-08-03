@@ -1,171 +1,206 @@
 import 'dart:math';
+import 'package:hrc_project/dashboard/read_data/get_daily_data.dart';
+import 'package:hrc_project/dashboard/widget_source/source.dart';
+import 'package:intl/intl.dart';
 
+import '../dashboard_main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as grad;
 import 'package:firebase_core/firebase_core.dart';
-
-class ToDayRun {
-  double distance = 0;
-  double pace = 0;
-  double time = 0;
-}
-
-class Daily extends StatefulWidget {
-  Daily({Key? key}) : super(key: key);
-
-  @override
-  State<Daily> createState() => _DailyState();
-}
-
-class _DailyState extends State<Daily> {
-  
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.05),
-
-//Stack - text : Today Run / distance / time / pace
-          child: Stack(
-            children: <Widget>[
-//Today Run
-              Positioned(
-                left: MediaQuery.of(context).size.width * 0.6,
-                top: 20,
-                child: IconButton(
-                    onPressed: () {
-                      double testDist = Random().nextInt(10).toDouble();
-                      int testTime = Random().nextInt(4);
-                      double testSp = Random().nextInt(5).toDouble();
-                      addTestData(testDist, testTime, testSp);
-                    },
-                    icon: Icon(Icons.add_circle)),
-              ),
-
-              Positioned(
-                left: 10,
-                top: 30,
-                child: Column(
-                  children: [
-                    grad.GradientText(
-                      'Daily Running',
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      gradient: const LinearGradient(
-                          colors: [
-                            Color.fromRGBO(255, 255, 255, 1),
-                            Color.fromRGBO(255, 255, 255, 1),
-                            Color.fromARGB(79, 195, 159, 231)
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter),
-                    ),
-                  ],
-                ),
-              ),
-// Distance
-              Positioned(
-                left: 10,
-                top: 250,
-                child: grad.GradientText(
-                  'Distance : ',
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  gradient: const LinearGradient(colors: [
-                    Color.fromRGBO(255, 255, 255, 1),
-                    Color.fromRGBO(255, 255, 255, 1),
-                    Color.fromARGB(79, 195, 159, 231)
-                  ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                ),
-              ),
-// time
-              Positioned(
-                left: 10,
-                bottom: 100,
-                child: grad.GradientText(
-                  'Time : ',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  gradient: const LinearGradient(colors: [
-                    Color.fromRGBO(255, 255, 255, 1),
-                    Color.fromRGBO(255, 255, 255, 1),
-                    Color.fromARGB(79, 195, 159, 231)
-                  ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                ),
-              ),
-// pace
-              Positioned(
-                right: 60,
-                bottom: 100,
-                child: grad.GradientText(
-                  'Pace : ',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  gradient: const LinearGradient(colors: [
-                    Color.fromRGBO(255, 255, 255, 1),
-                    Color.fromRGBO(255, 255, 255, 1),
-                    Color.fromARGB(79, 195, 159, 231)
-                  ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-    ;
-  }
-}
-
-class Save extends StatefulWidget {
-  Save({Key? key}) : super(key: key);
-
-  @override
-  State<Save> createState() => _SaveState();
-}
-
-class _SaveState extends State<Save> {
-  @override
-  Widget build(BuildContext context) {
-    Image Distance = Image.asset('image/distance.png',
-        width: MediaQuery.of(context).size.width * 0.1,
-        height: MediaQuery.of(context).size.width * 0.1);
-
-    Image Running_duration = Image.asset('image/hourglass.png',
-        color: Colors.black.withOpacity(0.7),
-        width: MediaQuery.of(context).size.width * 0.1,
-        height: MediaQuery.of(context).size.width * 0.1);
-
-    Image Running_pace = Image.asset('image/running-shoe.png',
-        color: Colors.black.withOpacity(0.7),
-        width: MediaQuery.of(context).size.width * 0.1,
-        height: MediaQuery.of(context).size.width * 0.1);
-    return Container();
-  }
-}
+import 'package:google_fonts/google_fonts.dart';
 
 final List<String> entries = <String>[];
 
 Future addTestData(
   double dist,
-  int t,
+  double t,
   double sp,
 ) async {
   await FirebaseFirestore.instance.collection('test_data').add({
-    'distacne': dist,
+    'distance': dist,
     'time': t,
     'pace': sp,
     'date': DateTime.now(),
   });
+}
+
+class TextFormat extends grad.GradientText {
+  TextFormat(super.data, {Key? key, super.style, required super.gradient});
+}
+
+class DailyMain extends StatefulWidget {
+  const DailyMain({Key? key}) : super(key: key);
+
+  @override
+  State<DailyMain> createState() => _DailyMainState();
+}
+
+class _DailyMainState extends State<DailyMain> {
+  List<String> docsId = [];
+
+  Future getRunDocs() async {
+    docsId.clear();
+    await FirebaseFirestore.instance
+        .collection('test_data')
+        //  데이터 정렬!!
+        .orderBy('date', descending: true)
+        .get()
+        .then(
+          (snapshot) => snapshot.docs.forEach(
+            (doccument) {
+              docsId.add(doccument.reference.id);
+            },
+          ),
+        );
+  }
+
+  Future refreshPage() {
+    setState(() {
+      docsId.clear();
+    });
+    return Future.delayed(Duration(milliseconds: 0));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: refreshPage,
+      child: Expanded(
+        child: FutureBuilder(
+          future: getRunDocs(),
+          builder: (context, snapshot) {
+            return ListView.builder(
+              itemCount: docsId.length,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Container(
+                    decoration: boxdeco,
+                    height: MediaQuery.of(context).size.height * 0.64,
+                    child: DailyBoxDesign(latestDocsId: docsId[index]),
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      Divider(
+                          height: MediaQuery.of(context).size.height * 0.03),
+                      GetDailyData(docsId: docsId[index]),
+                    ],
+                  );
+                }
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class DailyBoxDesign extends StatelessWidget {
+  final String latestDocsId;
+
+  const DailyBoxDesign({
+    Key? key,
+    required this.latestDocsId,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference data =
+        FirebaseFirestore.instance.collection('test_data');
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.07,
+          vertical: MediaQuery.of(context).size.width * 0.08),
+      child: FutureBuilder<DocumentSnapshot>(
+        future: data.doc(latestDocsId).get(),
+        builder: (context, snapshot) {
+          Map<String, dynamic> runData =
+              snapshot.data!.data() as Map<String, dynamic>;
+
+          return Column(
+            children: <Widget>[
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      grad.GradientText(
+                        'Daily Running',
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        gradient: textGradient,
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormat(
+                        formatTimeStamp(runData['date']),
+                        style: GoogleFonts.openSans(
+                            textStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        )),
+                        gradient: textGradient,
+                      )
+                    ],
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        double testDist = Random().nextInt(10).toDouble();
+                        double testTime = Random().nextInt(4).toDouble();
+                        double testSp = Random().nextInt(5).toDouble();
+                        addTestData(testDist, testTime, testSp);
+                      },
+                      icon: const Icon(Icons.add_circle)),
+                ],
+              ),
+              //traking images
+              const SizedBox(height: 200),
+              // Distance
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  grad.GradientText(
+                    'Distance :    ${runData['distance']}km',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    gradient: textGradient,
+                  ),
+                  const Divider(height: 10),
+                  //time
+                  grad.GradientText(
+                    'Time :    ${runData['time']} h',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    gradient: textGradient,
+                  ),
+                  const Divider(height: 10),
+                  //pace
+                  grad.GradientText(
+                    'Pace :    ${runData['pace']} m/s',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    gradient: textGradient,
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  String formatTimeStamp(Timestamp timestamp) {
+    var text = DateFormat('y/MM/dd');
+    return text.format(timestamp.toDate());
+  }
 }
