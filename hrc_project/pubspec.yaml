@@ -42,11 +42,19 @@ dependencies:
   fl_chart: ^0.55.0
   firebase_auth: ^3.4.1
   cloud_firestore: ^3.3.0
-  timer_count_down: ^2.2.0
+  gradient_ui_widgets: ^1.0.2-nullsafety
+  image_picker: ^0.8.5+3
+  firebase_storage: ^10.3.2
+  google_nav_bar: ^5.0.6
+  flutter_svg: ^1.1.1+1
+  back_button_interceptor: ^6.0.1
   google_fonts: ^3.0.1
+  syncfusion_flutter_datepicker: ^20.2.40
+  timer_count_down: ^2.2.0
   charts_flutter: ^0.12.0
   syncfusion_flutter_sliders: ^20.2.40
   syncfusion_flutter_charts: ^20.2.40
+
 
 dev_dependencies:
   flutter_test:
@@ -79,13 +87,20 @@ flutter:
     - image/play_btn.png
     - image/stop_btn.png
     - image/Backgroundimage.png
-    - image/Logo1.png
+
+    - image/ranking_board/1st.svg
+    - image/ranking_board/2nd.svg
+    - image/ranking_board/3rd.svg
+    - image/ranking_board/type.svg
+    - image/Logo.svg
+    - image/distance.png
+    - image/hourglass.png
+    - image/running-shoe.png
     - image/save_btn.png
     - image/gage.png
     - image/run_blue.png
-    - image/save_btn.png
 
-
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
