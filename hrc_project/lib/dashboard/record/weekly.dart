@@ -4,6 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:hrc_project/dashboard/widget_source/source.dart';
 import 'package:intl/intl.dart';
 
+import '../read_data/get_weekly_data.dart';
+
 class Weekly extends StatelessWidget {
   String formatTimeStamp(DateTime t) {
     var text = DateFormat('MM/dd');
@@ -14,6 +16,8 @@ class Weekly extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    date1 = firstDayOfWeek;
+    date2 = endOfWeek;
     return Container(
       decoration: boxdeco,
       height: MediaQuery.of(context).size.height * 0.64,
@@ -25,13 +29,19 @@ class Weekly extends StatelessWidget {
               left: 30,
               top: 35,
             ),
-            child: grad.GradientText(
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-              'Weekly Running : ${formatTimeStamp(firstDayOfWeek)}',
-              gradient: textGradient,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                grad.GradientText(
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  'Weekly Running ',
+                  gradient: textGradient,
+                ),
+                TitleDate(),
+              ],
             ),
           ),
           const SizedBox(
@@ -49,10 +59,7 @@ class Weekly extends StatelessWidget {
   }
 }
 
-DateTime now = DateTime.now();
-int currentDay = now.weekday;
-DateTime firstDayOfWeek = now.subtract(Duration(days: currentDay));
-
+//Chart
 class WeeklyChart extends StatefulWidget {
   const WeeklyChart({Key? key}) : super(key: key);
 
@@ -129,30 +136,6 @@ class _WeeklyChartState extends State<WeeklyChart> {
     );
   }
 
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color.fromARGB(255, 234, 241, 247),
-      fontWeight: FontWeight.bold,
-      fontSize: 15,
-    );
-    String text;
-    switch (value.toInt()) {
-      case 1:
-        text = '10K';
-        break;
-      case 3:
-        text = '30k';
-        break;
-      case 5:
-        text = '50k';
-        break;
-      default:
-        return Container();
-    }
-
-    return Text(text, style: style, textAlign: TextAlign.left);
-  }
-
   LineChartData mainData() {
     return LineChartData(
       gridData: FlGridData(
@@ -192,9 +175,6 @@ class _WeeklyChartState extends State<WeeklyChart> {
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: false,
-            interval: 1,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
           ),
         ),
       ),
