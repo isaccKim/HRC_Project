@@ -10,8 +10,6 @@ import 'package:hrc_project/ranking_board_page/ranking_board.dart';
 import 'package:hrc_project/running_main/showmap.dart';
 import 'package:hrc_project/setting_page/setting_page.dart';
 
-
-
 class NavigationBarPage extends StatefulWidget {
   const NavigationBarPage({Key? key}) : super(key: key);
 
@@ -115,73 +113,71 @@ class _NavigationBarState extends State<NavigationBarPage> {
 
       //  Gnav bar
       bottomNavigationBar: Container(
-        child: Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black,
-                spreadRadius: 0.2,
-                blurRadius: 4,
-                offset: Offset(0, 1),
-              )
-            ],
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            ),
-            color: Color.fromRGBO(159, 101, 230, 1),
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black,
+              spreadRadius: 0.2,
+              blurRadius: 4,
+              offset: Offset(0, 1),
+            )
+          ],
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 5.0),
-            child: Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-                color: Color.fromRGBO(46, 36, 70, 1),
+          color: Color.fromRGBO(159, 101, 230, 1),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 5.0),
+          child: Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
               ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 15, right: 15, top: 5, bottom: 5),
-                child: GNav(
-                    selectedIndex: 1,
-                    tabBorderRadius: 45,
-                    haptic: true,
-                    duration: const Duration(
-                        milliseconds: 450), // tab animation duration
-                    backgroundColor: const Color.fromRGBO(46, 36, 70, 1),
-                    color: Colors.white,
-                    activeColor: Colors.white,
-                    padding: const EdgeInsets.only(
-                        left: 15, right: 15, top: 16, bottom: 16),
-                    gap: 8,
-                    iconSize: 30,
-                    onTabChange: _navigateBottomBar,
-                    tabs: const [
-                      GButton(
-                        icon: Icons.equalizer,
-                        text: 'Ranking',
+              color: Color.fromRGBO(46, 36, 70, 1),
+            ),
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+              child: GNav(
+                  selectedIndex: 1,
+                  tabBorderRadius: 45,
+                  haptic: true,
+                  duration: const Duration(
+                      milliseconds: 450), // tab animation duration
+                  backgroundColor: const Color.fromRGBO(46, 36, 70, 1),
+                  color: Colors.white,
+                  activeColor: Colors.white,
+                  padding: const EdgeInsets.only(
+                      left: 15, right: 15, top: 16, bottom: 16),
+                  gap: 8,
+                  iconSize: 30,
+                  onTabChange: _navigateBottomBar,
+                  tabs: const [
+                    GButton(
+                      icon: Icons.equalizer,
+                      text: 'Ranking',
+                    ),
+                    GButton(
+                      icon: Icons.home,
+                      text: 'Home',
+                    ),
+                    GButton(
+                      icon: Icons.person,
+                      text: 'Dashboard',
+                      textStyle: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
-                      GButton(
-                        icon: Icons.home,
-                        text: 'Home',
-                      ),
-                      GButton(
-                        icon: Icons.person,
-                        text: 'Dashboard',
-                        textStyle: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      GButton(
-                        icon: Icons.settings,
-                        text: 'Setting',
-                      ),
-                    ]),
-              ),
+                    ),
+                    GButton(
+                      icon: Icons.settings,
+                      text: 'Setting',
+                    ),
+                  ]),
             ),
           ),
         ),

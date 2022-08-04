@@ -87,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
               final _user_image = await _userProfileImage.getDownloadURL();
 
               //  data set 방식 함수 호출
-              addUserDetails(
+              await addUserDetails(
                 newUser,
                 _userNameController.text.trim(),
                 _emailController.text.trim(),
@@ -97,13 +97,16 @@ class _RegisterPageState extends State<RegisterPage> {
               );
 
               //  data add 방식 함수 호출
-              // addUserDetails(
+              // await addUserDetails(
               //   _userNameController.text.trim(),
               //   _emailController.text.trim(),
               //   _user_image.trim(),
               //   double.parse(_userHeightController.text.trim()),
               //   double.parse(_userWeightController.text.trim()),
               // );
+
+              //  Add a document subcollection
+              await addSubCollection(newUser);
 
               //  pop the loading circle
               Navigator.of(context).pop();
@@ -182,10 +185,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   '모든 정보를 기입해주십시오.', 17, () {}, () {}, () {}, () {});
             });
       }
-    } else {
+    }
+    //  Profile image select alert
+    else {
       //  pop the loading circle
       Navigator.of(context).pop();
-      //  Profile image select alert
+
       showDialog(
           context: context,
           builder: (context) {
@@ -223,6 +228,20 @@ class _RegisterPageState extends State<RegisterPage> {
       'weight': weight,
       'sum_distance': 0,
       'sum_time': 0,
+    });
+  }
+
+  //  Add a document subcollection
+  Future addSubCollection(UserCredential newUser) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(newUser.user!.uid)
+        .collection('running record')
+        .add({
+      'distance': 0,
+      'time': 0,
+      'pace': 0,
+      'date': DateTime.now(),
     });
   }
 
