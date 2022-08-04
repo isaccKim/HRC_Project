@@ -2,9 +2,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-
 import 'package:hrc_project/dashboard/dashboard_main.dart';
-
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:hrc_project/ranking_board_page/ranking_board.dart';
 import 'package:hrc_project/running_main/showmap.dart';
