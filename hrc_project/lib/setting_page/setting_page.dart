@@ -1,10 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -17,6 +19,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  bool isExite = true;
   bool isEdited = false;
   bool isNameEdited = false;
   bool isWeightEdited = false;
@@ -60,7 +63,7 @@ class _SettingPageState extends State<SettingPage> {
       barrierDismissible: false,
       context: context,
       builder: (context) {
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       },
     );
 
@@ -189,6 +192,7 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   void initState() {
+    BackButtonInterceptor.add(myInterceptor);
     _userNameController.addListener(isUserDataChanged);
     _userWeightController.addListener(isUserDataChanged);
     _userHeightController.addListener(isUserDataChanged);
@@ -243,10 +247,39 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
     _userNameController.dispose();
     _userHeightController.dispose();
     _userWeightController.dispose();
     super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (isExite) {
+      isExite = false;
+      showDialog(
+          context: context,
+          builder: (context) {
+            return alternativeDialog(
+              context,
+              200,
+              30,
+              '앱 종료하기',
+              15,
+              '앱을 종료하시겠습니까?',
+              17,
+              Navigator.of(context).pop,
+              SystemNavigator.pop,
+              () {},
+              () {},
+              () {
+                isExite = true;
+              },
+            );
+          });
+    }
+
+    return true;
   }
 
   @override
