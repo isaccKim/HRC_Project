@@ -109,7 +109,7 @@ class _DashBoardState extends State<DashBoard> {
                   child: TabBarView(
                     children: [
                       DailyMain(),
-                      MainBox.getContainer(Weekly()),
+                      Weekly(),
                       MainBox.getContainer(Monthly()),
                       MainBox.getContainer(Yearly()),
                     ],

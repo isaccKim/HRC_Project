@@ -49,6 +49,7 @@ dependencies:
   flutter_svg: ^1.1.1+1
   back_button_interceptor: ^6.0.1
   google_fonts: ^3.0.1
+  syncfusion_flutter_datepicker: ^20.2.40
 
 dev_dependencies:
   flutter_test:
