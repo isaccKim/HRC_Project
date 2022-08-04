@@ -82,10 +82,16 @@ flutter:
     - image/play_btn.png
     - image/stop_btn.png
     - image/Backgroundimage.png
-    - image/Logo1.png
+    - image/ranking_board/1st.svg
+    - image/ranking_board/2nd.svg
+    - image/ranking_board/3rd.svg
+    - image/ranking_board/type.svg
+    - image/Logo.svg
     - image/distance.png
     - image/hourglass.png
     - image/running-shoe.png
+
+  
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
