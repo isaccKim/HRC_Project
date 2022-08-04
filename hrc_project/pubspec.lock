@@ -85,7 +85,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
-
   cross_file:
     dependency: transitive
     description:
@@ -607,6 +606,9 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_datepicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.2.40"
   syncfusion_flutter_sliders:
     dependency: "direct main"
     description:
