@@ -195,11 +195,12 @@ class DailyBoxDesign extends StatelessWidget {
                 ),
               ],
             );
-          } else {
+
+          }
             return Center(
               child: CircularProgressIndicator(),
             );
-          }
+
         },
       ),
     );
