@@ -153,7 +153,7 @@ class MapSampleState extends State<stop> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 100),
+            padding: EdgeInsets.symmetric(vertical :MediaQuery.of(context).size.height*0.05),
             child: Positioned(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
