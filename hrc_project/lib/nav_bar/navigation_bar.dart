@@ -19,7 +19,7 @@ class NavigationBarPage extends StatefulWidget {
 
 class _NavigationBarState extends State<NavigationBarPage> {
   int selectedIndex = 1;
-  bool isExite = true;
+  //bool isExite = true;
 
   void _navigateBottomBar(int index) {
     setState(() {
@@ -30,49 +30,49 @@ class _NavigationBarState extends State<NavigationBarPage> {
   final List<Widget> _pages = [
     const RankingBoardPage(),
     MapSample(),
-    DashBoard(),
+    const DashBoard(),
     const SettingPage(),
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    BackButtonInterceptor.add(myInterceptor);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   BackButtonInterceptor.add(myInterceptor);
+  // }
 
-  @override
-  void dispose() {
-    BackButtonInterceptor.remove(myInterceptor);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   BackButtonInterceptor.remove(myInterceptor);
+  //   super.dispose();
+  // }
 
-  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    if (isExite) {
-      isExite = false;
-      showDialog(
-          context: context,
-          builder: (context) {
-            return alternativeDialog(
-              context,
-              200,
-              30,
-              '앱 종료하기',
-              15,
-              '앱을 종료하시겠습니까?',
-              17,
-              Navigator.of(context).pop,
-              SystemNavigator.pop,
-              () {},
-              () {},
-              () {
-                isExite = true;
-              },
-            );
-          });
-    }
+  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+  //   // if (isExite) {
+  //   //   isExite = false;
+  //   //   showDialog(
+  //   //       context: context,
+  //   //       builder: (context) {
+  //   //         return alternativeDialog(
+  //   //           context,
+  //   //           200,
+  //   //           30,
+  //   //           '앱 종료하기',
+  //   //           15,
+  //   //           '앱을 종료하시겠습니까?',
+  //   //           17,
+  //   //           Navigator.of(context).pop,
+  //   //           SystemNavigator.pop,
+  //   //           () {},
+  //   //           () {},
+  //   //           () {
+  //   //             isExite = true;
+  //   //           },
+  //   //         );
+  //   //       });
+  //   // }
 
-    return true;
-  }
+  //   return true;
+  // }
 
   @override
   Widget build(BuildContext context) {
