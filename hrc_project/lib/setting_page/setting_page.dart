@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
-import 'package:hrc_project/login_page/pages/email_verify_page.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SettingPage extends StatefulWidget {

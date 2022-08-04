@@ -42,11 +42,14 @@ dependencies:
   fl_chart: ^0.55.0
   firebase_auth: ^3.4.1
   cloud_firestore: ^3.3.0
+  gradient_ui_widgets: ^1.0.2-nullsafety
   image_picker: ^0.8.5+3
   firebase_storage: ^10.3.2
   google_nav_bar: ^5.0.6
   flutter_svg: ^1.1.1+1
   back_button_interceptor: ^6.0.1
+  google_fonts: ^3.0.1
+  syncfusion_flutter_datepicker: ^20.2.40
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +87,9 @@ flutter:
     - image/ranking_board/3rd.svg
     - image/ranking_board/type.svg
     - image/Logo.svg
+    - image/distance.png
+    - image/hourglass.png
+    - image/running-shoe.png
 
   
 
