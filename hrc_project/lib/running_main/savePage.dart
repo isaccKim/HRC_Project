@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hrc_project/nav_bar/navigation_bar.dart';
 import 'package:hrc_project/running_main/countdown.dart';
 import 'package:hrc_project/running_main/counter.dart';
 import 'package:hrc_project/running_main/showmap.dart';
@@ -330,7 +331,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return MapSample();
+                                return NavigationBarPage();
                               },
                             ),
                           );
@@ -353,7 +354,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return MapSample();
+                                return NavigationBarPage();
                               },
                             ),
                           );

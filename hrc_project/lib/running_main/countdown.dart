@@ -43,7 +43,6 @@ class _MyHomePageState extends State<start> {
                 ),
               ),
               onFinished: (){
-                Navigator.pop(context);
                      Navigator.push(
                             context,
                             MaterialPageRoute(
