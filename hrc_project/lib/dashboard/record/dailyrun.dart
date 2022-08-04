@@ -116,84 +116,90 @@ class DailyBoxDesign extends StatelessWidget {
       child: FutureBuilder<DocumentSnapshot>(
         future: data.doc(latestDocsId).get(),
         builder: (context, snapshot) {
-          Map<String, dynamic> runData =
-              snapshot.data!.data() as Map<String, dynamic>;
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> runData =
+                snapshot.data!.data() as Map<String, dynamic>;
 
-          return Column(
-            children: <Widget>[
-              Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      grad.GradientText(
-                        'Daily Running',
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
+            return Column(
+              children: <Widget>[
+                Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        grad.GradientText(
+                          'Daily Running',
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          gradient: textGradient,
                         ),
-                        gradient: textGradient,
+                        const SizedBox(height: 10),
+                        TextFormat(
+                          formatTimeStamp(runData['date']),
+                          style: GoogleFonts.openSans(
+                              textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          )),
+                          gradient: textGradient,
+                        )
+                      ],
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          double testDist = Random().nextInt(10).toDouble();
+                          double testTime = Random().nextInt(4).toDouble();
+                          double testSp = Random().nextInt(5).toDouble();
+                          addTestData(testDist, testTime, testSp);
+                        },
+                        icon: const Icon(Icons.add_circle)),
+                  ],
+                ),
+                //traking images
+                const SizedBox(height: 200),
+                // Distance
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    grad.GradientText(
+                      'Distance :    ${runData['distance']}km',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(height: 10),
-                      TextFormat(
-                        formatTimeStamp(runData['date']),
-                        style: GoogleFonts.openSans(
-                            textStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        )),
-                        gradient: textGradient,
-                      )
-                    ],
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        double testDist = Random().nextInt(10).toDouble();
-                        double testTime = Random().nextInt(4).toDouble();
-                        double testSp = Random().nextInt(5).toDouble();
-                        addTestData(testDist, testTime, testSp);
-                      },
-                      icon: const Icon(Icons.add_circle)),
-                ],
-              ),
-              //traking images
-              const SizedBox(height: 200),
-              // Distance
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  grad.GradientText(
-                    'Distance :    ${runData['distance']}km',
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                      gradient: textGradient,
                     ),
-                    gradient: textGradient,
-                  ),
-                  const Divider(height: 10),
-                  //time
-                  grad.GradientText(
-                    'Time :    ${runData['time']} h',
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                    const Divider(height: 10),
+                    //time
+                    grad.GradientText(
+                      'Time :    ${runData['time']} h',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      gradient: textGradient,
                     ),
-                    gradient: textGradient,
-                  ),
-                  const Divider(height: 10),
-                  //pace
-                  grad.GradientText(
-                    'Pace :    ${runData['pace']} m/s',
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                    const Divider(height: 10),
+                    //pace
+                    grad.GradientText(
+                      'Pace :    ${runData['pace']} m/s',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      gradient: textGradient,
                     ),
-                    gradient: textGradient,
-                  ),
-                ],
-              ),
-            ],
-          );
+                  ],
+                ),
+              ],
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         },
       ),
     );
