@@ -154,118 +154,188 @@ class _MapPageState extends State<MapSample> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0x50C9EF).withOpacity(0.7),
-                        const Color(0X53DFA9).withOpacity(0.3),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    color: Colors.amber.shade100,
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.7),
-                        spreadRadius: 0,
-                        blurRadius: 5.0,
-                        offset: Offset(0, 10), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  height: MediaQuery.of(context).size.width / 2,
-                  width: MediaQuery.of(context).size.width / 1.2,
-                  margin: EdgeInsets.all(35.0),
-                  child: Positioned(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 50),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(width: 30,),
-                          Column(
-                            children: [
-                              Container(
-                                child: Text('Recent',style: TextStyle(
-                                  fontSize: 15,
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.bold,
-                                ),),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(right: 10),
-                                    child: Image.asset(
-                                      'image/run.png',
-                                      width: 50,
+                Padding(
+                  padding:  EdgeInsets.only(left: 30),
+                  child: Container(
+                    width:  MediaQuery.of(context).size.width*0.8,
+                    height:  MediaQuery.of(context).size.height*0.15,
+                    child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: 4,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width * 0.7,
+                                    child: Card(
+                                      color: Color.fromARGB(255, 176, 114, 221),
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 7,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 100),
+                                            child: Container(
+                                              child: Text(
+                                                'ss',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            'ss',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontStyle: FontStyle.italic,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          SizedBox(height: 7),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 80),
+                                            child: Container(
+                                              child: Text(
+                                                'ss',
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      Color.fromARGB(255, 0, 0, 0),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(height: 20,),
-                              Container(
-                                child: Text('km :',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                ),
+                                  );
+                                },
                               ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Container(
-                                child: Text('num :',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.bold,
-                                ),),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 75,
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(height: 20,),
-                              Container(
-                                child: Text('kcal :',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.bold,
-                                ),),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Container(
-                                child: Text('pace :',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.bold,
-                                ),),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     gradient: LinearGradient(
+                //       colors: [
+                //         Color(0x50C9EF).withOpacity(0.7),
+                //         const Color(0X53DFA9).withOpacity(0.3),
+                //       ],
+                //       begin: Alignment.topLeft,
+                //       end: Alignment.bottomRight,
+                //     ),
+                //     color: Colors.amber.shade100,
+                //     borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                //     boxShadow: [
+                //       BoxShadow(
+                //         color: Colors.grey.withOpacity(0.7),
+                //         spreadRadius: 0,
+                //         blurRadius: 5.0,
+                //         offset: Offset(0, 10), // changes position of shadow
+                //       ),
+                //     ],
+                //   ),
+                //   height: MediaQuery.of(context).size.width / 2,
+                //   width: MediaQuery.of(context).size.width / 1.2,
+                //   margin: EdgeInsets.all(35.0),
+                //   child: Positioned(
+                //     child: Padding(
+                //       padding: EdgeInsets.only(top: 50),
+                //       child: Row(
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         children: [
+                //           SizedBox(width: 30,),
+                //           Column(
+                //             children: [
+                //               Container(
+                //                 child: Text('Recent',style: TextStyle(
+                //                   fontSize: 15,
+                //                   fontStyle: FontStyle.italic,
+                //                   fontWeight: FontWeight.bold,
+                //                 ),),
+                //               ),
+                //               SizedBox(
+                //                 height: 20,
+                //               ),
+                //               Container(
+                //                 margin: EdgeInsets.only(right: 10),
+                //                     child: Image.asset(
+                //                       'image/run.png',
+                //                       width: 50,
+                //                     ),
+                //                   ),
+                //             ],
+                //           ),
+                //           SizedBox(
+                //             width: 10,
+                //           ),
+                //           Column(
+                //             children: [
+                //               SizedBox(height: 20,),
+                //               Container(
+                //                 child: Text('km :',
+                //                 style: TextStyle(
+                //                   fontSize: 15,
+                //                   fontStyle: FontStyle.italic,
+                //                   fontWeight: FontWeight.bold,
+                //                 ),
+                //                 ),
+                //               ),
+                //               SizedBox(
+                //                 height: 30,
+                //               ),
+                //               Container(
+                //                 child: Text('num :',
+                //                 style: TextStyle(
+                //                   fontSize: 15,
+                //                   fontStyle: FontStyle.italic,
+                //                   fontWeight: FontWeight.bold,
+                //                 ),),
+                //               ),
+                //             ],
+                //           ),
+                //           SizedBox(
+                //             width: 75,
+                //           ),
+                //           Column(
+                //             children: [
+                //               SizedBox(height: 20,),
+                //               Container(
+                //                 child: Text('kcal :',
+                //                 style: TextStyle(
+                //                   fontSize: 15,
+                //                   fontStyle: FontStyle.italic,
+                //                   fontWeight: FontWeight.bold,
+                //                 ),),
+                //               ),
+                //               SizedBox(
+                //                 height: 30,
+                //               ),
+                //               Container(
+                //                 child: Text('pace :',
+                //                 style: TextStyle(
+                //                   fontSize: 15,
+                //                   fontStyle: FontStyle.italic,
+                //                   fontWeight: FontWeight.bold,
+                //                 ),),
+                //               ),
+                //             ],
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 SizedBox(
                   height: 70,
                 ),

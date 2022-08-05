@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:hrc_project/login_page/auth/auth_page.dart';
 import 'login_page/pages/start_page.dart';
 import 'running_main/showmap.dart';
-import 'running_main/temp_2.dart';
-import 'running_main/tester.dart';
 
 
 void main() async {
