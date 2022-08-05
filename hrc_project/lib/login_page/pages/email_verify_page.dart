@@ -72,6 +72,15 @@ class _EmailVerifyState extends State<EmailVerify> {
     //  delete user profile image
     await deleteUserProfileImage.delete();
 
+    //  delete subcollection
+    await userData.collection('running record').get().then(
+          (snapshot) => snapshot.docs.forEach(
+            (doccument) {
+              doccument.reference.delete();
+            },
+          ),
+        );
+
     //  delete user data
     await userData.delete();
 

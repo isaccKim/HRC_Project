@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hrc_project/ranking_board_page/unit_conversion.dart';
 
 Widget noData(bool isTime, BuildContext context) {
   return Padding(
@@ -287,7 +288,7 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
               child: Padding(
                 padding: const EdgeInsets.only(top: 130, left: 130),
                 child: UserNameStatic(data, isTime, context, Colors.white, 25,
-                    Colors.white, 35, Colors.white, 25),
+                    Colors.white, 28, Colors.white, 25),
               ),
             ),
 
@@ -362,7 +363,7 @@ Widget ranking2nd(Map<String, dynamic> data, int number, bool isTime,
           child: Padding(
             padding: const EdgeInsets.only(top: 130, right: 130),
             child: UserNameStatic(data, isTime, context, Colors.white, 25,
-                Colors.white, 35, Colors.white, 25),
+                Colors.white, 28, Colors.white, 25),
           ),
         ),
 
@@ -433,7 +434,7 @@ Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
         child: Padding(
           padding: const EdgeInsets.only(top: 130, left: 130),
           child: UserNameStatic(data, isTime, context, Colors.white, 25,
-              Colors.white, 35, Colors.white, 25),
+              Colors.white, 28, Colors.white, 25),
         ),
       ),
 
@@ -514,7 +515,7 @@ Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 20, right: 5),
                   child: UserNameStatic(data, isTime, context, Colors.grey[500],
-                      18, Colors.white, 30, Colors.white, 23),
+                      18, Colors.white, 23, Colors.white, 23),
                 ),
 
                 //  User profile image
@@ -667,41 +668,41 @@ Widget UserNameStatic(
       isTime
           ? Text.rich(
               TextSpan(
-                text: '${data['sum_time']}',
+                text: convertTime('${data['sum_time']}'),
+                //text: '${data['sum_time']}',
                 style: TextStyle(
                   color: staticColor,
-                  fontSize:
-                      ('${data['sum_time']}'.length > 3) ? 27 : staticSize,
+                  fontSize: staticSize,
                   fontWeight: FontWeight.bold,
                 ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: ' min',
-                    style: TextStyle(
-                      fontSize:
-                          ('${data['sum_time']}'.length > 3) ? 21 : unitSize,
-                      color: unitColor,
-                    ),
-                  ),
-                ],
+                // children: <TextSpan>[
+                //   TextSpan(
+                //     text: ' min',
+                //     style: TextStyle(
+                //       fontSize:
+                //           ('${data['sum_time']}'.length > 3) ? 21 : unitSize,
+                //       color: unitColor,
+                //     ),
+                //   ),
+                // ],
               ),
             )
           : Text.rich(
               TextSpan(
-                text: '${data['sum_distance']}',
+                text: convertTime(data['sum_distance']),
+                //text: '${data['sum_distance']}',
                 style: TextStyle(
                   color: staticColor,
-                  fontSize:
-                      ('${data['sum_distance']}'.length > 3) ? 27 : staticSize,
+                  fontSize: staticSize,
                   fontWeight: FontWeight.bold,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: ' km',
+                    text: double.parse('${data['sum_distance']}') >= 1
+                        ? ' km'
+                        : ' m',
                     style: TextStyle(
-                      fontSize: ('${data['sum_distacne']}'.length > 3)
-                          ? 21
-                          : unitSize,
+                      fontSize: unitSize,
                       color: unitColor,
                     ),
                   ),

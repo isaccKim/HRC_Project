@@ -69,66 +69,86 @@ class _RegisterPageState extends State<RegisterPage> {
           _userNameController.text.isNotEmpty &&
           _userHeightController.text.isNotEmpty &&
           _userWeightController.text.isNotEmpty) {
-        if (_emailController.text.trim().contains('@handong')) {
+        //  email form validation
+        if (RegExp(
+                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            .hasMatch(_emailController.text.trim())) {
+          //  handong email 한정 계정 생성하기
+          // if (_emailController.text.trim().contains('@handong')) {
           if (passwordConfirmed()) {
             try {
-              final newUser =
-                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                email: _emailController.text.trim(),
-                password: _passwordController.text.trim(),
-              );
+              double.parse(_userHeightController.text.trim());
+              double.parse(_userWeightController.text.trim());
+              try {
+                final newUser =
+                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  email: _emailController.text.trim(),
+                  password: _passwordController.text.trim(),
+                );
 
-              final _userProfileImage = FirebaseStorage.instance
-                  .ref()
-                  .child('profile_image')
-                  .child(newUser.user!.uid);
+                final _userProfileImage = FirebaseStorage.instance
+                    .ref()
+                    .child('profile_image')
+                    .child(newUser.user!.uid);
 
-              await _userProfileImage.putFile(_userImage!);
-              final _user_image = await _userProfileImage.getDownloadURL();
+                await _userProfileImage.putFile(_userImage!);
+                final _user_image = await _userProfileImage.getDownloadURL();
 
-              //  data set 방식 함수 호출
-              await addUserDetails(
-                newUser,
-                _userNameController.text.trim(),
-                _emailController.text.trim(),
-                _user_image.trim(),
-                double.parse(_userHeightController.text.trim()),
-                double.parse(_userWeightController.text.trim()),
-              );
+                //  data set 방식 함수 호출
+                await addUserDetails(
+                  newUser,
+                  _userNameController.text.trim(),
+                  _emailController.text.trim(),
+                  _user_image.trim(),
+                  double.parse(_userHeightController.text.trim()),
+                  double.parse(_userWeightController.text.trim()),
+                );
 
-              //  data add 방식 함수 호출
-              // await addUserDetails(
-              //   _userNameController.text.trim(),
-              //   _emailController.text.trim(),
-              //   _user_image.trim(),
-              //   double.parse(_userHeightController.text.trim()),
-              //   double.parse(_userWeightController.text.trim()),
-              // );
+                //  data add 방식 함수 호출
+                // await addUserDetails(
+                //   _userNameController.text.trim(),
+                //   _emailController.text.trim(),
+                //   _user_image.trim(),
+                //   double.parse(_userHeightController.text.trim()),
+                //   double.parse(_userWeightController.text.trim()),
+                // );
 
-              //  Add a document subcollection
-              await addSubCollection(newUser);
+                //  Add a document subcollection
+                await addSubCollection(newUser);
 
+                //  pop the loading circle
+                Navigator.of(context).pop();
+
+                //  email verify page push
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return EmailVerify();
+                    },
+                  ),
+                );
+              } on FirebaseAuthException catch (e) {
+                //  pop the loading circle
+                Navigator.of(context).pop();
+                //  account creation error alert
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return flexibleDialog(context, 200, 30, '알림', 15,
+                          e.message.toString(), 17, () {}, () {}, () {}, () {});
+                    });
+              }
+            } catch (e) {
               //  pop the loading circle
               Navigator.of(context).pop();
 
-              //  email verify page push
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return EmailVerify();
-                  },
-                ),
-              );
-            } on FirebaseAuthException catch (e) {
-              //  pop the loading circle
-              Navigator.of(context).pop();
-              //  account creation error alert
+              // height, weight form alert
               showDialog(
                   context: context,
                   builder: (context) {
                     return flexibleDialog(context, 200, 30, '알림', 15,
-                        e.message.toString(), 17, () {}, () {}, () {}, () {});
+                        e.toString(), 16, () {}, () {}, () {}, () {});
                   });
             }
           } else {
@@ -159,18 +179,8 @@ class _RegisterPageState extends State<RegisterPage> {
           showDialog(
               context: context,
               builder: (context) {
-                return flexibleDialog(
-                    context,
-                    200,
-                    30,
-                    '알림',
-                    15,
-                    '올바른 이메일 형식이 아닙니다.\n"@handong" 이메일이 필요합니다.',
-                    16,
-                    () {},
-                    () {},
-                    () {},
-                    () {});
+                return flexibleDialog(context, 200, 30, '알림', 15,
+                    '올바른 형식의 이메일을 입력해주세요.', 16, () {}, () {}, () {}, () {});
               });
         }
       }

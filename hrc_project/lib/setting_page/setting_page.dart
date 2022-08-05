@@ -68,61 +68,86 @@ class _SettingPageState extends State<SettingPage> {
     );
 
     try {
-      if (isImageEdited) {
-        final deleteUserProfileImage = await FirebaseStorage.instance
-            .ref()
-            .child('profile_image')
-            .child(user!.uid);
-
-        await deleteUserProfileImage.delete();
-
-        final userProfileImage = await FirebaseStorage.instance
-            .ref()
-            .child('profile_image')
-            .child(user.uid);
-
-        await userProfileImage.putFile(_userImage!);
-        newUserImage = await userProfileImage.getDownloadURL();
+      if (_userHeightController.text.trim().isNotEmpty) {
+        double.parse(_userHeightController.text.trim());
       }
 
-      updateUserDatails(
-        _userNameController.text.trim(),
-        newUserImage.trim(),
-        _userHeightController.text.trim().isNotEmpty
-            ? double.parse(_userHeightController.text.trim())
-            : height,
-        _userWeightController.text.trim().isNotEmpty
-            ? double.parse(_userWeightController.text.trim())
-            : weight,
-      );
+      if (_userWeightController.text.trim().isNotEmpty) {
+        double.parse(_userWeightController.text.trim());
+      }
 
-      // pop the loading circle
-      Future.delayed(const Duration(milliseconds: 500), () {
-        Navigator.of(context, rootNavigator: true).pop();
-      });
+      try {
+        if (isImageEdited) {
+          final deleteUserProfileImage = await FirebaseStorage.instance
+              .ref()
+              .child('profile_image')
+              .child(user!.uid);
 
-      //  update completion alert
-      Future.delayed(const Duration(milliseconds: 900), () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return flexibleDialog(context, 200, 30, '알림', 15,
-                  '계정 정보가 수정되었습니다.', 15, () {}, () {}, () {}, () {});
-            });
-      });
+          await deleteUserProfileImage.delete();
+
+          final userProfileImage = await FirebaseStorage.instance
+              .ref()
+              .child('profile_image')
+              .child(user.uid);
+
+          await userProfileImage.putFile(_userImage!);
+          newUserImage = await userProfileImage.getDownloadURL();
+        }
+
+        updateUserDatails(
+          _userNameController.text.trim(),
+          newUserImage.trim(),
+          _userHeightController.text.trim().isNotEmpty
+              ? double.parse(_userHeightController.text.trim())
+              : height,
+          _userWeightController.text.trim().isNotEmpty
+              ? double.parse(_userWeightController.text.trim())
+              : weight,
+        );
+
+        // pop the loading circle
+        Future.delayed(const Duration(milliseconds: 500), () {
+          Navigator.of(context, rootNavigator: true).pop();
+        });
+
+        //  update completion alert
+        Future.delayed(const Duration(milliseconds: 900), () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return flexibleDialog(context, 200, 30, '알림', 15,
+                    '계정 정보가 수정되었습니다.', 15, () {}, () {}, () {}, () {});
+              });
+        });
+      } catch (e) {
+        // pop the loading circle
+        Future.delayed(const Duration(milliseconds: 500), () {
+          Navigator.of(context, rootNavigator: true).pop();
+        });
+
+        //  update data format alert
+        Future.delayed(const Duration(milliseconds: 900), () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return flexibleDialog(context, 200, 30, '알림', 15, e.toString(),
+                    20, () {}, () {}, () {}, () {});
+              });
+        });
+      }
     } catch (e) {
       // pop the loading circle
       Future.delayed(const Duration(milliseconds: 500), () {
         Navigator.of(context, rootNavigator: true).pop();
       });
 
-      //  update data format alert
+      // height, weight form alert
       Future.delayed(const Duration(milliseconds: 900), () {
         showDialog(
             context: context,
             builder: (context) {
               return flexibleDialog(context, 200, 30, '알림', 15, e.toString(),
-                  20, () {}, () {}, () {}, () {});
+                  16, () {}, () {}, () {}, () {});
             });
       });
     }
@@ -179,6 +204,15 @@ class _SettingPageState extends State<SettingPage> {
 
     //  delete user profile image
     await deleteUserProfileImage.delete();
+
+    //  delete subcollection
+    await userData.collection('running record').get().then(
+          (snapshot) => snapshot.docs.forEach(
+            (doccument) {
+              doccument.reference.delete();
+            },
+          ),
+        );
 
     //  delete user data
     await userData.delete();
