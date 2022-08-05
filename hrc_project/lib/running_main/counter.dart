@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:hrc_project/running_main/stop.dart';
-import 'package:hrc_project/running_main/temp.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 final distance = 0;
@@ -33,7 +32,7 @@ class _counterScreenState extends State<counter> {
                 children: [
                   Container(
                     child: Text(
-                      'ss',
+                      displayTime,
                       style: TextStyle(
                           fontSize: 40,
                           fontStyle: FontStyle.italic,

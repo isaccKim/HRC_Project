@@ -3,10 +3,14 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hrc_project/running_main/countdown.dart';
 import 'package:hrc_project/running_main/savePage.dart';
+import 'package:hrc_project/running_main/showmap.dart';
+import 'package:hrc_project/running_main/util.dart';
 import 'package:intl/intl.dart';
 import 'counter.dart';
 import 'package:flutter/material.dart';
@@ -15,42 +19,60 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:google_fonts/google_fonts.dart';
-final username = 'SeowonKim';
 
+String user_name = '';
+String email = '';
+String user_image = '';
 
-String ?tempTime;
-DateTime now = DateTime.now();
-final DateTime currentTime = new DateTime(now.year, now.month, now.day);
+  double dist = 0;
+  late String displayTime;
+  late int _time = 0;
+  late int _lastTime = 0;
+  double speed = 0;
+  double _avgSpeed = 0;
+  int _speedCounter = 0;
+  double temp_dist = 0;
+  double temp_time = 0;
+
+Future _getUserData() async {
+  final user = await FirebaseAuth.instance.currentUser;
+  final userData =
+      await FirebaseFirestore.instance.collection('users').doc(user!.uid);
+  temp_time = 0;
+  temp_time = 0;
+  await userData.get().then(
+        (value) => {
+          user_name = value['user_name'],
+          email = value['email'],
+          user_image = value['user_image'],
+          temp_dist= value['sum_distance'],
+          temp_time = value['sum_time'],
+        },
+      );
+}
 
 class stop extends StatefulWidget {
   @override
   State<stop> createState() => MapSampleState();
 }
 
-
 class MapSampleState extends State<stop> {
   final Set<Polyline> polyline = {};
   Location _location = Location();
-  
+
   late GoogleMapController _mapController;
   LatLng _center = const LatLng(0, 0);
   List<LatLng> route = [];
 
-  double dist = 0;
-  late String displayTime;
-  late int _time;
-  late int _lastTime;
-  double speed = 0;
-  double _avgSpeed = 0;
-  int _speedCounter = 0;
+  late String date = getToday();
 
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
 
-@override
+  @override
   void initState() {
     super.initState();
     _stopWatchTimer.onExecute.add(StopWatchExecute.start);
-  } 
+  }
 
   @override
   void dispose() async {
@@ -58,7 +80,7 @@ class MapSampleState extends State<stop> {
     await _stopWatchTimer.dispose(); // Need to call dispose function.
   }
 
-    void _onMapCreated(GoogleMapController controller) {
+  void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     double appendDist;
 
@@ -97,30 +119,37 @@ class MapSampleState extends State<stop> {
     });
   }
 
-  
+  Util ut = new Util();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Stack(
         children: [
           Container(
-          child: GoogleMap(
-        polylines: polyline,
-        zoomControlsEnabled: false,
-        onMapCreated: _onMapCreated,
-        myLocationEnabled: true,
-        initialCameraPosition: CameraPosition(target: _center, zoom: 11),
-      )),
+              child: GoogleMap(
+            polylines: polyline,
+            zoomControlsEnabled: false,
+            onMapCreated: _onMapCreated,
+            myLocationEnabled: true,
+            initialCameraPosition: CameraPosition(target: _center, zoom: 11),
+          )),
           Padding(
-            padding: const EdgeInsets.only(left: 10, top: 30),
+            padding: const EdgeInsets.only(left: 20, top: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  'image/profile_1.png',
-                  width: 40,
-                  height: 40,
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.grey[200],
+                  foregroundImage: NetworkImage(
+                    user_image,
+                  ),
+                  child: Icon(
+                    Icons.account_circle,
+                    size: 17,
+                    color: Colors.grey,
+                  ),
                 ),
                 SizedBox(
                   width: 10,
@@ -131,7 +160,7 @@ class MapSampleState extends State<stop> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        username,
+                        user_name,
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.black,
@@ -139,7 +168,7 @@ class MapSampleState extends State<stop> {
                         ),
                       ),
                       Text(
-                        '#$currentTime',
+                        getToday(),
                         style: TextStyle(
                             fontSize: 10,
                             color: Colors.black,
@@ -153,7 +182,8 @@ class MapSampleState extends State<stop> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical :MediaQuery.of(context).size.height*0.05),
+            padding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height * 0.05),
             child: Positioned(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -198,27 +228,27 @@ class MapSampleState extends State<stop> {
                               height: 27,
                             ),
                             Container(
-                              child: StreamBuilder<int>(
-                          stream: _stopWatchTimer.rawTime,
-                          initialData: 0,
-                          builder: (context, snap) {
-                            _time = snap.data!;
-                            displayTime =
-                                StopWatchTimer.getDisplayTimeHours(_time) +
+                                child: StreamBuilder<int>(
+                              stream: _stopWatchTimer.rawTime,
+                              initialData: 0,
+                              builder: (context, snap) {
+                                _time = snap.data!;
+                                displayTime = StopWatchTimer
+                                        .getDisplayTimeHours(_time) +
                                     ":" +
                                     StopWatchTimer.getDisplayTimeMinute(_time) +
                                     ":" +
                                     StopWatchTimer.getDisplayTimeSecond(_time);
-                            return Text(displayTime,
-                             style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 30,
-                                ),
+                                return Text(
+                                  displayTime,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: 30,
+                                  ),
                                 );
-                          },
-                        )
-                            ),
+                              },
+                            )),
                             SizedBox(
                               height: 15,
                             ),
@@ -237,7 +267,7 @@ class MapSampleState extends State<stop> {
                               height: 15,
                             ),
                             Container(
-                                width: MediaQuery.of(context).size.width*0.7,
+                                width: MediaQuery.of(context).size.width * 0.7,
                                 child: Divider(
                                     color: Color.fromARGB(255, 141, 137, 137),
                                     thickness: 2.0)),
@@ -275,8 +305,8 @@ class MapSampleState extends State<stop> {
                                       child: Image.asset('image/play_btn.png',
                                           width: 60, height: 60),
                                       onTap: () {
-                                        _stopWatchTimer.onExecute.add(StopWatchExecute.start);
-                                         
+                                        _stopWatchTimer.onExecute
+                                            .add(StopWatchExecute.start);
                                       },
                                     ),
                                   ],
@@ -313,7 +343,10 @@ class MapSampleState extends State<stop> {
                                           width: 50, height: 50),
                                       onLongPress: () {
                                         startcounter();
-                                        _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+                                        _stopWatchTimer.onExecute
+                                            .add(StopWatchExecute.stop);
+                                            updatePersonalRecord();
+                                            addSubCollection();
                                         Navigator.pop(context);
                                         Navigator.push(
                                           context,
@@ -324,9 +357,10 @@ class MapSampleState extends State<stop> {
                                           ),
                                         );
                                       },
-                                       onTap: () {
+                                      onTap: () {
                                         startcounter();
-                                        _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+                                        _stopWatchTimer.onExecute
+                                            .add(StopWatchExecute.stop);
                                       },
                                     ),
                                   ],
@@ -347,4 +381,39 @@ class MapSampleState extends State<stop> {
       ),
     );
   }
+}
+
+Future updatePersonalRecord() async {
+Util ut = new Util();
+final user = await FirebaseAuth.instance.currentUser;
+
+final userData =
+      await FirebaseFirestore.instance.collection('users').doc(user!.uid);
+
+  temp_time += ut.timeToDouble(displayTime);
+  temp_dist += double.parse((dist/1000).toStringAsFixed(2));
+  
+  await userData.update({
+    'sum_distance': temp_dist,
+    'sum_time': temp_time,
+  });
+
+}
+
+Future addSubCollection() async {
+  Util ut = new Util();
+  final user = await FirebaseAuth.instance.currentUser;
+
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user?.uid)
+      .collection('running record')
+      .add({
+    'distance': double.parse((dist/1000).toStringAsFixed(2)),
+    'time': ut.timeToDouble(displayTime),
+    'pace': speed,
+    'date': DateTime.now(),
+  });
+
+
 }

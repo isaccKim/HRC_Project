@@ -1,28 +1,27 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last, import_of_legacy_library_into_null_safe
 
 import 'dart:ui';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hrc_project/nav_bar/navigation_bar.dart';
-import 'package:hrc_project/running_main/countdown.dart';
-import 'package:hrc_project/running_main/counter.dart';
 import 'package:hrc_project/running_main/showmap.dart';
+import 'package:hrc_project/running_main/stop.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 //import 'package:syncfusion_flutter_sliders/sliders.dart';
-
 import 'package:vector_math/vector_math.dart' as vmath;
 import 'dart:math' as math;
+import 'util.dart';
 
-final username = 'SeowonKim';
-final dist = 4;
+
 String saveDay() {
   DateTime now = DateTime.now();
   DateFormat formatter = DateFormat('EEEE MMMM dd Run');
   strToday = formatter.format(now);
   return strToday;
 }
+
 final List numbers = [
   ['calorie', '124', 'kcal'],
   ['distance', '4.34', 'km'],
@@ -108,9 +107,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              SizedBox(
-
-              ),
+              SizedBox(),
               Column(
                 children: [
                   Container(
@@ -147,7 +144,9 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                         ),
                         Column(
                           children: [
-                            SizedBox(height: MediaQuery.of(context).size.width * 0.18,),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.width * 0.18,
+                            ),
                             Container(
                               child: Text(
                                 '67 km',
@@ -160,17 +159,17 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                             ),
                           ],
                         ),
-
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Text('Friday',
-                                style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 109, 114, 107),
-                                      fontStyle: FontStyle.italic),),
-                            ),
-
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            'Friday',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 109, 114, 107),
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ),
                         CustomPaint(
                             painter: CustomCircularProgress(
                                 value: controller.value)),
@@ -178,12 +177,14 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                           height: MediaQuery.of(context).size.width * 0.18,
                         ),
                         Container(
-                          child:      Text('Steps',
-                              style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromARGB(255, 142, 214, 120),
-                                    fontStyle: FontStyle.italic),),
+                          child: Text(
+                            'Steps',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 142, 214, 120),
+                                fontStyle: FontStyle.italic),
+                          ),
                         ),
                         Container(
                           padding: EdgeInsets.symmetric(
@@ -261,55 +262,68 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                           height: MediaQuery.of(context).size.height * 0.15,
                           decoration: BoxDecoration(
                             color: Color.fromARGB(255, 113, 200, 206),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                           child: Column(
                             children: [
-                              SizedBox(height: MediaQuery.of(context).size.width * 0.03,),
-                              Row(
-                                children:[ 
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width * 0.08,
-                                  ),
-                                  Image.asset('image/run_blue.png',
-                                  width: MediaQuery.of(context).size.width * 0.06,
-                                  height: MediaQuery.of(context).size.width * 0.06,),
-                                  SizedBox(width: MediaQuery.of(context).size.width * 0.04,),
-                                  Container(
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.width * 0.03,
+                              ),
+                              Row(children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.08,
+                                ),
+                                Image.asset(
+                                  'image/run_blue.png',
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.06,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.06,
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.04,
+                                ),
+                                Container(
                                   child: Text(
                                     'Stense',
                                     style: TextStyle(
-                                      fontSize: 7,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.white
-                                    ),
+                                        fontSize: 7,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic,
+                                        color: Colors.white),
                                   ),
                                 ),
-                                ]
+                              ]),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 30, right: 30),
+                                child: SfSlider(
+                                  min: 1,
+                                  max: 5,
+                                  value: _value,
+                                  interval: 1,
+                                  showTicks: true,
+                                  showLabels: true,
+                                  enableTooltip: true,
+                                  minorTicksPerInterval: 1,
+                                  onChanged: (dynamic value) {
+                                    setState(() {
+                                      _value = value;
+                                      print(_value);
+                                    });
+                                  },
+                                ),
                               ),
-                                  Padding(
-                            padding: const EdgeInsets.only(left:30 ,right: 30),
-                            child: SfSlider(
-                              min: 1,
-                              max: 5,
-                              value: _value,
-                              interval: 1,
-                              showTicks: true,
-                              showLabels: true,
-                              enableTooltip: true,
-                              minorTicksPerInterval: 1,
-                              onChanged: (dynamic value) {
-                                setState(() {
-                                  _value = value;
-                                });
-                              },
-                            ),
-                          ),
                             ],
                           ),
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.width * 0.04,),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.04,
+                        ),
                         Container(
                           width: 100,
                           height: 50,
@@ -323,48 +337,53 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                             child: Row(
                               children: [
                                 Container(
-                                   child: InkWell(
-                        child: Image.asset('image/profile_1.png',
-                            width: 40, height: 40),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return NavigationBarPage();
-                              },
-                            ),
-                          );
-                        },
-                      ),
+                                  child: InkWell(
+                                    child: Image.asset('image/profile_1.png',
+                                        width: 40, height: 40),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return NavigationBarPage();
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
-                                SizedBox( width : MediaQuery.of(context).size.width*0.03 ),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.03),
                                 Container(
-                                   child: InkWell(
-                      child: Text('Save',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic,
-                                    color: Color.fromARGB(255, 111, 221, 157),
+                                  child: InkWell(
+                                    child: Text(
+                                      'Save',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic,
+                                        color:
+                                            Color.fromARGB(255, 111, 221, 157),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return NavigationBarPage();
+                                          },
+                                        ),
+                                      );
+                                    },
                                   ),
-                                  ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return NavigationBarPage();
-                              },
-                            ),
-                          );
-                        },
-                      ),
                                 ),
-
                               ],
                             ),
-
                           ),
                         ),
                       ],
@@ -417,7 +436,7 @@ class CustomCircularProgress extends CustomPainter {
     canvas.drawArc(
       Rect.fromCenter(center: center, width: 170, height: 170),
       vmath.radians(140),
-      vmath.radians(dist*10* value),
+      vmath.radians(dist * 10 * value),
       false,
       Paint()
         ..style = PaintingStyle.stroke
