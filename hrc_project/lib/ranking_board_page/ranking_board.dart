@@ -59,6 +59,9 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // theme: ThemeData(
+      //   fontFamily: 'Leferi_font',
+      // ),
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
         length: 2,

@@ -286,7 +286,7 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 130, left: 130),
-                child: UserNameEmail(data, isTime, context, Colors.white, 25,
+                child: UserNameStatic(data, isTime, context, Colors.white, 25,
                     Colors.white, 35, Colors.white, 25),
               ),
             ),
@@ -361,7 +361,7 @@ Widget ranking2nd(Map<String, dynamic> data, int number, bool isTime,
         Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 130, right: 130),
-            child: UserNameEmail(data, isTime, context, Colors.white, 25,
+            child: UserNameStatic(data, isTime, context, Colors.white, 25,
                 Colors.white, 35, Colors.white, 25),
           ),
         ),
@@ -432,7 +432,7 @@ Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
       Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 130, left: 130),
-          child: UserNameEmail(data, isTime, context, Colors.white, 25,
+          child: UserNameStatic(data, isTime, context, Colors.white, 25,
               Colors.white, 35, Colors.white, 25),
         ),
       ),
@@ -480,7 +480,7 @@ Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
           Radius.circular(15),
         ),
         color: isMe
-            ? const Color.fromARGB(255, 67, 75, 227)
+            ? const Color.fromARGB(255, 116, 30, 255)
             : const Color.fromARGB(255, 46, 36, 80),
       ),
       child: Stack(
@@ -513,7 +513,7 @@ Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
                 //  User name, statistic
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 20, right: 5),
-                  child: UserNameEmail(data, isTime, context, Colors.grey[500],
+                  child: UserNameStatic(data, isTime, context, Colors.grey[500],
                       18, Colors.white, 30, Colors.white, 23),
                 ),
 
@@ -640,7 +640,7 @@ Widget UserImage(
 }
 
 //  User name, statistic
-Widget UserNameEmail(
+Widget UserNameStatic(
   Map<String, dynamic> data,
   bool isTime,
   BuildContext context,
@@ -676,7 +676,7 @@ Widget UserNameEmail(
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: ' hr',
+                    text: ' min',
                     style: TextStyle(
                       fontSize:
                           ('${data['sum_time']}'.length > 3) ? 21 : unitSize,

@@ -5,15 +5,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:hrc_project/login_page/auth/auth_page.dart';
 import 'login_page/pages/start_page.dart';
-import 'running_main/showmap.dart';
-import 'running_main/temp_2.dart';
-import 'running_main/tester.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   MaterialApp(
+    // theme: ThemeData(
+    //   fontFamily: 'Leferi_font',
+    // ),
     initialRoute: '/',
     routes: {
       '/': (BuildContext context) => StartPageWidget(),
@@ -36,10 +35,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     hideSmartPhoneBar();
     return MaterialApp(
+      // theme: ThemeData(
+      //   fontFamily: 'Leferi_font',
+      // ),
       debugShowCheckedModeBanner: false,
-
       home: StartPageWidget(),
-
     );
   }
 }
