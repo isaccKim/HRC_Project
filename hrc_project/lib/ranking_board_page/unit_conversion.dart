@@ -1,3 +1,4 @@
+//  second convert
 String convertTime(String time) {
   int hr, min, sec;
   String convertedTime;
@@ -13,6 +14,7 @@ String convertTime(String time) {
   return convertedTime;
 }
 
+//  km convert
 String convertDist(String distance) {
   // int km, m;
   // String convertedTime;
@@ -22,9 +24,13 @@ String convertDist(String distance) {
 
   // return convertedTime;
 
+  String convertedDist;
+
+  convertedDist = '${(double.parse(distance) * 1000).round()}';
+
   if (double.parse(distance) >= 1) {
     return distance;
   } else {
-    return '${(double.parse(distance) * 1000).round()}';
+    return convertedDist;
   }
 }

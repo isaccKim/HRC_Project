@@ -70,7 +70,7 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
           appBar: AppBar(
             backgroundColor: const Color.fromARGB(255, 35, 25, 60),
             elevation: 0.8,
-            toolbarHeight: 0,
+            toolbarHeight: 15,
             bottom: PreferredSize(
               preferredSize: const Size(0, 57),
               child: TabBar(

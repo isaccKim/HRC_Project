@@ -10,27 +10,23 @@ class TestPage extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Container(
+            color: Colors.blue,
+            width: 30,
+            height: MediaQuery.of(context).size.height,
+          ),
+          // child: Text(
+          //   'WOW',
+          //   style: TextStyle(
+          //     fontWeight: FontWeight.bold,
+          //     fontSize: 30,
+          //   ),
+          // ),
+        ),
       ),
-      home: const MyHomePage(),
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: Column(children: []));
   }
 }

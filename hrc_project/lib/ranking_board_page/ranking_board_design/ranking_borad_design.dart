@@ -689,7 +689,7 @@ Widget UserNameStatic(
             )
           : Text.rich(
               TextSpan(
-                text: convertTime(data['sum_distance']),
+                text: convertDist('${data['sum_distance']}'),
                 //text: '${data['sum_distance']}',
                 style: TextStyle(
                   color: staticColor,
