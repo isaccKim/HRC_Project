@@ -123,6 +123,7 @@ class StartPageWidget extends StatelessWidget {
                               'Start',
                               textAlign: TextAlign.center,
                               style: TextStyle(
+                                fontFamily: 'JostStart',
                                 color: Colors.white,
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,

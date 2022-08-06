@@ -383,7 +383,7 @@ Function confirmDialog(
         return Dialog(
           backgroundColor: Colors.white.withOpacity(0),
           child: Container(
-            height: 200,
+            height: 210,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.white,

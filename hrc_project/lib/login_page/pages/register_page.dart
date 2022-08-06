@@ -334,7 +334,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 19),
+                        padding: const EdgeInsets.only(top: 8.5),
                         child: SvgPicture.asset(
                           'image/Logo.svg',
                           height: 80,
@@ -363,7 +363,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.only(top: 12),
+                        padding: const EdgeInsets.only(top: 4),
                         child: Center(
                           child: Text(
                             'User profile',
@@ -487,7 +487,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 12),
+                        padding: const EdgeInsets.only(top: 7),
                         child: Center(
                           child: Text(
                             'ID/PW',
@@ -502,7 +502,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 60, 0, 10),
+                        padding: const EdgeInsets.fromLTRB(0, 55, 0, 10),
                         child: Column(
                           children: [
                             //  email textField
@@ -642,7 +642,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 12),
+                        padding: const EdgeInsets.only(top: 7),
                         child: Center(
                           child: Text(
                             'Body info',
@@ -747,7 +747,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
 
-                  SizedBox(height: 25),
+                  SizedBox(height: 40),
 
                   //  Sign up button
                   Padding(

@@ -59,9 +59,6 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // theme: ThemeData(
-      //   fontFamily: 'Leferi_font',
-      // ),
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
         length: 2,
@@ -80,8 +77,10 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
                 unselectedLabelColor: Colors.grey[500],
                 labelColor: Colors.white,
                 labelPadding: const EdgeInsets.only(bottom: 5),
-                labelStyle:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                labelStyle: const TextStyle(
+                    fontFamily: 'JostSemi',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 21),
                 indicatorPadding: const EdgeInsets.only(bottom: 5),
                 indicator: const BoxDecoration(
                   borderRadius: BorderRadius.all(

@@ -10,9 +10,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   MaterialApp(
-    // theme: ThemeData(
-    //   fontFamily: 'Leferi_font',
-    // ),
     initialRoute: '/',
     routes: {
       '/': (BuildContext context) => StartPageWidget(),
@@ -35,9 +32,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     hideSmartPhoneBar();
     return MaterialApp(
-      // theme: ThemeData(
-      //   fontFamily: 'Leferi_font',
-      // ),
+      theme: ThemeData(
+        fontFamily: 'JostMain',
+      ),
       debugShowCheckedModeBanner: false,
       home: StartPageWidget(),
     );

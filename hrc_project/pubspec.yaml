@@ -112,19 +112,22 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Leferi_font
-      fonts:
-      - asset: assets/font/LeferiBaseRegular.ttf
-      # - asset: assets/font/LeferiPointBlackOblique.ttf
-      #   weight: 300
-        # - asset: assets/font/LeferiBaseBold.ttf
-        # - asset: assets/font/LeferiBaseRegular.ttf
-        # - asset: assets/font/LeferiPointBlack.ttf
-        # - asset: assets/font/LeferiPointSpecial.ttf
-        # - asset: assets/font/LeferiPointSpecialItalic.ttf
-        # - asset: assets/font/LeferiPointWhite.ttf
-        # - asset: assets/font/LeferiPointWhiteOblique.ttf
-          # style: italic
+      - family: Jost
+        fonts:
+          - asset: assets/font/Jost/Jost600SemiItalic.otf
+
+      - family: JostMain
+        fonts:
+          - asset: assets/font/Jost/Jost400Book.otf
+
+      - family: JostSemi
+        fonts:
+          - asset: assets/font/Jost/Jost600Semi.otf
+
+      - family: JostStart
+        fonts:
+          - asset: assets/font/Jost/Jost800HeavyItalic.otf
+
     # - family: Trajan Pro
     #   fonts:
     #     - asset: fonts/TrajanPro.ttf

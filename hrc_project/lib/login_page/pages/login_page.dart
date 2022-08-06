@@ -89,9 +89,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // theme: ThemeData(
-      //   fontFamily: 'Leferi_font',
-      // ),
+      theme: ThemeData(
+        fontFamily: 'JostMain',
+      ),
       debugShowCheckedModeBanner: false,
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),

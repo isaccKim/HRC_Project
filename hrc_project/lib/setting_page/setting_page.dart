@@ -479,6 +479,7 @@ class _SettingPageState extends State<SettingPage> {
                                                   filled: true,
                                                   hintText: '${user_name}',
                                                   hintStyle: TextStyle(
+                                                    fontFamily: 'Roboto',
                                                     color: isNameEdited
                                                         ? Colors.white
                                                             .withOpacity(0)
@@ -489,6 +490,7 @@ class _SettingPageState extends State<SettingPage> {
                                                 ),
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
+                                                  fontFamily: 'Roboto',
                                                   color: Color.fromRGBO(
                                                       186, 104, 186, 1),
                                                   fontWeight: FontWeight.bold,
@@ -503,6 +505,7 @@ class _SettingPageState extends State<SettingPage> {
                                             Text(
                                               '${email}',
                                               style: TextStyle(
+                                                fontFamily: 'Roboto',
                                                 color: Colors.grey[500],
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.bold,
@@ -574,7 +577,7 @@ class _SettingPageState extends State<SettingPage> {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white,
-                                                  fontSize: 15,
+                                                  fontSize: 17,
                                                 ),
                                               ),
                                               const SizedBox(height: 7),
@@ -620,6 +623,7 @@ class _SettingPageState extends State<SettingPage> {
                                                     suffixIcon: const Text(
                                                       'kg',
                                                       style: TextStyle(
+                                                        fontFamily: 'Roboto',
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: Colors.white,
@@ -628,9 +632,10 @@ class _SettingPageState extends State<SettingPage> {
                                                     ),
                                                     suffixIconConstraints:
                                                         const BoxConstraints(
-                                                            minHeight: 39),
+                                                            minHeight: 32),
                                                     hintText: '${weight}',
                                                     hintStyle: TextStyle(
+                                                      fontFamily: 'Roboto',
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: isWeightEdited
@@ -668,7 +673,7 @@ class _SettingPageState extends State<SettingPage> {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white,
-                                                  fontSize: 15,
+                                                  fontSize: 17,
                                                 ),
                                               ),
                                               const SizedBox(height: 7),
@@ -716,6 +721,7 @@ class _SettingPageState extends State<SettingPage> {
                                                       suffixIcon: const Text(
                                                         'cm',
                                                         style: TextStyle(
+                                                          fontFamily: 'Roboto',
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           color: Colors.white,
@@ -724,9 +730,10 @@ class _SettingPageState extends State<SettingPage> {
                                                       ),
                                                       suffixIconConstraints:
                                                           const BoxConstraints(
-                                                              minHeight: 39),
+                                                              minHeight: 32),
                                                       hintText: '${height}',
                                                       hintStyle: TextStyle(
+                                                        fontFamily: 'Roboto',
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: isHeightEdited
