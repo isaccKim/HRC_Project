@@ -632,10 +632,10 @@ class _SettingPageState extends State<SettingPage> {
                                                     ),
                                                     suffixIconConstraints:
                                                         const BoxConstraints(
-                                                            minHeight: 32),
+                                                            minHeight: 38),
                                                     hintText: '${weight}',
                                                     hintStyle: TextStyle(
-                                                      fontFamily: 'Roboto',
+                                                      //fontFamily: 'Roboto',
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: isWeightEdited
@@ -730,10 +730,10 @@ class _SettingPageState extends State<SettingPage> {
                                                       ),
                                                       suffixIconConstraints:
                                                           const BoxConstraints(
-                                                              minHeight: 32),
+                                                              minHeight: 38),
                                                       hintText: '${height}',
                                                       hintStyle: TextStyle(
-                                                        fontFamily: 'Roboto',
+                                                        //fontFamily: 'Roboto',
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: isHeightEdited

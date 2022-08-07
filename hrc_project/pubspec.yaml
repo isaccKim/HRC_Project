@@ -54,6 +54,7 @@ dependencies:
   charts_flutter: ^0.12.0
   syncfusion_flutter_sliders: ^20.2.40
   syncfusion_flutter_charts: ^20.2.40
+  video_player: ^2.4.5
 
 
 dev_dependencies:
@@ -98,6 +99,7 @@ flutter:
     - image/save_btn.png
     - image/gage.png
     - image/run_blue.png
+    - assets/video/backgroundvideo.mp4
 
     
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -126,7 +128,7 @@ flutter:
 
       - family: JostStart
         fonts:
-          - asset: assets/font/Jost/Jost800HeavyItalic.otf
+          - asset: assets/font/Jost/Jost700BoldItalic.otf
 
     # - family: Trajan Pro
     #   fonts:

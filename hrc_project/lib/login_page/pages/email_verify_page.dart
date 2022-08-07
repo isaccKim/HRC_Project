@@ -276,7 +276,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                                         fit: FlexFit.tight,
                                         child: Padding(
                                           padding: const EdgeInsets.only(
-                                              top: 20, bottom: 10, right: 25),
+                                              top: 10, bottom: 10, right: 20),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceAround,
@@ -289,7 +289,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                              SizedBox(height: 10),
+                                              //SizedBox(height: 10),
                                               Text(
                                                 '${email}',
                                                 style: TextStyle(

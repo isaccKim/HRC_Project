@@ -835,7 +835,8 @@ Widget UserNameStatic(
                 style: TextStyle(
                   fontFamily: 'Jost',
                   color: staticColor,
-                  fontSize: staticSize,
+                  fontSize:
+                      '${data['sum_distance']}'.length > 4 ? 22 : staticSize,
                   //fontWeight: FontWeight.bold,
                 ),
                 children: <TextSpan>[
@@ -845,7 +846,8 @@ Widget UserNameStatic(
                         : ' m',
                     style: TextStyle(
                       fontFamily: 'Jost',
-                      fontSize: unitSize,
+                      fontSize:
+                          '${data['sum_distance']}'.length > 4 ? 19 : unitSize,
                       color: unitColor,
                     ),
                   ),
