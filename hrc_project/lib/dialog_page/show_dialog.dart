@@ -2,6 +2,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:hrc_project/dialog_page/rc_select_dialog.dart';
 
 //  with yes and no textbutton
 Dialog alternativeDialog(
@@ -821,6 +822,16 @@ Dialog rcSelectDialog(
   Function executableFuc4,
   Function executableFuc5,
 ) {
+  final images = [
+    '',
+    'image/ranking_board/rc images/Ro.png',
+    'image/ranking_board/rc images/Be.png',
+    'image/ranking_board/rc images/Vi.png',
+    'image/ranking_board/rc images/Ja.png',
+    'image/ranking_board/rc images/Ca.png',
+    'image/ranking_board/rc images/Ky.png'
+  ];
+  int activeIndex = 0;
   return Dialog(
     backgroundColor: Colors.white.withOpacity(0),
     child: Container(
@@ -843,16 +854,24 @@ Dialog rcSelectDialog(
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: CarouselSlider.builder(
-                itemCount: 7,
-                options: CarouselOptions(height: 400),
-                itemBuilder: (context, index, realIndex) {
-                  return Text('s');
-                },
-              ),
+
+            //  Page indicator
+            buildIndicatior(images.length, activeIndex),
+
+            //  RC image slider
+            CarouselSlider.builder(
+              itemCount: images.length,
+              options: CarouselOptions(
+                  height: 150,
+                  enlargeCenterPage: true,
+                  onPageChanged: (index, reason) {
+                    activeIndex = index;
+                  }),
+              itemBuilder: (context, index, realIndex) {
+                return buildImage(images[index], index);
+              },
             ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

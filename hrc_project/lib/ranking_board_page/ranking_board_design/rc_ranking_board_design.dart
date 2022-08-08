@@ -568,18 +568,14 @@ class RadiantGradientMask extends StatelessWidget {
 
 //  User profile slot
 Widget RcImage(
-    Map<String, dynamic> data,
-    String documentId,
-    BuildContext context,
-    double height,
-    double width,
-    double circlePadding,
-    String rank) {
-  bool isMyRC = false;
-  final user = FirebaseAuth.instance.currentUser;
-  if (documentId == user!.uid) {
-    isMyRC = true;
-  }
+  Map<String, dynamic> data,
+  String documentId,
+  BuildContext context,
+  double height,
+  double width,
+  double circlePadding,
+  String rank,
+) {
   return //  rc profile image
       GestureDetector(
     onTap: () {

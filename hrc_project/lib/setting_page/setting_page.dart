@@ -176,7 +176,7 @@ class _SettingPageState extends State<SettingPage> {
       await userData.update({'weight': newWeight});
     }
 
-    //  reload page
+    //  Reload page
     setState(() {
       isEdited = false;
       isNameEdited = false;

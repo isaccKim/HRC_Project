@@ -56,6 +56,7 @@ dependencies:
   syncfusion_flutter_charts: ^20.2.40
   video_player: ^2.4.5
   carousel_slider: ^4.1.1
+  smooth_page_indicator: ^1.0.0+2
 
 
 dev_dependencies:
@@ -101,6 +102,12 @@ flutter:
     - image/gage.png
     - image/run_blue.png
     - assets/video/backgroundvideo.mp4
+    - image/ranking_board/rc images/Ro.png
+    - image/ranking_board/rc images/Be.png
+    - image/ranking_board/rc images/Vi.png
+    - image/ranking_board/rc images/Ja.png
+    - image/ranking_board/rc images/Ca.png
+    - image/ranking_board/rc images/Ky.png
 
     
   # An image asset can refer to one or more resolution-specific "variants", see

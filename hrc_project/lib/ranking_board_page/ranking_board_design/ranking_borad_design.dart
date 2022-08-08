@@ -715,18 +715,14 @@ class RadiantGradientMask extends StatelessWidget {
 
 //  User profile slot
 Widget UserImage(
-    Map<String, dynamic> data,
-    String documentId,
-    BuildContext context,
-    double height,
-    double width,
-    double circlePadding,
-    String rank) {
-  bool isMe = false;
-  final user = FirebaseAuth.instance.currentUser;
-  if (documentId == user!.uid) {
-    isMe = true;
-  }
+  Map<String, dynamic> data,
+  String documentId,
+  BuildContext context,
+  double height,
+  double width,
+  double circlePadding,
+  String rank,
+) {
   return //  user profile image
       GestureDetector(
     onTap: () {
@@ -860,21 +856,4 @@ Widget UserNameStatic(
             ),
     ],
   );
-}
-
-//  Get user data from cloud Firestore
-Future<String> _getUserData() async {
-  String user_rc = '';
-
-  final user = FirebaseAuth.instance.currentUser;
-  final userData =
-      FirebaseFirestore.instance.collection('users').doc(user!.uid);
-
-  userData.get().then(
-        (value) => {
-          user_rc = value['user_RC'],
-        },
-      );
-
-  return user_rc;
 }
