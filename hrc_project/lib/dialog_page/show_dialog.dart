@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 //  with yes and no textbutton
@@ -844,13 +845,12 @@ Dialog rcSelectDialog(
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
-              child: Text(
-                '$mainText',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: mainTextSize,
-                ),
+              child: CarouselSlider.builder(
+                itemCount: 7,
+                options: CarouselOptions(height: 400),
+                itemBuilder: (context, index, realIndex) {
+                  return Text('s');
+                },
               ),
             ),
             Row(

@@ -122,11 +122,11 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
                 ),
                 //  Read user RC data
                 FutureBuilder(
-                  future: getUserRCData(),
+                  future: getDocId(),
                   builder: ((context, snapshot) {
                     //  4th or below list view
                     return FutureBuilder(
-                      future: getDocId(),
+                      future: getUserRCData(),
                       builder: (context, snapshot) {
                         return ListView.separated(
                           primary: false,

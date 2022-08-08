@@ -55,6 +55,7 @@ dependencies:
   syncfusion_flutter_sliders: ^20.2.40
   syncfusion_flutter_charts: ^20.2.40
   video_player: ^2.4.5
+  carousel_slider: ^4.1.1
 
 
 dev_dependencies:

@@ -9,13 +9,13 @@ import 'login_page/pages/start_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  MaterialApp(
-    initialRoute: '/',
-    routes: {
-      '/': (BuildContext context) => StartPageWidget(),
-      '/second': (BuildContext context) => AuthPage(),
-    },
-  );
+  // MaterialApp(
+  //   initialRoute: '/',
+  //   routes: {
+  //     '/': (BuildContext context) => StartPageWidget(),
+  //     '/second': (BuildContext context) => AuthPage(),
+  //   },
+  // );
 
   //  screen rotation lock
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -36,11 +36,16 @@ class MyApp extends StatelessWidget {
     //  OS navigation bar hide
     hideSmartPhoneBar();
     return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (BuildContext context) => StartPageWidget(),
+        '/second': (BuildContext context) => AuthPage(),
+      },
       theme: ThemeData(
         fontFamily: 'JostMain',
       ),
       debugShowCheckedModeBanner: false,
-      home: StartPageWidget(),
+      //home: StartPageWidget(),
     );
   }
 }

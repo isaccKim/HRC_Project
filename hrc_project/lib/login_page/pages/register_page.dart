@@ -313,7 +313,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   //  page back arrow
                   Padding(
-                    padding: EdgeInsets.only(left: 20, top: 15),
+                    padding: EdgeInsets.only(left: 20, top: 25),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [

@@ -38,7 +38,6 @@ class _EmailVerifyState extends State<EmailVerify> {
       bool stopDefaultButtonEvent, RouteInfo info) async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pop();
-    Navigator.of(context).pop();
 
     return true;
   }
@@ -113,15 +112,6 @@ class _EmailVerifyState extends State<EmailVerify> {
                       onTap: () async {
                         await FirebaseAuth.instance.signOut();
                         Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return AuthPage();
-                            },
-                          ),
-                        );
                       },
                       child: Icon(
                         Icons.arrow_back,

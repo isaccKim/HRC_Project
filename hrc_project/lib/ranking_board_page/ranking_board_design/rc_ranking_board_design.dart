@@ -181,7 +181,7 @@ Widget rcRanking1st(Map<String, dynamic> data, int number, String documentId,
                     x2: -1,
                     y2: 1,
                     child: const Icon(
-                      Icons.north,
+                      Icons.holiday_village_outlined,
                       size: 170,
                       color: Colors.white,
                     ),

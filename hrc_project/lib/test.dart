@@ -21,7 +21,7 @@ class TestPage extends StatelessWidget {
                   builder: (context) {
                     return rcSelectDialog(
                       context,
-                      270,
+                      500,
                       30,
                       'RC 선택하기',
                       15,

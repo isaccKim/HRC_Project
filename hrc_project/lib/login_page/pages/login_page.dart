@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hrc_project/login_page/auth/auth_page.dart';
 import 'package:hrc_project/nav_bar/navigation_bar.dart';
 import 'email_verify_page.dart';
 import 'forgot_pw_page.dart';
@@ -19,6 +22,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  // bool isLogin = true;
+  // bool isExite = true;
 
   //  Signin
   Future signIn() async {
@@ -80,10 +85,45 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+  @override
   void dispose() {
+    //BackButtonInterceptor.remove(myInterceptor);
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    // if (isExite && isLogin) {
+    //   isExite = false;
+    //   showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return alternativeDialog(
+    //           context,
+    //           200,
+    //           30,
+    //           '앱 종료하기',
+    //           15,
+    //           '앱을 종료하시겠습니까?',
+    //           17,
+    //           Navigator.of(context).pop,
+    //           SystemNavigator.pop,
+    //           () {},
+    //           () {},
+    //           () {
+    //             isExite = true;
+    //           },
+    //         );
+    //       });
+    // }
+    // isLogin = true;
+    return true;
   }
 
   @override
@@ -97,8 +137,10 @@ class _LoginPageState extends State<LoginPage> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            //isLogin = false;
             return NavigationBarPage();
           } else {
+            //  Login page
             return Scaffold(
               backgroundColor: Color.fromARGB(255, 35, 25, 60),
               body: SafeArea(
@@ -111,6 +153,46 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          // exit icon button
+                          Align(
+                            heightFactor: 1,
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 20, top: 15),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(context).unfocus();
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return alternativeDialog(
+                                              context,
+                                              200,
+                                              30,
+                                              '앱 종료하기',
+                                              15,
+                                              '앱을 종료하시겠습니까?',
+                                              17,
+                                              Navigator.of(context).pop,
+                                              SystemNavigator.pop,
+                                              () {},
+                                              () {},
+                                              () {},
+                                            );
+                                          });
+                                    },
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                           //  HRC Logo
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -209,6 +291,8 @@ class _LoginPageState extends State<LoginPage> {
                                   onTap: () {
                                     _emailController.clear();
                                     _passwordController.clear();
+                                    //isLogin = false;
+                                    FocusScope.of(context).unfocus();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -306,6 +390,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ],
                           ),
+
+                          SizedBox(height: 30)
                         ],
                       ),
                     ),
