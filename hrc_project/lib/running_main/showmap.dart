@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unnecessary_new, deprecated_member_use, sort_child_properties_last
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,6 +11,7 @@ import 'package:location/location.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timer_count_down/timer_count_down.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 final username = 'SeowonKim';
 var strToday;
@@ -83,15 +84,6 @@ class _MapPageState extends State<MapSample> {
       _lastTime = _time;
       route.add(loc);
 
-      polyline.add(Polyline(
-          polylineId: PolylineId(event.toString()),
-          visible: true,
-          points: route,
-          width: 5,
-          startCap: Cap.roundCap,
-          endCap: Cap.roundCap,
-          color: Colors.deepOrange));
-
       setState(() {});
     });
   }
@@ -151,229 +143,198 @@ class _MapPageState extends State<MapSample> {
           ),
           Positioned(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding:  EdgeInsets.only(left: 30),
-                  child: Container(
-                    width:  MediaQuery.of(context).size.width*0.8,
-                    height:  MediaQuery.of(context).size.height*0.15,
-                    child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 4,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    width: MediaQuery.of(context).size.width * 0.7,
-                                    child: Card(
-                                      color: Color.fromARGB(255, 176, 114, 221),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: 7,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 100),
-                                            child: Container(
-                                              child: Text(
-                                                'ss',
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                  fontStyle: FontStyle.italic,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            'ss',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontStyle: FontStyle.italic,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          SizedBox(height: 7),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 80),
-                                            child: Container(
-                                              child: Text(
-                                                'ss',
-                                                style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontStyle: FontStyle.italic,
-                                                  fontWeight: FontWeight.bold,
-                                                  color:
-                                                      Color.fromARGB(255, 0, 0, 0),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                  ),
+                Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Running Record',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                        ),),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text('Kuyper RC',
+                      style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),),
+                        SizedBox(height: 20,),
+                        Image.asset(
+                  'image/profile_1.png',
+                  width: 34,
+                  height: 34,
                 ),
-                // Container(
-                //   decoration: BoxDecoration(
-                //     gradient: LinearGradient(
-                //       colors: [
-                //         Color(0x50C9EF).withOpacity(0.7),
-                //         const Color(0X53DFA9).withOpacity(0.3),
-                //       ],
-                //       begin: Alignment.topLeft,
-                //       end: Alignment.bottomRight,
-                //     ),
-                //     color: Colors.amber.shade100,
-                //     borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                //     boxShadow: [
-                //       BoxShadow(
-                //         color: Colors.grey.withOpacity(0.7),
-                //         spreadRadius: 0,
-                //         blurRadius: 5.0,
-                //         offset: Offset(0, 10), // changes position of shadow
-                //       ),
-                //     ],
-                //   ),
-                //   height: MediaQuery.of(context).size.width / 2,
-                //   width: MediaQuery.of(context).size.width / 1.2,
-                //   margin: EdgeInsets.all(35.0),
-                //   child: Positioned(
-                //     child: Padding(
-                //       padding: EdgeInsets.only(top: 50),
-                //       child: Row(
-                //         crossAxisAlignment: CrossAxisAlignment.center,
-                //         children: [
-                //           SizedBox(width: 30,),
-                //           Column(
-                //             children: [
-                //               Container(
-                //                 child: Text('Recent',style: TextStyle(
-                //                   fontSize: 15,
-                //                   fontStyle: FontStyle.italic,
-                //                   fontWeight: FontWeight.bold,
-                //                 ),),
-                //               ),
-                //               SizedBox(
-                //                 height: 20,
-                //               ),
-                //               Container(
-                //                 margin: EdgeInsets.only(right: 10),
-                //                     child: Image.asset(
-                //                       'image/run.png',
-                //                       width: 50,
-                //                     ),
-                //                   ),
-                //             ],
-                //           ),
-                //           SizedBox(
-                //             width: 10,
-                //           ),
-                //           Column(
-                //             children: [
-                //               SizedBox(height: 20,),
-                //               Container(
-                //                 child: Text('km :',
-                //                 style: TextStyle(
-                //                   fontSize: 15,
-                //                   fontStyle: FontStyle.italic,
-                //                   fontWeight: FontWeight.bold,
-                //                 ),
-                //                 ),
-                //               ),
-                //               SizedBox(
-                //                 height: 30,
-                //               ),
-                //               Container(
-                //                 child: Text('num :',
-                //                 style: TextStyle(
-                //                   fontSize: 15,
-                //                   fontStyle: FontStyle.italic,
-                //                   fontWeight: FontWeight.bold,
-                //                 ),),
-                //               ),
-                //             ],
-                //           ),
-                //           SizedBox(
-                //             width: 75,
-                //           ),
-                //           Column(
-                //             children: [
-                //               SizedBox(height: 20,),
-                //               Container(
-                //                 child: Text('kcal :',
-                //                 style: TextStyle(
-                //                   fontSize: 15,
-                //                   fontStyle: FontStyle.italic,
-                //                   fontWeight: FontWeight.bold,
-                //                 ),),
-                //               ),
-                //               SizedBox(
-                //                 height: 30,
-                //               ),
-                //               Container(
-                //                 child: Text('pace :',
-                //                 style: TextStyle(
-                //                   fontSize: 15,
-                //                   fontStyle: FontStyle.italic,
-                //                   fontWeight: FontWeight.bold,
-                //                 ),),
-                //               ),
-                //             ],
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                     Row(
+                       children: [
+                         SizedBox(
+                           width: MediaQuery.of(context).size.width*0.03,
+                         ),
+                         Text('Progress',
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),),
+                       ]
+                     ),
+                     SizedBox(
+                       width: MediaQuery.of(context).size.width*0.45,
+                     ),
+                     Text('90%',
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),),
+                  ],
+                ),
+            Padding(
+              padding: EdgeInsets.all(7.0),
+              child: Center(
+                child: new LinearPercentIndicator(
+                  width: MediaQuery.of(context).size.width*0.65,
+                  animation: true,
+                  lineHeight: MediaQuery.of(context).size.height*0.01,
+                  animationDuration: 2000,
+                  percent: 0.9,
+                  barRadius: Radius.circular(20),
+                  linearStrokeCap: LinearStrokeCap.roundAll,
+                  progressColor: Colors.greenAccent,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.width*0.03,
+            ),
+            Container(
+              child: Row(
+                children: [
+                   SizedBox(
+                    width: MediaQuery.of(context).size.width*0.05,
+                  ),
+                  Text('Distance',
+                  style: TextStyle(
+                            fontSize: 9,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                          ),
+                  ),
+                   SizedBox(
+                    width: MediaQuery.of(context).size.width*0.015,
+                  ),
+                  Image.asset('image/distance.png',
+                        width: MediaQuery.of(context).size.width*0.04,
+                        height: MediaQuery.of(context).size.width*0.04,
+                        ),
+                        SizedBox(
+                    width: MediaQuery.of(context).size.width*0.02,
+                  ),
+                         Text('30km',
+                  style: TextStyle(
+                            fontSize: 9,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                          ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width*0.18,
+                  ),
+                  Text('October ',
+                  style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                          ),
+                  ),
+                  Image.asset('image/run.png',
+                        width: MediaQuery.of(context).size.width*0.04,
+                        height: MediaQuery.of(context).size.width*0.04,
+                        ),
+                        SizedBox(
+                    width: MediaQuery.of(context).size.width*0.01,
+                  ),
+                         Text('5',
+                  style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                  ),
+                ],
+              ),
+            )
+                
+                    ],
+                  ),
+                  width: MediaQuery.of(context).size.width*0.7,
+                  height: MediaQuery.of(context).size.height*0.26,
+              decoration: BoxDecoration(
+                      color: Color.fromARGB(0, 18, 13, 65).withOpacity(0.8),
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                      boxShadow: [
+                         BoxShadow(
+                              color: Colors.grey.withOpacity(0.7),
+                              spreadRadius: 0,
+                              blurRadius: 5.0,
+                              offset:
+                                  Offset(0, 10), // changes position of shadow
+                            ),
+                      ]
+                    ),
+                ),
                 SizedBox(
                   height: 70,
                 ),
-                Column(
-                  children: [
-                    Positioned(
-                      child: InkWell(
-                        child: Image.asset('image/run_btn.png',
-                            width: 100, height: 100),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return start();
-                              },
-                            ),
-                          );
-                        },
+                Center(
+                  child: Column(
+                    children: [
+                      Positioned(
+                        child: InkWell(
+                          child: Image.asset('image/run_btn.png',
+                              width: 100, height: 100),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return start();
+                                },
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      child: InkWell(
-                        child: Image.asset('image/start_btn.png',
-                            width: 60, height: 60),
-                        onTap: () {
-                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return start();
-                              },
-                            ),
-                          );
-                        },
+                      Positioned(
+                        child: InkWell(
+                          child: Image.asset('image/start_btn.png',
+                              width: 60, height: 60),
+                          onTap: () {
+                             Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return start();
+                                },
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

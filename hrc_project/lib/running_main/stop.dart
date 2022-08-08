@@ -12,6 +12,7 @@ import 'package:hrc_project/running_main/savePage.dart';
 import 'package:hrc_project/running_main/showmap.dart';
 import 'package:hrc_project/running_main/util.dart';
 import 'package:intl/intl.dart';
+import 'package:shake/shake.dart';
 import 'counter.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -33,6 +34,7 @@ String user_image = '';
   int _speedCounter = 0;
   double temp_dist = 0;
   double temp_time = 0;
+
 
 Future _getUserData() async {
   final user = await FirebaseAuth.instance.currentUser;
@@ -71,7 +73,7 @@ class MapSampleState extends State<stop> {
   @override
   void initState() {
     super.initState();
-    _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+    _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
   }
 
   @override
@@ -87,7 +89,7 @@ class MapSampleState extends State<stop> {
     _location.onLocationChanged.listen((event) {
       LatLng loc = LatLng(event.latitude!, event.longitude!);
       _mapController.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: loc, zoom: 15)));
+          CameraPosition(target: loc, zoom: 13)));
 
       if (route.length > 0) {
         appendDist = Geolocator.distanceBetween(route.last.latitude,
@@ -122,6 +124,12 @@ class MapSampleState extends State<stop> {
   Util ut = new Util();
   @override
   Widget build(BuildContext context) {
+    ShakeDetector detector = ShakeDetector.autoStart(
+    onPhoneShake: () {
+         _stopWatchTimer.onExecute
+                                            .add(StopWatchExecute.start);// Do stuff on phone shake
+    }
+);
     return new Scaffold(
       body: Stack(
         children: [
@@ -181,6 +189,7 @@ class MapSampleState extends State<stop> {
               ],
             ),
           ),
+          
           Padding(
             padding: EdgeInsets.symmetric(
                 vertical: MediaQuery.of(context).size.height * 0.05),
@@ -318,7 +327,7 @@ class MapSampleState extends State<stop> {
                                   children: [
                                     Container(
                                       child: Text(
-                                        speed.toStringAsFixed(2),
+                                      _avgSpeed.toStringAsFixed(2),
                                         style: TextStyle(
                                             fontSize: 25,
                                             color: Colors.black,
@@ -338,7 +347,7 @@ class MapSampleState extends State<stop> {
                                       ),
                                     ),
                                     SizedBox(height: 10),
-                                    InkWell(
+                           InkWell(
                                       child: Image.asset('image/stop_btn.png',
                                           width: 50, height: 50),
                                       onLongPress: () {
