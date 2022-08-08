@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hrc_project/ranking_board_page/ranking_board_design/rc_ranking_board_design.dart';
@@ -13,6 +14,7 @@ class RcRank extends StatefulWidget {
 class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
   List<String> docIDs = [];
   List<String> docIDs2 = [];
+  String userRC = '';
 
   //  4th or below
   Future getDocId() async {
@@ -46,10 +48,22 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
         );
   }
 
+  //  Get user RC data
+  Future getUserRCData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final userData =
+        FirebaseFirestore.instance.collection('users').doc(user!.uid);
+
+    await userData.get().then((value) => {
+          userRC = value['user_RC'],
+        });
+  }
+
   Future refreshPage() {
     setState(() {
       docIDs.clear();
       docIDs2.clear();
+      userRC = '';
     });
     return Future.delayed(Duration(milliseconds: 0));
   }
@@ -67,6 +81,7 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
             physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
+                //  3rd or higher
                 FutureBuilder(
                   future: getDocId2(),
                   builder: (context, snapshot) {
@@ -78,16 +93,19 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
                               documentId: docIDs2[0],
                               number: 0,
                               context: context,
+                              userRC: userRC,
                             ),
                             GetRcData(
                               documentId: docIDs2[1],
                               number: 1,
                               context: context,
+                              userRC: userRC,
                             ),
                             GetRcData(
                               documentId: docIDs2[2],
                               number: 2,
                               context: context,
+                              userRC: userRC,
                             ),
                           ],
                         );
@@ -102,39 +120,47 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
                     }
                   },
                 ),
+                //  Read user RC data
                 FutureBuilder(
-                  future: getDocId(),
-                  builder: (context, snapshot) {
-                    return ListView.separated(
-                      primary: false,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: docIDs.length + 1,
-                      itemBuilder: (context, index) {
-                        if (docIDs.length != index && index > 2) {
-                          return GetRcData(
-                            documentId: docIDs[index],
-                            number: index,
-                            context: context,
-                          );
-                        } else if (index > 2) {
-                          return const SizedBox(height: 80);
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      },
-                      separatorBuilder: (context, index) {
-                        if (index > 2) {
-                          return Divider(
-                            height: 15,
-                            color: Colors.white.withOpacity(0),
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
+                  future: getUserRCData(),
+                  builder: ((context, snapshot) {
+                    //  4th or below list view
+                    return FutureBuilder(
+                      future: getDocId(),
+                      builder: (context, snapshot) {
+                        return ListView.separated(
+                          primary: false,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: docIDs.length + 1,
+                          itemBuilder: (context, index) {
+                            if (docIDs.length != index && index > 2) {
+                              return GetRcData(
+                                documentId: docIDs[index],
+                                number: index,
+                                context: context,
+                                userRC: userRC,
+                              );
+                            } else if (index > 2) {
+                              return const SizedBox(height: 80);
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                          },
+                          separatorBuilder: (context, index) {
+                            if (index > 2) {
+                              return Divider(
+                                height: 15,
+                                color: Colors.white.withOpacity(0),
+                              );
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                          },
+                        );
                       },
                     );
-                  },
+                  }),
                 ),
               ],
             ),

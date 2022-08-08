@@ -454,12 +454,13 @@ Widget rcRanking3rd(Map<String, dynamic> data, int number, String documentId,
 
 //  4th or below
 Widget rcRankingDesign(Map<String, dynamic> data, int number, String documentId,
-    BuildContext context) {
+    BuildContext context, String userRC) {
   bool isMyRC = false;
 
-  if (documentId == 'userRC') {
+  if (documentId == userRC) {
     isMyRC = true;
   }
+
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 25.0),
     child: Container(

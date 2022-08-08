@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../ranking_board_design/rc_ranking_board_design.dart';
 
@@ -7,12 +6,14 @@ class GetRcData extends StatefulWidget {
   final String documentId;
   final int number;
   BuildContext context;
+  final String userRC;
 
   GetRcData({
     Key? key,
     required this.documentId,
     required this.number,
     required this.context,
+    required this.userRC,
   }) : super(key: key);
 
   @override
@@ -20,19 +21,6 @@ class GetRcData extends StatefulWidget {
 }
 
 class _GetRcDataState extends State<GetRcData> {
-  Future getUserRCData() async {
-    String userRC = '';
-    final user = FirebaseAuth.instance.currentUser;
-    final userData =
-        FirebaseFirestore.instance.collection('users').doc(user!.uid);
-
-    await userData.get().then((value) => {
-          userRC = value['user_RC'],
-        });
-
-    return userRC;
-  }
-
   @override
   Widget build(BuildContext context) {
     CollectionReference rcCollection =
@@ -54,8 +42,8 @@ class _GetRcDataState extends State<GetRcData> {
             return rcRanking3rd(
                 data, widget.number + 1, widget.documentId, context);
           }
-          return rcRankingDesign(
-              data, widget.number + 1, widget.documentId, context);
+          return rcRankingDesign(data, widget.number + 1, widget.documentId,
+              context, widget.userRC);
         }
 
         return const SizedBox.shrink();
