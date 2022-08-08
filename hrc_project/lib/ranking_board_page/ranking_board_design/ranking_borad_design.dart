@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_const, must_be_immutable, non_constant_identifier_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
@@ -593,7 +594,9 @@ Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
 Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
     String documentId, BuildContext context) {
   bool isMe = false;
+
   final user = FirebaseAuth.instance.currentUser;
+
   if (documentId == user!.uid) {
     isMe = true;
   }
@@ -857,4 +860,21 @@ Widget UserNameStatic(
             ),
     ],
   );
+}
+
+//  Get user data from cloud Firestore
+Future<String> _getUserData() async {
+  String user_rc = '';
+
+  final user = FirebaseAuth.instance.currentUser;
+  final userData =
+      FirebaseFirestore.instance.collection('users').doc(user!.uid);
+
+  userData.get().then(
+        (value) => {
+          user_rc = value['user_RC'],
+        },
+      );
+
+  return user_rc;
 }

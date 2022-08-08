@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
@@ -262,8 +263,8 @@ Widget rcRanking1st(Map<String, dynamic> data, int number, String documentId,
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 130, left: 130),
-                child: RcStatic(data, context, Colors.grey[500], 18,
-                    Colors.white, 30, Colors.white, 25),
+                child: RcStatic(data, context, Colors.white, 20, Colors.white,
+                    30, Colors.white, 25),
               ),
             ),
 
@@ -341,8 +342,8 @@ Widget rcRanking2nd(Map<String, dynamic> data, int number, String documentId,
         Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 130, right: 130),
-            child: RcStatic(data, context, Colors.grey[500], 18, Colors.white,
-                30, Colors.white, 25),
+            child: RcStatic(data, context, Colors.white, 20, Colors.white, 30,
+                Colors.white, 25),
           ),
         ),
 
@@ -416,7 +417,7 @@ Widget rcRanking3rd(Map<String, dynamic> data, int number, String documentId,
       Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 130, left: 130),
-          child: RcStatic(data, context, Colors.grey[500], 18, Colors.white, 30,
+          child: RcStatic(data, context, Colors.white, 20, Colors.white, 30,
               Colors.white, 25),
         ),
       ),
@@ -455,8 +456,8 @@ Widget rcRanking3rd(Map<String, dynamic> data, int number, String documentId,
 Widget rcRankingDesign(Map<String, dynamic> data, int number, String documentId,
     BuildContext context) {
   bool isMyRC = false;
-  final user = FirebaseAuth.instance.currentUser;
-  if (documentId == user!.uid) {
+
+  if (documentId == 'userRC') {
     isMyRC = true;
   }
   return Padding(
@@ -509,7 +510,7 @@ Widget rcRankingDesign(Map<String, dynamic> data, int number, String documentId,
                 //  Rc name, statistic
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 20, right: 5),
-                  child: RcStatic(data, context, Colors.grey[500], 18,
+                  child: RcStatic(data, context, Colors.grey[500], 19,
                       Colors.white, 29, Colors.white, 26),
                 ),
 
