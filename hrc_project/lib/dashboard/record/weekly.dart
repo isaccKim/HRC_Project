@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as grad;
 import 'package:fl_chart/fl_chart.dart';
@@ -6,12 +7,29 @@ import 'package:intl/intl.dart';
 
 import '../read_data/get_weekly_data.dart';
 
-class Weekly extends StatelessWidget {
-  String formatTimeStamp(DateTime t) {
-    var text = DateFormat('MM/dd');
-    return text.format(t);
-  }
+DateTime now = DateTime.now();
+int currentDay = now.weekday;
+DateTime firstDayOfWeek = now.subtract(Duration(days: currentDay));
+DateTime endOfWeek =
+    now.add(Duration(days: DateTime.daysPerWeek - now.weekday - 1));
 
+DateTime date1 = firstDayOfWeek;
+DateTime date2 = endOfWeek;
+
+DateTime titleFirstOfWeek = date1;
+DateTime titleEndOfWeek = date2;
+
+String convertTimeStamp(Timestamp timestamp) {
+  var text = DateFormat('EE');
+  return text.format(timestamp.toDate());
+}
+
+String formatTimeStamp(DateTime t) {
+  var text = DateFormat('MM/dd/EE');
+  return text.format(t);
+}
+
+class Weekly extends StatelessWidget {
   const Weekly({Key? key}) : super(key: key);
 
   @override
@@ -40,7 +58,7 @@ class Weekly extends StatelessWidget {
                   'Weekly Running ',
                   gradient: textGradient,
                 ),
-                TitleDate(),
+                TestTitle()
               ],
             ),
           ),
@@ -73,6 +91,28 @@ class _WeeklyChartState extends State<WeeklyChart> {
     const Color(0xff02d39a),
   ];
 
+  List<String> testId = [];
+  List<double> testDis = [];
+  Map<String, dynamic> testMap = {};
+  Map<int, double> result = {};
+
+  Future getData() async {
+    testId.clear();
+    await FirebaseFirestore.instance
+        .collection('test_data')
+        //  데이터 정렬!!
+        .orderBy('date', descending: false)
+        .where('date', isGreaterThan: titleFirstOfWeek)
+        .where('date', isLessThanOrEqualTo: titleEndOfWeek)
+        .get()
+        .then(((value) => value.docs.forEach((element) {
+              testId.add(element.reference.id);
+            })));
+    // setState(() {
+    //   testMap;
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -85,8 +125,50 @@ class _WeeklyChartState extends State<WeeklyChart> {
             child: Padding(
               padding: const EdgeInsets.only(
                   right: 18.0, left: 12.0, top: 24, bottom: 12),
-              child: LineChart(
-                mainData(),
+              // child: FutureBuilder(
+              //     future: getData(),
+              // builder: (context, snapshot) {
+              //   if (snapshot.connectionState == ConnectionState.done) {
+              //     return Text(
+              //         '$testMap\n ${formatTimeStamp(titleFirstOfWeek)} ~ ${formatTimeStamp(titleEndOfWeek)}');
+              //   }
+              //   return const Center(
+              //     child: CircularProgressIndicator(),
+              //   );
+              // }),
+              child: FutureBuilder(
+                future: getData(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    final data =
+                        FirebaseFirestore.instance.collection('test_data');
+                    return ListView.builder(
+                      itemCount: testId.length,
+                      itemBuilder: (context, index) {
+                        return FutureBuilder<DocumentSnapshot>(
+                          future: data.doc(testId[index]).get(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              Map<String, dynamic> temp =
+                                  snapshot.data!.data() as Map<String, dynamic>;
+                              update(result, convertTimeStamp(temp['date']),
+                                  temp['distance']);
+                              return Text(result.toString());
+
+                              // weeks.add(dataToXY(convertTimeStamp(temp['date']),
+                              //     temp['distacne']));
+                            }
+                            return SizedBox.shrink();
+                          },
+                        );
+                      },
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
             ),
           ),
@@ -104,25 +186,25 @@ class _WeeklyChartState extends State<WeeklyChart> {
     Widget text;
     switch (value.toInt()) {
       case 2:
-        text = const Text('Mon', style: style);
+        text = const Text('Sun', style: style);
         break;
       case 4:
-        text = const Text('Tue', style: style);
+        text = const Text('Mon', style: style);
         break;
       case 6:
-        text = const Text('Wed', style: style);
+        text = const Text('Tue', style: style);
         break;
       case 8:
-        text = const Text('Thur', style: style);
+        text = const Text('Wed', style: style);
         break;
       case 10:
-        text = const Text('Fri', style: style);
+        text = const Text('Thur', style: style);
         break;
       case 12:
-        text = const Text('Sat', style: style);
+        text = const Text('Fri', style: style);
         break;
       case 14:
-        text = const Text('Sun', style: style);
+        text = const Text('Sat', style: style);
         break;
       default:
         text = const Text('', style: style);
@@ -215,12 +297,59 @@ class _WeeklyChartState extends State<WeeklyChart> {
   }
 }
 
-List<FlSpot> weeks = const [
-  FlSpot(2, 3),
-  FlSpot(4, 2),
+List<FlSpot> weeks = [
+  // 0 : Sun ~ 6 ; Sat
+  FlSpot(2, 0),
+  FlSpot(4, 0),
   FlSpot(6, 0),
-  FlSpot(8, 10),
+  FlSpot(8, 0),
   FlSpot(10, 0),
   FlSpot(12, 0),
-  FlSpot(14, 3.1),
+  FlSpot(14, 0)
 ];
+
+FlSpot dataToXY(String a, double b) {
+  if (a == 'Sun') {
+    return FlSpot(2, b);
+  } else if (a == 'Mon') {
+    return FlSpot(4, b);
+  } else if (a == 'Tue') {
+    return FlSpot(6, b);
+  } else if (a == 'Wed') {
+    return FlSpot(8, b);
+  } else if (a == 'Thu') {
+    return FlSpot(10, b);
+  } else if (a == 'Fri') {
+    return FlSpot(12, b);
+  } else if (a == 'Sat') {
+    return FlSpot(14, b);
+  }
+  return const FlSpot(0, 0);
+}
+
+void update(Map<int, double> mp, String weeksday, double dist) {
+  int keys = convertWeeksDaytoKey(weeksday);
+  if (mp.containsKey(keys)) {
+    mp.update(keys, (value) => value + dist);
+    return;
+  }
+  mp[keys] = dist;
+}
+
+int convertWeeksDaytoKey(String weeksday) {
+  if (weeksday == 'Sun') {
+    return 2;
+  } else if (weeksday == 'Mon') {
+    return 4;
+  } else if (weeksday == 'Tue') {
+    return 6;
+  } else if (weeksday == 'Wed') {
+    return 8;
+  } else if (weeksday == 'Thu') {
+    return 10;
+  } else if (weeksday == 'Fri') {
+    return 12;
+  } else {
+    return 14;
+  }
+}
