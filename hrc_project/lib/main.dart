@@ -17,6 +17,9 @@ void main() async {
     },
   );
 
+  //  screen rotation lock
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(MyApp());
 }
 
@@ -30,6 +33,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    //  OS navigation bar hide
     hideSmartPhoneBar();
     return MaterialApp(
       theme: ThemeData(

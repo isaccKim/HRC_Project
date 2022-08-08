@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hrc_project/running_main/showmap.dart';
+import 'dialog_page/show_dialog.dart';
 
 void main() {
   runApp(const TestPage());
@@ -14,18 +14,29 @@ class TestPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Container(
-            color: Colors.blue,
-            width: 30,
-            height: MediaQuery.of(context).size.height,
+          child: ElevatedButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return rcSelectDialog(
+                      context,
+                      270,
+                      30,
+                      'RC 선택하기',
+                      15,
+                      'WOW',
+                      17,
+                      () {},
+                      () {},
+                      () {},
+                      () {},
+                      () {},
+                    );
+                  });
+            },
+            child: const Text('RC select'),
           ),
-          // child: Text(
-          //   'WOW',
-          //   style: TextStyle(
-          //     fontWeight: FontWeight.bold,
-          //     fontSize: 30,
-          //   ),
-          // ),
         ),
       ),
     );

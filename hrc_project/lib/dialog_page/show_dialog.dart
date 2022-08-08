@@ -804,3 +804,124 @@ List<Color> rankBadge(String rank) {
     return [];
   }
 }
+
+//  RC select with yes and no textbutton
+Dialog rcSelectDialog(
+  BuildContext context,
+  double boxHeight,
+  double topBarHeight,
+  String topBarText,
+  double topBarTextSize,
+  String mainText,
+  double mainTextSize,
+  Function executableFuc1,
+  Function executableFuc2,
+  Function executableFuc3,
+  Function executableFuc4,
+  Function executableFuc5,
+) {
+  return Dialog(
+    backgroundColor: Colors.white.withOpacity(0),
+    child: Container(
+        height: boxHeight,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: Text(
+                '$topBarText',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.deepPurpleAccent,
+                  fontSize: topBarTextSize,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Text(
+                '$mainText',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: mainTextSize,
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Container(
+                    height: 50,
+                    color: Colors.white.withOpacity(0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        executableFuc1();
+                        executableFuc2();
+                        executableFuc3();
+                        executableFuc4();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          onPrimary: Colors.white,
+                          elevation: 0,
+                          primary: Colors.deepPurpleAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                            ),
+                          )),
+                      child: Text(
+                        '선택하기',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Container(
+                    height: 50,
+                    color: Colors.white.withOpacity(0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        executableFuc5();
+                        //  pop the alert
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          onPrimary: Colors.white,
+                          elevation: 0,
+                          primary: Colors.deepPurpleAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(10),
+                            ),
+                          )),
+                      child: Text(
+                        '취소하기',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        )),
+  );
+}

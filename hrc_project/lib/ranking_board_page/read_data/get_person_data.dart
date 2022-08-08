@@ -1,8 +1,5 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../ranking_board_design/ranking_borad_design.dart';
 
 class GetPersonData extends StatelessWidget {
