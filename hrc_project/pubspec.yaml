@@ -111,7 +111,8 @@ flutter:
     - image/ranking_board/rc images/Ca.png
     - image/ranking_board/rc images/Ky.png
     - image/distance.png
-    
+    - image/ranking_board/rc images/independent.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

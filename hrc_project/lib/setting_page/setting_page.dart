@@ -11,6 +11,8 @@ import 'package:hrc_project/dialog_page/show_dialog.dart';
 
 import 'package:image_picker/image_picker.dart';
 
+import '../dialog_page/rc_select_dialog.dart';
+
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
 
@@ -552,19 +554,19 @@ class _SettingPageState extends State<SettingPage> {
                         showDialog(
                             context: context,
                             builder: (context) {
-                              return rcSelectDialog(
-                                context,
-                                350,
-                                30,
-                                'RC 선택하기',
-                                15,
-                                'WOW',
-                                17,
-                                () {},
-                                () {},
-                                () {},
-                                () {},
-                                () {},
+                              return rcSelectDialogWidget(
+                                context: context,
+                                boxHeight: 370,
+                                topBarHeight: 30,
+                                topBarText: 'RC 선택하기',
+                                topBarTextSize: 15,
+                                mainText: '',
+                                mainTextSize: 17,
+                                executableFuc1: () {},
+                                executableFuc2: () {},
+                                executableFuc3: () {},
+                                executableFuc4: () {},
+                                executableFuc5: () {},
                               );
                             });
                       },

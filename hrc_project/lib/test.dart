@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dialog_page/rc_select_dialog.dart';
 import 'dialog_page/show_dialog.dart';
 
 void main() {
@@ -19,19 +20,19 @@ class TestPage extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (context) {
-                    return rcSelectDialog(
-                      context,
-                      350,
-                      30,
-                      'RC 선택하기',
-                      15,
-                      'WOW',
-                      17,
-                      () {},
-                      () {},
-                      () {},
-                      () {},
-                      () {},
+                    return rcSelectDialogWidget(
+                      context: context,
+                      boxHeight: 370,
+                      topBarHeight: 30,
+                      topBarText: 'RC 선택하기',
+                      topBarTextSize: 15,
+                      mainText: '',
+                      mainTextSize: 17,
+                      executableFuc1: () {},
+                      executableFuc2: () {},
+                      executableFuc3: () {},
+                      executableFuc4: () {},
+                      executableFuc5: () {},
                     );
                   });
             },
