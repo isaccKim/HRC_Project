@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class  Util{
-
-   List<String> running_num = [];
+   late String u_sum_dist;
+   late String u_sum_time;
+   late String user_name;
+   late String email;
    double timeToDouble(String string){
     List<String> splited =  string.split(":");
     double time = 0;
@@ -22,7 +24,17 @@ class  Util{
     return time;
   }
   
+  Future getUserData() async {
+  final user = await FirebaseAuth.instance.currentUser;
+  final userData =
+      await FirebaseFirestore.instance.collection('users').doc(user!.uid);
+  await userData.get().then(
+        (value) => {
+          user_name = value['user_name'],
+          email = value['email'],
+          u_sum_dist= value['sum_distance'],
+          u_sum_time= value['sum_time'],
+        },
+      );
 }
-
-  
-
+}
