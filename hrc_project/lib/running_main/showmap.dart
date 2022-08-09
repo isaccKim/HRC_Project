@@ -238,7 +238,7 @@ class _MapPageState extends State<MapSample> {
                        SizedBox(
                          width: MediaQuery.of(context).size.width*0.5,
                        ),
-                       Text('${sum_record[index][4]}%',
+                       Text('%',
                           style: TextStyle(
                               fontSize: 11,
                               color: Colors.white,
@@ -255,7 +255,7 @@ class _MapPageState extends State<MapSample> {
                     animation: true,
                     lineHeight: MediaQuery.of(context).size.height*0.01,
                     animationDuration: 2000,
-                    percent: sum_record[index][4]/100,
+                    percent: 0.4,//int.parse(sum_record[index][4])/100,
                     barRadius: Radius.circular(20),
                     linearStrokeCap: LinearStrokeCap.roundAll,
                     progressColor: Colors.greenAccent,
