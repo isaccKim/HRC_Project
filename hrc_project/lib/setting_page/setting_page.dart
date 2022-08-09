@@ -537,6 +537,44 @@ class _SettingPageState extends State<SettingPage> {
 
                 const SizedBox(height: 20),
 
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                      color: Color.fromARGB(255, 46, 36, 80),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return rcSelectDialog(
+                                context,
+                                350,
+                                30,
+                                'RC 선택하기',
+                                15,
+                                'WOW',
+                                17,
+                                () {},
+                                () {},
+                                () {},
+                                () {},
+                                () {},
+                              );
+                            });
+                      },
+                      child: const Text('RC select'),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
                 //  user body information section
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
