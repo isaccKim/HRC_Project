@@ -91,28 +91,6 @@ class _WeeklyChartState extends State<WeeklyChart> {
     const Color(0xff02d39a),
   ];
 
-  List<String> testId = [];
-  List<double> testDis = [];
-  Map<String, dynamic> testMap = {};
-  Map<int, double> result = {};
-
-  Future getData() async {
-    testId.clear();
-    await FirebaseFirestore.instance
-        .collection('test_data')
-        //  데이터 정렬!!
-        .orderBy('date', descending: false)
-        .where('date', isGreaterThan: titleFirstOfWeek)
-        .where('date', isLessThanOrEqualTo: titleEndOfWeek)
-        .get()
-        .then(((value) => value.docs.forEach((element) {
-              testId.add(element.reference.id);
-            })));
-    // setState(() {
-    //   testMap;
-    // });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -136,40 +114,7 @@ class _WeeklyChartState extends State<WeeklyChart> {
               //     child: CircularProgressIndicator(),
               //   );
               // }),
-              child: FutureBuilder(
-                future: getData(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    final data =
-                        FirebaseFirestore.instance.collection('test_data');
-                    return ListView.builder(
-                      itemCount: testId.length,
-                      itemBuilder: (context, index) {
-                        return FutureBuilder<DocumentSnapshot>(
-                          future: data.doc(testId[index]).get(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              Map<String, dynamic> temp =
-                                  snapshot.data!.data() as Map<String, dynamic>;
-                              update(result, convertTimeStamp(temp['date']),
-                                  temp['distance']);
-                              return Text(result.toString());
-
-                              // weeks.add(dataToXY(convertTimeStamp(temp['date']),
-                              //     temp['distacne']));
-                            }
-                            return SizedBox.shrink();
-                          },
-                        );
-                      },
-                    );
-                  }
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
+              child: testWidget(result, context),
             ),
           ),
         ),
@@ -327,13 +272,12 @@ FlSpot dataToXY(String a, double b) {
   return const FlSpot(0, 0);
 }
 
-void update(Map<int, double> mp, String weeksday, double dist) {
+void updates(Map<int, double> mp, String weeksday, double dist) {
   int keys = convertWeeksDaytoKey(weeksday);
   if (mp.containsKey(keys)) {
     mp.update(keys, (value) => value + dist);
-    return;
-  }
-  mp[keys] = dist;
+  } else
+    mp[keys] = dist;
 }
 
 int convertWeeksDaytoKey(String weeksday) {
@@ -352,4 +296,60 @@ int convertWeeksDaytoKey(String weeksday) {
   } else {
     return 14;
   }
+}
+
+List<String> testId = [];
+List<double> testDis = [];
+Map<String, dynamic> testMap = {};
+Map<int, double> result = {};
+
+Future getData() async {
+  testId.clear();
+  await FirebaseFirestore.instance
+      .collection('test_data')
+      //  데이터 정렬!!
+      .orderBy('date', descending: false)
+      .where('date', isGreaterThan: titleFirstOfWeek)
+      .where('date', isLessThanOrEqualTo: titleEndOfWeek)
+      .get()
+      .then(((value) => value.docs.forEach((element) {
+            testId.add(element.reference.id);
+          })));
+  // setState(() {
+  //   testMap;
+  // });
+}
+
+void mapToList(Map mp, List list) {}
+
+Widget testWidget(Map<int, double> result, BuildContext context) {
+  result.clear();
+  return FutureBuilder(
+    future: getData(),
+    builder: (context, snapshot) {
+      final data = FirebaseFirestore.instance.collection('test_data');
+      return ListView.builder(
+        itemCount: testId.length,
+        itemBuilder: (context, index) {
+          return FutureBuilder<DocumentSnapshot>(
+            future: data.doc(testId[index]).get(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                Map<String, dynamic> temp =
+                    snapshot.data!.data() as Map<String, dynamic>;
+                updates(
+                    result, convertTimeStamp(temp['date']), temp['distance']);
+                print("${result.toString()} : $index");
+                return Text("${result.toString()} : $index");
+
+                // weeks.add(dataToXY(convertTimeStamp(temp['date']),
+                //     temp['distacne']));
+              }
+              return SizedBox.shrink();
+            },
+          );
+        },
+      );
+    },
+  );
 }

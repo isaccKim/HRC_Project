@@ -43,11 +43,12 @@ class _WeekSelectionInPickerState extends State<WeekSelectionInPicker> {
               TextButton(
                 onPressed: () {
                   setState(() {
+                    // result.clear();
+                    testWidget(result, context);
                     titleFirstOfWeek = date1;
                     titleEndOfWeek = date2;
                     print('${formatTimeStamp(titleFirstOfWeek)}');
                     Navigator.of(context).pop();
-                    TestTitle();
                   });
                 },
                 child: Text('test'),
