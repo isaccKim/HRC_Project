@@ -521,7 +521,7 @@ Function confirmDialog(
                                 showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return flexibleDialog(context, 150, 30,
+                                      return flexibleDialog(context, 210, 30,
                                           '알림', 15, '계정이 삭제되었습니다.', 15, () {
                                         Navigator.pushNamedAndRemoveUntil(
                                             context, '/', (route) => false);

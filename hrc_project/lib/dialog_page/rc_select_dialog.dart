@@ -43,7 +43,7 @@ class _rcSelectDialogWidgetState extends State<rcSelectDialogWidget> {
     'image/ranking_board/rc images/Ro.png',
     'image/ranking_board/rc images/Be.png',
     'image/ranking_board/rc images/Vi.png',
-    '',
+    'image/ranking_board/rc images/independent.png',
     'image/ranking_board/rc images/Ja.png',
     'image/ranking_board/rc images/Ca.png',
     'image/ranking_board/rc images/Ky.png'
@@ -52,7 +52,7 @@ class _rcSelectDialogWidgetState extends State<rcSelectDialogWidget> {
   final rcNames = [
     '열송학사 RC',
     '손양원 RC',
-    '비전 RC',
+    '토레이 RC',
     '무소속',
     '장기려 RC',
     '카마이클 RC',
@@ -211,10 +211,7 @@ Widget buildImage(String imageUrl, int index, int activIndex, String rcName) {
               shape: BoxShape.circle,
               color: Colors.white,
               image: DecorationImage(
-                image: imageUrl != ''
-                    ? AssetImage(imageUrl)
-                    : const AssetImage(
-                        'image/ranking_board/rc images/independent.png'),
+                image: AssetImage(imageUrl),
                 fit: BoxFit.fitHeight,
               ),
             ),

@@ -448,7 +448,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                                   '알림',
                                   15,
                                   '이메일 인증을 완료하여 주십시오.',
-                                  17,
+                                  15,
                                   () {},
                                   () {},
                                   () {},

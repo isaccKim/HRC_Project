@@ -464,7 +464,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(70, 180, 70, 0),
                         child: TextField(
-                          textInputAction: TextInputAction.next,
+                          textInputAction: TextInputAction.none,
                           controller: _userNameController,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.person),
@@ -494,6 +494,18 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ],
+                  ),
+
+                  SizedBox(height: 25),
+
+                  //  RC select button
+                  rcSelectButton(
+                    context,
+                    isEdited,
+                    selectedIndex,
+                    getRCData,
+                    () {},
+                    () {},
                   ),
 
                   SizedBox(height: 25),
@@ -649,18 +661,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       )
                     ],
-                  ),
-
-                  SizedBox(height: 25),
-
-                  //  RC select button
-                  rcSelectButton(
-                    context,
-                    isEdited,
-                    selectedIndex,
-                    getRCData,
-                    () {},
-                    () {},
                   ),
 
                   SizedBox(height: 25),

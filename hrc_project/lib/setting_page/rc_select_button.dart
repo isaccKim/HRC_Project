@@ -4,11 +4,21 @@ import '../dialog_page/rc_select_dialog.dart';
 final rcNames = [
   '열송학사 RC',
   '손양원 RC',
-  '비전 RC',
+  '토레이 RC',
   '무소속',
   '장기려 RC',
   '카마이클 RC',
   '카이퍼 RC'
+];
+
+final images = [
+  'image/ranking_board/rc images/Ro.png',
+  'image/ranking_board/rc images/Be.png',
+  'image/ranking_board/rc images/Vi.png',
+  'image/ranking_board/rc images/independent.png',
+  'image/ranking_board/rc images/Ja.png',
+  'image/ranking_board/rc images/Ca.png',
+  'image/ranking_board/rc images/Ky.png'
 ];
 
 Widget rcSelectButton(
@@ -47,7 +57,7 @@ Widget rcSelectButton(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 400),
-        height: 120,
+        height: 130,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           boxShadow: [
@@ -68,6 +78,11 @@ Widget rcSelectButton(
             end: Alignment.topLeft,
             colors: !isEdited ? rcColors(7) : rcColors(selectedIndex),
           ),
+          image: DecorationImage(
+            image: AssetImage(images[selectedIndex]),
+            opacity: selectedIndex != 3 ? 0.2 : 0,
+            fit: BoxFit.cover,
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -83,7 +98,7 @@ Widget rcSelectButton(
               style: TextStyle(
                 color: isEdited ? Colors.white : Colors.grey[200],
                 fontWeight: FontWeight.bold,
-                fontSize: 23,
+                fontSize: 25,
               ),
             )
           ],
@@ -98,10 +113,10 @@ List<Color> rcColors(int index) {
   //  열송학사
   if (index == 0) {
     return [
-      const Color.fromRGBO(69, 88, 26, 1),
-      const Color.fromRGBO(86, 108, 43, 1),
-      const Color.fromRGBO(66, 141, 0, 1),
-      const Color.fromRGBO(52, 132, 0, 1),
+      const Color.fromRGBO(41, 92, 0, 1),
+      const Color.fromRGBO(47, 141, 0, 1),
+      const Color.fromRGBO(110, 166, 3, 1),
+      const Color.fromRGBO(180, 205, 94, 1),
     ];
   }
   //  손양원
@@ -154,10 +169,10 @@ List<Color> rcColors(int index) {
   //  카이퍼
   else if (index == 6) {
     return [
-      const Color.fromRGBO(6, 41, 63, 1),
-      const Color.fromRGBO(0, 63, 95, 1),
-      const Color.fromRGBO(110, 200, 226, 1),
-      const Color.fromRGBO(207, 241, 255, 1),
+      const Color.fromRGBO(0, 63, 102, 1),
+      const Color.fromRGBO(3, 108, 166, 1),
+      const Color.fromRGBO(4, 183, 201, 1),
+      const Color.fromRGBO(128, 233, 238, 1),
     ];
   }
   //  선택 안됨
