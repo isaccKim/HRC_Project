@@ -8,13 +8,16 @@ import 'package:hrc_project/nav_bar/navigation_bar.dart';
 import 'package:hrc_project/running_main/showmap.dart';
 import 'package:hrc_project/running_main/stop.dart';
 import 'package:intl/intl.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 //import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:vector_math/vector_math.dart' as vmath;
 import 'dart:math' as math;
 import 'util.dart';
 
-
+double? t_distance;
+double? t_pace;
+double? t_t;
 String saveDay() {
   DateTime now = DateTime.now();
   DateFormat formatter = DateFormat('EEEE MMMM dd Run');
@@ -22,12 +25,70 @@ String saveDay() {
   return strToday;
 }
 
+Future _getUserData() async {
+  final user = await FirebaseAuth.instance.currentUser;
+  final userData =
+      await FirebaseFirestore.instance.collection('users').doc(user!.uid);
+  temp_time = 0;
+  temp_time = 0;
+  await userData.get().then(
+        (value) => {
+          user_name = value['user_name'],
+          email = value['email'],
+          user_image = value['user_image'],
+          temp_dist = value['sum_distance'],
+          temp_time = value['sum_time'],
+        },
+      );
+}
+
 final List numbers = [
-  ['calorie', '124', 'kcal'],
-  ['distance', '4.34', 'km'],
-  ['pace', '5.55', 'pace'],
-  ['time', '22:30', 'minute']
+  ['calorie', '0', 'kcal'],
+  ['distance', '0', 'km'],
+  ['pace', '0', 'pace'],
+  ['time', ' ', 'minute']
 ];
+
+class _Run_result {
+  String? test;
+  List<String> docsId = [];
+  Future getRunDocs() async {
+    final user = await FirebaseAuth.instance.currentUser;
+    docsId.clear();
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .collection('running record')
+        //  데이터 정렬!!
+        .orderBy('date', descending: true)
+        .get()
+        .then(
+          (snapshot) => snapshot.docs.forEach(
+            (doccument) {
+              docsId.add(doccument.reference.id);
+            },
+          ),
+        );
+  }
+
+  Future _getOneData() async {
+    final user = await FirebaseAuth.instance.currentUser;
+    final userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .collection('running record')
+        .doc(docsId[0]);
+    temp_time = 0;
+    temp_time = 0;
+    await userData.get().then(
+          (value) => {
+            numbers[1][1] = value['distance'],
+            numbers[2][1] = value['pace'],
+            numbers[3][1] = value['minute'],
+          },
+        );
+  }
+}
 
 class savePage extends StatefulWidget {
   const savePage({Key? key}) : super(key: key);
@@ -60,6 +121,9 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    _Run_result run = new _Run_result();
+    run.getRunDocs();
+    run._getOneData();
     return Scaffold(
       backgroundColor: Color.fromARGB(95, 11, 2, 95),
       body: Stack(
@@ -85,261 +149,25 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '$username',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            getToday(),
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(),
-              Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(0, 18, 13, 65).withOpacity(0.1),
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    ),
-                    width: MediaQuery.of(context).size.width - 20,
-                    height: MediaQuery.of(context).size.height - 100,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Positioned(
-                          child: Row(children: [
-                            Text(
-                              '    ' + saveDay(),
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ]),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.width * 0.04,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          height: MediaQuery.of(context).size.height * 0.005,
-                          color: Colors.white,
-                        ),
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.width * 0.18,
-                            ),
-                            Container(
-                              child: Text(
-                                '67 km',
-                                style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontStyle: FontStyle.italic),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Text(
-                            'Friday',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 109, 114, 107),
-                                fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                        CustomPaint(
-                            painter: CustomCircularProgress(
-                                value: controller.value)),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.width * 0.18,
-                        ),
-                        Container(
-                          child: Text(
-                            'Steps',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 142, 214, 120),
-                                fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 24.0),
-                          height: MediaQuery.of(context).size.height * 0.2,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: numbers.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width * 0.45,
-                                child: Card(
-                                  color: Color.fromARGB(255, 155, 114, 221),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 7,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 100),
-                                        child: Container(
-                                          child: Text(
-                                            numbers[index][0],
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              fontStyle: FontStyle.italic,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        numbers[index][1],
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontStyle: FontStyle.italic,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      SizedBox(height: 7),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 80),
-                                        child: Container(
-                                          child: Text(
-                                            numbers[index][2],
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              fontStyle: FontStyle.italic,
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  Color.fromARGB(255, 0, 0, 0),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.width * 0.01,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          height: MediaQuery.of(context).size.height * 0.15,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 113, 200, 206),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                          ),
-                          child: Column(
+                          Row(
                             children: [
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.width * 0.03,
-                              ),
-                              Row(children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.08,
-                                ),
-                                Image.asset(
-                                  'image/run_blue.png',
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.06,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.06,
-                                ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                ),
-                                Container(
-                                  child: Text(
-                                    'Stense',
-                                    style: TextStyle(
-                                        fontSize: 7,
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.italic,
-                                        color: Colors.white),
-                                  ),
-                                ),
-                              ]),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 30, right: 30),
-                                child: SfSlider(
-                                  min: 1,
-                                  max: 5,
-                                  value: _value,
-                                  interval: 1,
-                                  showTicks: true,
-                                  showLabels: true,
-                                  enableTooltip: true,
-                                  minorTicksPerInterval: 1,
-                                  onChanged: (dynamic value) {
-                                    setState(() {
-                                      _value = value;
-                                      print(_value);
-                                    });
-                                  },
+                              Text(
+                                '$username',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.width * 0.04,
-                        ),
-                        Container(
-                          width: 100,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            //color: Color.fromARGB(255, 71, 255, 215)
-                            //  .withOpacity(0.6),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                          ),
-                          child: Center(
-                            child: Row(
+                              SizedBox(width: MediaQuery.of(context).size.width *
+                                        0.4),
+                            Row(
                               children: [
                                 Container(
                                   child: InkWell(
-                                    child: Image.asset('image/profile_1.png',
-                                        width: 40, height: 40),
+                                    child: Image.asset('image/run_blue.png',
+                                        width: MediaQuery.of(context).size.width*0.05, 
+                                        height: MediaQuery.of(context).size.width*0.05),
                                     onTap: () {
                                       Navigator.pop(context);
                                       Navigator.push(
@@ -354,14 +182,13 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.03),
+                                    width: MediaQuery.of(context).size.width *0.02),
                                 Container(
                                   child: InkWell(
                                     child: Text(
                                       'Save',
                                       style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 10,
                                         fontWeight: FontWeight.bold,
                                         fontStyle: FontStyle.italic,
                                         color:
@@ -384,10 +211,409 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                 ),
                               ],
                             ),
+                            ],
                           ),
-                        ),
-                      ],
+                          Text(
+                            getToday(),
+                            style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ],
+                      ),
                     ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Positioned(
+                child: Row(children: [
+                  Text(
+                    '    ' + saveDay(),
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ]),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.04,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: MediaQuery.of(context).size.height * 0.005,
+                color: Colors.white,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.02,
+              ),
+              Positioned(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    //gage cardx
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.08),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: sum_record.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(30.0))),
+                                color: Color.fromARGB(0, 18, 13, 65)
+                                    .withOpacity(0.8),
+                                child: Column(
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'image/profile_1.png',
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.05,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Row(children: [
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04,
+                                              ),
+                                              Text(
+                                                'Progress',
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ]),
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.5,
+                                            ),
+                                            Text(
+                                              '90%',
+                                              style: TextStyle(
+                                                fontSize: 11,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.01,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(7.0),
+                                          child: Center(
+                                            child: new LinearPercentIndicator(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.73,
+                                              animation: true,
+                                              lineHeight: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.01,
+                                              animationDuration: 2000,
+                                              percent: 0.9,
+                                              barRadius: Radius.circular(20),
+                                              linearStrokeCap:
+                                                  LinearStrokeCap.roundAll,
+                                              progressColor: Colors.greenAccent,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.01,
+                                        ),
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.05,
+                                              ),
+                                              Text(
+                                                '${sum_record[index][1]}',
+                                                style: TextStyle(
+                                                  fontSize: 9,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.015,
+                                              ),
+                                              Image.asset(
+                                                'image/distance.png',
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04,
+                                              ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.02,
+                                              ),
+                                              Text(
+                                                '${sum_record[index][2]} km',
+                                                style: TextStyle(
+                                                  fontSize: 9,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.26,
+                                              ),
+                                              Text(
+                                                'October ',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ),
+                                              Image.asset(
+                                                'image/run.png',
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04,
+                                              ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.01,
+                                              ),
+                                              Text(
+                                                '${sum_record[index][3]}',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height*0.02,),
+                  Column(
+                    children: [
+                      Container(
+                        child: Column(children: [
+                          Column(
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.width * 0.15,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width *
+                                            0.1),
+                                child: Text(
+                                  '${numbers[1][1]}km',
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Text(
+                              'Friday',
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 109, 114, 107),
+                                  fontStyle: FontStyle.italic),
+                            ),
+                          ),
+                          CustomPaint(
+                              painter: CustomCircularProgress(
+                                  value: controller.value)),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.2,
+                          ),
+                          Container(
+                            child: 
+                                Text(
+                                  'Steps',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Color.fromARGB(255, 142, 214, 120),
+                                      fontStyle: FontStyle.italic),
+                                ),
+                          ),
+                        ]),
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 57, 59, 155)
+                              .withOpacity(0.8),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.7),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 24.0),
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: numbers.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(30.0))),
+                                color: Color.fromARGB(0, 84, 121, 177)
+                                    .withOpacity(0.8),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 7,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 100),
+                                      child: Container(
+                                        child: Text(
+                                          numbers[index][0],
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            fontStyle: FontStyle.italic,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      numbers[index][1],
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    SizedBox(height: 7),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 80),
+                                      child: Container(
+                                        child: Text(
+                                          numbers[index][2],
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontStyle: FontStyle.italic,
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                                Color.fromARGB(255, 0, 0, 0),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -410,7 +636,7 @@ class CustomCircularProgress extends CustomPainter {
 
     canvas.drawArc(
       Rect.fromCenter(center: center, width: 170, height: 170),
-      vmath.radians(140),
+      vmath.radians(120),
       vmath.radians(260),
       false,
       Paint()
@@ -435,8 +661,8 @@ class CustomCircularProgress extends CustomPainter {
     );
     canvas.drawArc(
       Rect.fromCenter(center: center, width: 170, height: 170),
-      vmath.radians(140),
-      vmath.radians(dist * 10 * value),
+      vmath.radians(120),
+      vmath.radians(dist * 3 * value),
       false,
       Paint()
         ..style = PaintingStyle.stroke
@@ -451,3 +677,50 @@ class CustomCircularProgress extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
+
+
+class FilledRadio<T> extends StatelessWidget {
+  final T value;
+  final T groupValue;
+  final ValueChanged<T> onChanged;
+  final double radius;
+  final Color color;
+  FilledRadio(
+      {required this.value,
+      required this.groupValue,
+      required this.onChanged,
+      this.radius = 16,
+      this.color = const Color(0xFF49EF3E)});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: () {
+          onChanged(this.value);
+        },
+        child: Container(
+          height: this.radius * 2,
+          width: this.radius * 2,
+          decoration: ShapeDecoration(
+            shape: CircleBorder(),
+            color: color,
+          ),
+          child: Center(
+            child: Container(
+              height: (this.radius * 2) - 8,
+              width: (this.radius * 2) - 8,
+              decoration: ShapeDecoration(
+                shape: CircleBorder(),
+                color: value == groupValue
+                    ? color
+                    : Theme.of(context).scaffoldBackgroundColor,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+

@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new, deprecated_member_use, sort_child_properties_last
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hrc_project/running_main/countdown.dart';
 import 'package:hrc_project/running_main/showmap.dart';
 import 'package:hrc_project/running_main/stop.dart';
+import 'package:hrc_project/running_main/util.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -15,6 +18,32 @@ import 'package:percent_indicator/percent_indicator.dart';
 
 final username = 'SeowonKim';
 var strToday;
+
+final List sum_record = [
+  ['Kuyper','Distance','30','5','0.3'],
+  ['Kuyper','Time', '48', '5','0.6'],
+];
+
+class Goal_data{
+  Util ut = new Util();
+  void set_data(){
+    ut.getUserData();
+    int temp = 1;
+    int temp_prc = 1;
+    
+    sum_record[0][2] = ut.u_sum_dist;
+    sum_record[1][2] = ut.u_sum_time;
+
+    temp = int.parse(ut.u_sum_dist);
+    temp_prc = {temp / 30 * 100} as int;
+      sum_record[0][4] = temp_prc;
+    temp = int.parse(ut.u_sum_time);
+    temp_prc = {temp / 5 * 100} as int;
+    sum_record[1][4] = temp_prc;
+
+  }
+}
+
 
 String getToday() {
   DateTime now = DateTime.now();
@@ -90,6 +119,8 @@ class _MapPageState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
+    Goal_data gd = new Goal_data();
+    gd.set_data;
     return Scaffold(
         body: Stack(children: [
       Container(
@@ -145,156 +176,168 @@ class _MapPageState extends State<MapSample> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.1),
+                  child: Container(
+                            height: MediaQuery.of(context).size.height*0.3,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: sum_record.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                    width: MediaQuery.of(context).size.width*0.8,
+                                  child: Card(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30.0))),
+                                    color:  Color.fromARGB(0, 18, 13, 65).withOpacity(0.8),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: MediaQuery.of(context).size.height*0.04,
+                                        ),
+                     Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Running Record',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                          ),),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text('${sum_record[index][0]} RC',
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),),
+                          SizedBox(height: 20,),
+                          Image.asset(
+                    'image/profile_1.png',
+                    width: 34,
+                    height: 34,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text('Running Record',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                        ),),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text('Kuyper RC',
-                      style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),),
-                        SizedBox(height: 20,),
-                        Image.asset(
-                  'image/profile_1.png',
-                  width: 34,
-                  height: 34,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                     Row(
-                       children: [
-                         SizedBox(
-                           width: MediaQuery.of(context).size.width*0.03,
-                         ),
-                         Text('Progress',
-                        style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),),
-                       ]
-                     ),
-                     SizedBox(
-                       width: MediaQuery.of(context).size.width*0.45,
-                     ),
-                     Text('90%',
-                        style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),),
-                  ],
-                ),
+                       Row(
+                         children: [
+                           SizedBox(
+                             width: MediaQuery.of(context).size.width*0.04,
+                           ),
+                           Text('Progress',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),),
+                         ]
+                       ),
+                       SizedBox(
+                         width: MediaQuery.of(context).size.width*0.5,
+                       ),
+                       Text('${sum_record[index][4]}%',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),),
+                    ],
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height*0.01,),
             Padding(
               padding: EdgeInsets.all(7.0),
               child: Center(
-                child: new LinearPercentIndicator(
-                  width: MediaQuery.of(context).size.width*0.65,
-                  animation: true,
-                  lineHeight: MediaQuery.of(context).size.height*0.01,
-                  animationDuration: 2000,
-                  percent: 0.9,
-                  barRadius: Radius.circular(20),
-                  linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: Colors.greenAccent,
-                ),
+                  child: new LinearPercentIndicator(
+                    width: MediaQuery.of(context).size.width*0.73,
+                    animation: true,
+                    lineHeight: MediaQuery.of(context).size.height*0.01,
+                    animationDuration: 2000,
+                    percent: sum_record[index][4]/100,
+                    barRadius: Radius.circular(20),
+                    linearStrokeCap: LinearStrokeCap.roundAll,
+                    progressColor: Colors.greenAccent,
+                  ),
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.width*0.03,
+              height: MediaQuery.of(context).size.height*0.01,
             ),
             Container(
               child: Row(
-                children: [
-                   SizedBox(
-                    width: MediaQuery.of(context).size.width*0.05,
-                  ),
-                  Text('Distance',
-                  style: TextStyle(
-                            fontSize: 9,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic,
+                  children: [
+                     SizedBox(
+                      width: MediaQuery.of(context).size.width*0.05,
+                    ),
+                    Text('${sum_record[index][1]}',
+                    style: TextStyle(
+                              fontSize: 9,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                            ),
+                    ),
+                     SizedBox(
+                      width: MediaQuery.of(context).size.width*0.015,
+                    ),
+                    Image.asset('image/distance.png',
+                          width: MediaQuery.of(context).size.width*0.04,
+                          height: MediaQuery.of(context).size.width*0.04,
                           ),
-                  ),
-                   SizedBox(
-                    width: MediaQuery.of(context).size.width*0.015,
-                  ),
-                  Image.asset('image/distance.png',
-                        width: MediaQuery.of(context).size.width*0.04,
-                        height: MediaQuery.of(context).size.width*0.04,
-                        ),
-                        SizedBox(
-                    width: MediaQuery.of(context).size.width*0.02,
-                  ),
-                         Text('30km',
-                  style: TextStyle(
-                            fontSize: 9,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic,
+                          SizedBox(
+                      width: MediaQuery.of(context).size.width*0.02,
+                    ),
+                           Text('${sum_record[index][2]} km',
+                    style: TextStyle(
+                              fontSize: 9,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                            ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width*0.26,
+                    ),
+                    Text('October ',
+                    style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                            ),
+                    ),
+                    Image.asset('image/run.png',
+                          width: MediaQuery.of(context).size.width*0.04,
+                          height: MediaQuery.of(context).size.width*0.04,
                           ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width*0.18,
-                  ),
-                  Text('October ',
-                  style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic,
-                          ),
-                  ),
-                  Image.asset('image/run.png',
-                        width: MediaQuery.of(context).size.width*0.04,
-                        height: MediaQuery.of(context).size.width*0.04,
-                        ),
-                        SizedBox(
-                    width: MediaQuery.of(context).size.width*0.01,
-                  ),
-                         Text('5',
-                  style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                  ),
-                ],
+                          SizedBox(
+                      width: MediaQuery.of(context).size.width*0.01,
+                    ),
+                           Text('${sum_record[index][3]}',
+                    style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                    ),
+                  ],
               ),
             )
-                
-                    ],
-                  ),
-                  width: MediaQuery.of(context).size.width*0.7,
-                  height: MediaQuery.of(context).size.height*0.26,
-              decoration: BoxDecoration(
-                      color: Color.fromARGB(0, 18, 13, 65).withOpacity(0.8),
-                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                      boxShadow: [
-                         BoxShadow(
-                              color: Colors.grey.withOpacity(0.7),
-                              spreadRadius: 0,
-                              blurRadius: 5.0,
-                              offset:
-                                  Offset(0, 10), // changes position of shadow
-                            ),
-                      ]
+                  
+                      ],
                     ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                 ),
+                
+
                 SizedBox(
                   height: 70,
                 ),

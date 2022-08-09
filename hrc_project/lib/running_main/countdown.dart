@@ -5,6 +5,14 @@ import 'package:hrc_project/running_main/stop.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
+
+final List numbers = [
+  ['calorie', '124', 'kcal'],
+  ['distance', '4.34', 'km'],
+  ['pace', '5.55', 'pace'],
+  ['time', '22:30', 'minute']
+];
+
 class startcounter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
