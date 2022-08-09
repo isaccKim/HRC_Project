@@ -26,7 +26,7 @@ class GetDailyData extends StatelessWidget {
 
             return Container(
               decoration: boxdeco,
-              height: MediaQuery.of(context).size.height * 0.15,
+              height: MediaQuery.of(context).size.height * 0.18,
               width: MediaQuery.of(context).size.width,
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -48,13 +48,15 @@ class GetDailyData extends StatelessWidget {
                         Column(
                           children: [
                             Distance(context),
-                            grad.GradientText(
+                            Divider(
+                                height: 15, color: Colors.white.withOpacity(0)),
+                            Text(
                               '${runData['distance']} km',
                               style: const TextStyle(
+                                color: Colors.white,
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
-                              gradient: textGradient,
                             ),
                           ],
                         ),
@@ -62,26 +64,30 @@ class GetDailyData extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Running_duration(context),
-                            grad.GradientText(
+                            Divider(
+                                height: 15, color: Colors.white.withOpacity(0)),
+                            Text(
                               '${runData['time']} h',
                               style: const TextStyle(
+                                color: Colors.white,
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
-                              gradient: textGradient,
                             ),
                           ],
                         ),
                         Column(
                           children: [
                             Running_pace(context),
-                            grad.GradientText(
+                            Divider(
+                                height: 15, color: Colors.white.withOpacity(0)),
+                            Text(
                               '${runData['pace']} m/s',
                               style: const TextStyle(
+                                color: Colors.white,
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
-                              gradient: textGradient,
                             ),
                           ],
                         )

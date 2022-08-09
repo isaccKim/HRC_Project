@@ -76,7 +76,7 @@ class _DailyMainState extends State<DailyMain> {
                 if (index == 0) {
                   return Container(
                     decoration: boxdeco,
-                    height: MediaQuery.of(context).size.height * 0.64,
+                    height: MediaQuery.of(context).size.height * 0.6655,
                     child: DailyBoxDesign(latestDocsId: docsId[index]),
                   );
                 } else {
@@ -164,33 +164,33 @@ class DailyBoxDesign extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    grad.GradientText(
+                    Text(
                       'Distance :    ${runData['distance']}km',
                       style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
-                      gradient: textGradient,
                     ),
                     const Divider(height: 10),
                     //time
-                    grad.GradientText(
+                    Text(
                       'Time :    ${runData['time']} h',
                       style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
-                      gradient: textGradient,
                     ),
                     const Divider(height: 10),
                     //pace
-                    grad.GradientText(
+                    Text(
                       'Pace :    ${runData['pace']} m/s',
                       style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
-                      gradient: textGradient,
                     ),
                   ],
                 ),
