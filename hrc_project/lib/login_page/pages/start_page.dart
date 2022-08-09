@@ -55,20 +55,6 @@ class _StartPageWidgetState extends State<StartPageWidget> {
             ),
           ),
 
-          // //  Background image
-          // Center(
-          //   child: Container(
-          //     decoration: const BoxDecoration(
-          //       image: DecorationImage(
-          //         image: AssetImage('image/Backgroundimage.png'),
-          //         fit: BoxFit.fitHeight,
-          //         opacity: 175,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-
-          //  HRC Logo
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
