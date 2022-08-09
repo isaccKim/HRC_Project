@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../record/weekly.dart';
 import 'package:hrc_project/dashboard/widget_source/source.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as grad;
 import 'package:intl/intl.dart';
@@ -10,18 +11,6 @@ String formatTimeStamp(DateTime t) {
   var text = DateFormat('MM/dd');
   return text.format(t);
 }
-
-DateTime now = DateTime.now();
-int currentDay = now.weekday;
-DateTime firstDayOfWeek = now.subtract(Duration(days: currentDay));
-DateTime endOfWeek =
-    now.add(Duration(days: DateTime.daysPerWeek - now.weekday - 1));
-
-DateTime date1 = firstDayOfWeek;
-DateTime date2 = endOfWeek;
-
-DateTime titleFirstofWeeky = date1;
-DateTime titleEndofWeeky = date2;
 
 class WeekSelectionInPicker extends StatefulWidget {
   @override
@@ -48,14 +37,19 @@ class _WeekSelectionInPickerState extends State<WeekSelectionInPicker> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('${formatTimeStamp(date1)}'),
+              Text(
+                  '${formatTimeStamp(titleFirstOfWeek)}\nEndOfWeek : ${formatTimeStamp(titleEndOfWeek)}'),
+              // Button - select the weeks
               TextButton(
                 onPressed: () {
                   setState(() {
-                    titleFirstofWeeky = date1;
-                    titleEndofWeeky = date2;
+                    // result.clear();
+                    testWidget(result, context);
+                    titleFirstOfWeek = date1;
+                    titleEndOfWeek = date2;
+                    print('${formatTimeStamp(titleFirstOfWeek)}');
+                    Navigator.of(context).pop();
                   });
-                  Navigator.of(context).pop();
                 },
                 child: Text('test'),
               ),
@@ -108,16 +102,16 @@ class _WeekSelectionInPickerState extends State<WeekSelectionInPicker> {
   }
 }
 
-class TitleDate extends StatelessWidget {
-  const TitleDate({Key? key}) : super(key: key);
+class TestTitle extends StatefulWidget {
+  TestTitle({Key? key}) : super(key: key);
 
   @override
+  State<TestTitle> createState() => _TestTitleState();
+}
+
+class _TestTitleState extends State<TestTitle> {
+  @override
   Widget build(BuildContext context) {
-    // if (endOfWeek.isAfter(firstDayOfWeek)) {
-    //   var temp = firstDayOfWeek;
-    //   firstDayOfWeek = endOfWeek;
-    //   endOfWeek = temp;
-    // }
     return TextButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(
@@ -128,7 +122,7 @@ class TitleDate extends StatelessWidget {
             context: context,
             builder: (context) {
               return Dialog(
-                child: Container(height: 500, child: WeekSelectionInPicker()),
+                child: SizedBox(height: 500, child: WeekSelectionInPicker()),
               );
             });
       },
@@ -140,7 +134,7 @@ class TitleDate extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
             gradient: textGradient,
-            '${formatTimeStamp(firstDayOfWeek)} ~ ${formatTimeStamp(endOfWeek)}',
+            '${formatTimeStamp(titleFirstOfWeek)} ~ ${formatTimeStamp(titleEndOfWeek)}',
           ),
           const Icon(Icons.calendar_month_rounded),
         ],

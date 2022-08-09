@@ -152,6 +152,7 @@ class DailyBoxDesign extends StatelessWidget {
                           double testDist = Random().nextInt(10).toDouble();
                           double testTime = Random().nextInt(4).toDouble();
                           double testSp = Random().nextInt(5).toDouble();
+
                           addTestData(testDist, testTime, testSp);
                         },
                         icon: const Icon(Icons.add_circle)),
@@ -195,12 +196,10 @@ class DailyBoxDesign extends StatelessWidget {
                 ),
               ],
             );
-
           }
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
