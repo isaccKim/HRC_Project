@@ -2,13 +2,12 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-
 import 'package:hrc_project/dashboard/dashboard_main.dart';
-
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:hrc_project/ranking_board_page/ranking_board.dart';
 import 'package:hrc_project/running_main/showmap.dart';
 import 'package:hrc_project/setting_page/setting_page.dart';
+import 'package:hrc_project/test.dart';
 
 class NavigationBarPage extends StatefulWidget {
   const NavigationBarPage({Key? key}) : super(key: key);
@@ -129,8 +128,9 @@ class _NavigationBarState extends State<NavigationBarPage> {
           color: Color.fromRGBO(159, 101, 230, 1),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(top: 5.0),
+          padding: const EdgeInsets.only(top: 3.0),
           child: Container(
+            height: 65,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30),
@@ -139,8 +139,7 @@ class _NavigationBarState extends State<NavigationBarPage> {
               color: Color.fromRGBO(46, 36, 70, 1),
             ),
             child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 4),
               child: GNav(
                   selectedIndex: 1,
                   tabBorderRadius: 45,
@@ -153,22 +152,32 @@ class _NavigationBarState extends State<NavigationBarPage> {
                   padding: const EdgeInsets.only(
                       left: 15, right: 15, top: 16, bottom: 16),
                   gap: 8,
-                  iconSize: 30,
+                  iconSize: 45,
                   onTabChange: _navigateBottomBar,
                   tabs: const [
                     GButton(
                       icon: Icons.equalizer,
                       text: 'Ranking',
+                      textStyle: TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                     GButton(
                       icon: Icons.home,
                       text: 'Home',
+                      textStyle: TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                     GButton(
                       icon: Icons.person,
                       text: 'Dashboard',
                       textStyle: TextStyle(
-                        fontSize: 13,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -176,6 +185,11 @@ class _NavigationBarState extends State<NavigationBarPage> {
                     GButton(
                       icon: Icons.settings,
                       text: 'Setting',
+                      textStyle: TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ]),
             ),

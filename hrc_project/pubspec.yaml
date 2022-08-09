@@ -54,6 +54,9 @@ dependencies:
   charts_flutter: ^0.12.0
   syncfusion_flutter_sliders: ^20.2.40
   syncfusion_flutter_charts: ^20.2.40
+  video_player: ^2.4.5
+  carousel_slider: ^4.1.1
+  smooth_page_indicator: ^1.0.0+2
   shake: ^2.1.0
   percent_indicator: ^4.2.2
 
@@ -100,8 +103,14 @@ flutter:
     - image/save_btn.png
     - image/gage.png
     - image/run_blue.png
+    - assets/video/backgroundvideo.mp4
+    - image/ranking_board/rc images/Ro.png
+    - image/ranking_board/rc images/Be.png
+    - image/ranking_board/rc images/Vi.png
+    - image/ranking_board/rc images/Ja.png
+    - image/ranking_board/rc images/Ca.png
+    - image/ranking_board/rc images/Ky.png
     - image/distance.png
-
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -114,17 +123,28 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  fonts:
+      - family: Jost
+        fonts:
+          - asset: assets/font/Jost/Jost600SemiItalic.otf
+
+      - family: JostMain
+        fonts:
+          - asset: assets/font/Jost/Jost400Book.otf
+
+      - family: JostSemi
+        fonts:
+          - asset: assets/font/Jost/Jost600Semi.otf
+
+      - family: JostStart
+        fonts:
+          - asset: assets/font/Jost/Jost700BoldItalic.otf
+
+    # - family: Trajan Pro
+    #   fonts:
+    #     - asset: fonts/TrajanPro.ttf
+    #     - asset: fonts/TrajanPro_Bold.ttf
+    #       weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

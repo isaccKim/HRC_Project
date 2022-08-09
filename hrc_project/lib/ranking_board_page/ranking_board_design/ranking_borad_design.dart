@@ -1,10 +1,13 @@
 // ignore_for_file: unnecessary_const, must_be_immutable, non_constant_identifier_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hrc_project/ranking_board_page/unit_conversion.dart';
 
+//  if there is no Data
 Widget noData(bool isTime, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 90.0),
@@ -12,7 +15,7 @@ Widget noData(bool isTime, BuildContext context) {
       children: [
         //  ranking type
         Align(
-          heightFactor: 0.4,
+          heightFactor: 0.35,
           child: Stack(
             children: [
               Center(
@@ -77,33 +80,92 @@ Widget noData(bool isTime, BuildContext context) {
 
               //  Time, Distacne text
               Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 150.0),
-                  child: isTime
-                      ? const Text(
-                          'Time',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 70,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      : const Text(
-                          'Distance',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 55,
-                            fontWeight: FontWeight.bold,
-                          ),
+                child: isTime
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 160.0),
+                        child: Column(
+                          children: const [
+                            Align(
+                              heightFactor: 0.5,
+                              child: Text(
+                                'Time',
+                                style: TextStyle(
+                                  fontFamily: 'Jost',
+                                  color: Colors.white,
+                                  fontSize: 65,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 40.0),
+                              child: Text(
+                                'Top 100',
+                                style: TextStyle(
+                                  fontFamily: 'Jost',
+                                  color: Colors.white,
+                                  fontSize: 25,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                ),
+                      )
+                    // const Text.rich(TextSpan(
+                    //     text: 'Time',
+                    //     style: TextStyle(
+                    //       fontFamily: 'Jost',
+                    //       color: Colors.white,
+                    //       fontSize: 65,
+                    //       fontWeight: FontWeight.bold,
+                    //     ),
+                    //     children: [
+                    //         TextSpan(
+                    //             text: '\n Top 100',
+                    // style: TextStyle(
+                    //   fontFamily: 'Jost',
+                    //   color: Colors.white,
+                    //   fontSize: 25,
+                    //             ))
+                    //       ]))
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 170.0),
+                        child: Column(
+                          children: const [
+                            Align(
+                              heightFactor: 0.5,
+                              child: Text(
+                                'Distance',
+                                style: TextStyle(
+                                  fontFamily: 'Jost',
+                                  color: Colors.white,
+                                  fontSize: 55,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 130.0),
+                              child: Text(
+                                'Top 100',
+                                style: TextStyle(
+                                  fontFamily: 'Jost',
+                                  color: Colors.white,
+                                  fontSize: 25,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
               ),
             ],
           ),
         ),
 
+        //  No Data icon, text
         Padding(
-          padding: const EdgeInsets.only(top: 100.0),
+          padding: const EdgeInsets.only(top: 80.0),
           child: Column(
             children: [
               RadiantGradientMask(
@@ -123,8 +185,9 @@ Widget noData(bool isTime, BuildContext context) {
               const Text(
                 'No Data',
                 style: TextStyle(
+                  fontFamily: 'Jost',
                   color: Color.fromRGBO(255, 125, 125, 1),
-                  fontSize: 50,
+                  fontSize: 45,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -210,40 +273,84 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
 
               //  Time, Distacne text
               Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 150.0),
-                  child: isTime
-                      ? const Text.rich(TextSpan(
-                          text: 'Time',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 60,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          children: [
-                              TextSpan(
-                                  text: '\n Top 100',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25,
-                                  ))
-                            ]))
-                      : const Text.rich(TextSpan(
-                          text: 'Distance',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 55,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          children: [
-                              TextSpan(
-                                  text: '\n Top 100',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25,
-                                  ))
-                            ])),
-                ),
+                child: isTime
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 160.0),
+                        child: Column(
+                          children: const [
+                            Align(
+                              heightFactor: 0.5,
+                              child: Text(
+                                'Time',
+                                style: TextStyle(
+                                  fontFamily: 'Jost',
+                                  color: Colors.white,
+                                  fontSize: 65,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 40.0),
+                              child: Text(
+                                'Top 100',
+                                style: TextStyle(
+                                  fontFamily: 'Jost',
+                                  color: Colors.white,
+                                  fontSize: 25,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    // const Text.rich(TextSpan(
+                    //     text: 'Time',
+                    //     style: TextStyle(
+                    //       fontFamily: 'Jost',
+                    //       color: Colors.white,
+                    //       fontSize: 65,
+                    //       fontWeight: FontWeight.bold,
+                    //     ),
+                    //     children: [
+                    //         TextSpan(
+                    //             text: '\n Top 100',
+                    // style: TextStyle(
+                    //   fontFamily: 'Jost',
+                    //   color: Colors.white,
+                    //   fontSize: 25,
+                    //             ))
+                    //       ]))
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 170.0),
+                        child: Column(
+                          children: const [
+                            Align(
+                              heightFactor: 0.5,
+                              child: Text(
+                                'Distance',
+                                style: TextStyle(
+                                  fontFamily: 'Jost',
+                                  color: Colors.white,
+                                  fontSize: 55,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 130.0),
+                              child: Text(
+                                'Top 100',
+                                style: TextStyle(
+                                  fontFamily: 'Jost',
+                                  color: Colors.white,
+                                  fontSize: 25,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
               ),
             ],
           ),
@@ -286,27 +393,39 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 130, left: 130),
-                child: UserNameEmail(data, isTime, context, Colors.white, 25,
-                    Colors.white, 35, Colors.white, 25),
+                child: UserNameStatic(
+                    data,
+                    isTime,
+                    context,
+                    Colors.white,
+                    25,
+                    Colors.white,
+                    isTime ? 26 : 30,
+                    Colors.white,
+                    isTime ? 25 : 25),
               ),
             ),
 
             //  Ranking
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 250.0, left: 150),
+                padding: const EdgeInsets.only(top: 235.0, left: 150),
                 child: Text.rich(
                   TextSpan(
                     text: '$number',
                     style: const TextStyle(
+                      fontFamily: 'Jost',
                       color: Colors.white,
-                      fontSize: 60,
+                      fontSize: 65,
                       fontWeight: FontWeight.bold,
                     ),
                     children: const <TextSpan>[
                       TextSpan(
-                        text: ' st',
-                        style: TextStyle(fontSize: 40),
+                        text: 'st',
+                        style: TextStyle(
+                          fontFamily: 'Jost',
+                          fontSize: 45,
+                        ),
                       ),
                     ],
                   ),
@@ -361,27 +480,31 @@ Widget ranking2nd(Map<String, dynamic> data, int number, bool isTime,
         Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 130, right: 130),
-            child: UserNameEmail(data, isTime, context, Colors.white, 25,
-                Colors.white, 35, Colors.white, 25),
+            child: UserNameStatic(data, isTime, context, Colors.white, 25,
+                Colors.white, isTime ? 26 : 30, Colors.white, isTime ? 25 : 25),
           ),
         ),
 
         //  Ranking
         Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 250.0, right: 150),
+            padding: const EdgeInsets.only(top: 235.0, right: 150),
             child: Text.rich(
               TextSpan(
                 text: '$number',
                 style: const TextStyle(
+                  fontFamily: 'Jost',
                   color: Colors.white,
-                  fontSize: 60,
+                  fontSize: 65,
                   fontWeight: FontWeight.bold,
                 ),
                 children: const <TextSpan>[
                   TextSpan(
-                    text: ' nd',
-                    style: TextStyle(fontSize: 40),
+                    text: 'nd',
+                    style: TextStyle(
+                      fontFamily: 'Jost',
+                      fontSize: 45,
+                    ),
                   ),
                 ],
               ),
@@ -432,27 +555,31 @@ Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
       Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 130, left: 130),
-          child: UserNameEmail(data, isTime, context, Colors.white, 25,
-              Colors.white, 35, Colors.white, 25),
+          child: UserNameStatic(data, isTime, context, Colors.white, 25,
+              Colors.white, isTime ? 26 : 30, Colors.white, isTime ? 25 : 25),
         ),
       ),
 
       //  Ranking
       Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 250.0, left: 150),
+          padding: const EdgeInsets.only(top: 235.0, left: 150),
           child: Text.rich(
             TextSpan(
               text: '$number',
               style: const TextStyle(
+                fontFamily: 'Jost',
                 color: Colors.white,
-                fontSize: 60,
+                fontSize: 65,
                 fontWeight: FontWeight.bold,
               ),
               children: const <TextSpan>[
                 TextSpan(
-                  text: ' rd',
-                  style: TextStyle(fontSize: 40),
+                  text: 'rd',
+                  style: TextStyle(
+                    fontFamily: 'Jost',
+                    fontSize: 45,
+                  ),
                 ),
               ],
             ),
@@ -467,7 +594,9 @@ Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
 Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
     String documentId, BuildContext context) {
   bool isMe = false;
+
   final user = FirebaseAuth.instance.currentUser;
+
   if (documentId == user!.uid) {
     isMe = true;
   }
@@ -480,7 +609,7 @@ Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
           Radius.circular(15),
         ),
         color: isMe
-            ? const Color.fromARGB(255, 67, 75, 227)
+            ? const Color.fromARGB(255, 116, 30, 255)
             : const Color.fromARGB(255, 46, 36, 80),
       ),
       child: Stack(
@@ -495,15 +624,23 @@ Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
                   child: Text.rich(
                     TextSpan(
                       text: '$number',
-                      style: const TextStyle(
+                      style: TextStyle(
+                        fontFamily: 'Jost',
                         color: Colors.white,
-                        fontSize: 40,
+                        fontSize: number > 99
+                            ? 30
+                            : number > 9
+                                ? 35
+                                : 40,
                         fontWeight: FontWeight.bold,
                       ),
                       children: const <TextSpan>[
                         TextSpan(
-                          text: ' th',
-                          style: TextStyle(fontSize: 23),
+                          text: 'th',
+                          style: TextStyle(
+                            fontFamily: 'Jost',
+                            fontSize: 23,
+                          ),
                         ),
                       ],
                     ),
@@ -513,8 +650,16 @@ Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
                 //  User name, statistic
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 20, right: 5),
-                  child: UserNameEmail(data, isTime, context, Colors.grey[500],
-                      18, Colors.white, 30, Colors.white, 23),
+                  child: UserNameStatic(
+                      data,
+                      isTime,
+                      context,
+                      Colors.grey[500],
+                      18,
+                      Colors.white,
+                      isTime ? 21 : 29,
+                      Colors.white,
+                      isTime ? 21 : 26),
                 ),
 
                 //  User profile image
@@ -570,18 +715,14 @@ class RadiantGradientMask extends StatelessWidget {
 
 //  User profile slot
 Widget UserImage(
-    Map<String, dynamic> data,
-    String documentId,
-    BuildContext context,
-    double height,
-    double width,
-    double circlePadding,
-    String rank) {
-  bool isMe = false;
-  final user = FirebaseAuth.instance.currentUser;
-  if (documentId == user!.uid) {
-    isMe = true;
-  }
+  Map<String, dynamic> data,
+  String documentId,
+  BuildContext context,
+  double height,
+  double width,
+  double circlePadding,
+  String rank,
+) {
   return //  user profile image
       GestureDetector(
     onTap: () {
@@ -640,7 +781,7 @@ Widget UserImage(
 }
 
 //  User name, statistic
-Widget UserNameEmail(
+Widget UserNameStatic(
   Map<String, dynamic> data,
   bool isTime,
   BuildContext context,
@@ -663,45 +804,50 @@ Widget UserNameEmail(
           fontWeight: FontWeight.bold,
         ),
       ),
-      const SizedBox(height: 10),
+      const SizedBox(height: 5),
       isTime
           ? Text.rich(
               TextSpan(
-                text: '${data['sum_time']}',
+                text: convertTime('${data['sum_time']}'),
+                //text: '${data['sum_time']}',
                 style: TextStyle(
+                  fontFamily: 'Jost',
                   color: staticColor,
-                  fontSize:
-                      ('${data['sum_time']}'.length > 3) ? 27 : staticSize,
-                  fontWeight: FontWeight.bold,
+                  fontSize: staticSize,
+                  //fontWeight: FontWeight.bold,
                 ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: ' hr',
-                    style: TextStyle(
-                      fontSize:
-                          ('${data['sum_time']}'.length > 3) ? 21 : unitSize,
-                      color: unitColor,
-                    ),
-                  ),
-                ],
+                // children: <TextSpan>[
+                //   TextSpan(
+                //     text: ' min',
+                //     style: TextStyle(
+                //       fontSize:
+                //           ('${data['sum_time']}'.length > 3) ? 21 : unitSize,
+                //       color: unitColor,
+                //     ),
+                //   ),
+                // ],
               ),
             )
           : Text.rich(
               TextSpan(
-                text: '${data['sum_distance']}',
+                text: convertDist('${data['sum_distance']}'),
+                //text: '${data['sum_distance']}',
                 style: TextStyle(
+                  fontFamily: 'Jost',
                   color: staticColor,
                   fontSize:
-                      ('${data['sum_distance']}'.length > 3) ? 27 : staticSize,
-                  fontWeight: FontWeight.bold,
+                      '${data['sum_distance']}'.length > 4 ? 22 : staticSize,
+                  //fontWeight: FontWeight.bold,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: ' km',
+                    text: double.parse('${data['sum_distance']}') >= 1
+                        ? ' km'
+                        : ' m',
                     style: TextStyle(
-                      fontSize: ('${data['sum_distacne']}'.length > 3)
-                          ? 21
-                          : unitSize,
+                      fontFamily: 'Jost',
+                      fontSize:
+                          '${data['sum_distance']}'.length > 4 ? 19 : unitSize,
                       color: unitColor,
                     ),
                   ),

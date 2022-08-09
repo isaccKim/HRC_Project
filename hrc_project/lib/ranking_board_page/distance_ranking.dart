@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hrc_project/ranking_board_page/get_person_data/get_person_data.dart';
+import 'package:hrc_project/ranking_board_page/read_data/get_person_data.dart';
 import 'package:hrc_project/ranking_board_page/ranking_board_design/ranking_borad_design.dart';
 
 class DistanceRank extends StatefulWidget {

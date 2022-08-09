@@ -1,35 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hrc_project/running_main/countdown.dart';
 import '../auth/auth_page.dart';
+import 'package:video_player/video_player.dart';
 
-class StartPageWidget extends StatelessWidget {
+class StartPageWidget extends StatefulWidget {
   const StartPageWidget({Key? key}) : super(key: key);
+
+  @override
+  State<StartPageWidget> createState() => _StartPageWidgetState();
+}
+
+class _StartPageWidgetState extends State<StartPageWidget> {
+  final asset = 'assets/video/backgroundvideo.mp4';
+  late VideoPlayerController controller;
+
+  @override
+  void initState() {
+    controller = VideoPlayerController.asset(asset)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..setLooping(true)
+      ..initialize().then((value) => controller.play());
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(100, 101, 50, 230),
+      backgroundColor: const Color.fromARGB(255, 35, 25, 60),
       body: Stack(
         children: [
-          //  Background image
-          Center(
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('image/Backgroundimage.png'),
-                  fit: BoxFit.fitHeight,
-                  opacity: 175,
+          //  Background video
+          SizedBox.expand(
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: Opacity(
+                opacity: 0.35,
+                child: SizedBox(
+                  width: controller.value.size.width,
+                  height: controller.value.size.height,
+                  child: controller.value.isInitialized
+                      ? VideoPlayer(controller)
+                      : null,
                 ),
               ),
             ),
           ),
+
+          // //  Background image
+          // Center(
+          //   child: Container(
+          //     decoration: const BoxDecoration(
+          //       image: DecorationImage(
+          //         image: AssetImage('image/Backgroundimage.png'),
+          //         fit: BoxFit.fitHeight,
+          //         opacity: 175,
+          //       ),
+          //     ),
+          //   ),
+          // ),
 
           //  HRC Logo
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 125),
+                padding: const EdgeInsets.only(top: 100),
                 child: SvgPicture.asset(
                   'image/Logo.svg',
                   height: 108,
@@ -83,14 +127,15 @@ class StartPageWidget extends StatelessWidget {
                         });
 
                         Future.delayed(const Duration(milliseconds: 1100), () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const AuthPage();
-                              },
-                            ),
-                          );
+                          Navigator.pushReplacementNamed(context, '/second');
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) {
+                          //       return const AuthPage();
+                          //     },
+                          //   ),
+                          // );
                         });
                       },
                       child: Container(
@@ -100,7 +145,7 @@ class StartPageWidget extends StatelessWidget {
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black,
-                              spreadRadius: 0.5,
+                              spreadRadius: 0.1,
                               blurRadius: 2,
                               offset: Offset(0, 1),
                             )
@@ -120,13 +165,14 @@ class StartPageWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
                             Text(
-                              'Start',
+                              'START',
                               textAlign: TextAlign.center,
                               style: TextStyle(
+                                fontFamily: 'JostStart',
                                 color: Colors.white,
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
-                                letterSpacing: 1,
+                                letterSpacing: 1.5,
                               ),
                             ),
                           ],

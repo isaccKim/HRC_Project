@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dialog_page/show_dialog.dart';
 
 void main() {
   runApp(const TestPage());
@@ -10,27 +11,34 @@ class TestPage extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return rcSelectDialog(
+                      context,
+                      350,
+                      30,
+                      'RC 선택하기',
+                      15,
+                      'WOW',
+                      17,
+                      () {},
+                      () {},
+                      () {},
+                      () {},
+                      () {},
+                    );
+                  });
+            },
+            child: const Text('RC select'),
+          ),
+        ),
       ),
-      home: const MyHomePage(),
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: Column(children: []));
   }
 }

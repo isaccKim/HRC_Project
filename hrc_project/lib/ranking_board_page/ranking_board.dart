@@ -2,8 +2,8 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hrc_project/ranking_board_page/distance_ranking.dart';
+import 'package:hrc_project/ranking_board_page/rc_ranking.dart';
 import 'package:hrc_project/ranking_board_page/time_ranking.dart';
-
 import '../dialog_page/show_dialog.dart';
 
 class RankingBoardPage extends StatefulWidget {
@@ -61,13 +61,14 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
-        length: 2,
+        length: 3,
+        initialIndex: 1,
         child: Scaffold(
           backgroundColor: const Color.fromARGB(255, 35, 25, 60),
           appBar: AppBar(
             backgroundColor: const Color.fromARGB(255, 35, 25, 60),
             elevation: 0.8,
-            toolbarHeight: 0,
+            toolbarHeight: 15,
             bottom: PreferredSize(
               preferredSize: const Size(0, 57),
               child: TabBar(
@@ -77,8 +78,10 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
                 unselectedLabelColor: Colors.grey[500],
                 labelColor: Colors.white,
                 labelPadding: const EdgeInsets.only(bottom: 5),
-                labelStyle:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                labelStyle: const TextStyle(
+                    fontFamily: 'JostSemi',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 21),
                 indicatorPadding: const EdgeInsets.only(bottom: 5),
                 indicator: const BoxDecoration(
                   borderRadius: BorderRadius.all(
@@ -88,12 +91,15 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
                 ),
                 tabs: const [
                   Tab(
+                    text: 'Distance',
+                    //icon: Icon(Icons.north, size: 40),
+                  ),
+                  Tab(
                     text: 'Time',
                     //icon: Icon(Icons.timer_outlined, size: 40),
                   ),
                   Tab(
-                    text: 'Distance',
-                    //icon: Icon(Icons.north, size: 40),
+                    text: 'RC',
                   ),
                 ],
               ),
@@ -101,8 +107,9 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
           ),
           body: const TabBarView(
             children: [
-              TimeRank(),
               DistanceRank(),
+              TimeRank(),
+              RcRank(),
             ],
           ),
         ),

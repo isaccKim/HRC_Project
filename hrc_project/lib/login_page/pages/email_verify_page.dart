@@ -38,7 +38,6 @@ class _EmailVerifyState extends State<EmailVerify> {
       bool stopDefaultButtonEvent, RouteInfo info) async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pop();
-    Navigator.of(context).pop();
 
     return true;
   }
@@ -72,6 +71,15 @@ class _EmailVerifyState extends State<EmailVerify> {
     //  delete user profile image
     await deleteUserProfileImage.delete();
 
+    //  delete subcollection
+    await userData.collection('running record').get().then(
+          (snapshot) => snapshot.docs.forEach(
+            (doccument) {
+              doccument.reference.delete();
+            },
+          ),
+        );
+
     //  delete user data
     await userData.delete();
 
@@ -104,15 +112,6 @@ class _EmailVerifyState extends State<EmailVerify> {
                       onTap: () async {
                         await FirebaseAuth.instance.signOut();
                         Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return AuthPage();
-                            },
-                          ),
-                        );
                       },
                       child: Icon(
                         Icons.arrow_back,
@@ -267,7 +266,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                                         fit: FlexFit.tight,
                                         child: Padding(
                                           padding: const EdgeInsets.only(
-                                              top: 20, bottom: 10, right: 25),
+                                              top: 10, bottom: 10, right: 20),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceAround,
@@ -280,7 +279,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                              SizedBox(height: 10),
+                                              //SizedBox(height: 10),
                                               Text(
                                                 '${email}',
                                                 style: TextStyle(

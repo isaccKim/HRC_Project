@@ -68,61 +68,86 @@ class _SettingPageState extends State<SettingPage> {
     );
 
     try {
-      if (isImageEdited) {
-        final deleteUserProfileImage = await FirebaseStorage.instance
-            .ref()
-            .child('profile_image')
-            .child(user!.uid);
-
-        await deleteUserProfileImage.delete();
-
-        final userProfileImage = await FirebaseStorage.instance
-            .ref()
-            .child('profile_image')
-            .child(user.uid);
-
-        await userProfileImage.putFile(_userImage!);
-        newUserImage = await userProfileImage.getDownloadURL();
+      if (_userHeightController.text.trim().isNotEmpty) {
+        double.parse(_userHeightController.text.trim());
       }
 
-      updateUserDatails(
-        _userNameController.text.trim(),
-        newUserImage.trim(),
-        _userHeightController.text.trim().isNotEmpty
-            ? double.parse(_userHeightController.text.trim())
-            : height,
-        _userWeightController.text.trim().isNotEmpty
-            ? double.parse(_userWeightController.text.trim())
-            : weight,
-      );
+      if (_userWeightController.text.trim().isNotEmpty) {
+        double.parse(_userWeightController.text.trim());
+      }
 
-      // pop the loading circle
-      Future.delayed(const Duration(milliseconds: 500), () {
-        Navigator.of(context, rootNavigator: true).pop();
-      });
+      try {
+        if (isImageEdited) {
+          final deleteUserProfileImage = await FirebaseStorage.instance
+              .ref()
+              .child('profile_image')
+              .child(user!.uid);
 
-      //  update completion alert
-      Future.delayed(const Duration(milliseconds: 900), () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return flexibleDialog(context, 200, 30, '알림', 15,
-                  '계정 정보가 수정되었습니다.', 15, () {}, () {}, () {}, () {});
-            });
-      });
+          await deleteUserProfileImage.delete();
+
+          final userProfileImage = await FirebaseStorage.instance
+              .ref()
+              .child('profile_image')
+              .child(user.uid);
+
+          await userProfileImage.putFile(_userImage!);
+          newUserImage = await userProfileImage.getDownloadURL();
+        }
+
+        updateUserDatails(
+          _userNameController.text.trim(),
+          newUserImage.trim(),
+          _userHeightController.text.trim().isNotEmpty
+              ? double.parse(_userHeightController.text.trim())
+              : height,
+          _userWeightController.text.trim().isNotEmpty
+              ? double.parse(_userWeightController.text.trim())
+              : weight,
+        );
+
+        // pop the loading circle
+        Future.delayed(const Duration(milliseconds: 500), () {
+          Navigator.of(context, rootNavigator: true).pop();
+        });
+
+        //  update completion alert
+        Future.delayed(const Duration(milliseconds: 900), () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return flexibleDialog(context, 200, 30, '알림', 15,
+                    '계정 정보가 수정되었습니다.', 15, () {}, () {}, () {}, () {});
+              });
+        });
+      } catch (e) {
+        // pop the loading circle
+        Future.delayed(const Duration(milliseconds: 500), () {
+          Navigator.of(context, rootNavigator: true).pop();
+        });
+
+        //  update data format alert
+        Future.delayed(const Duration(milliseconds: 900), () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return flexibleDialog(context, 200, 30, '알림', 15, e.toString(),
+                    20, () {}, () {}, () {}, () {});
+              });
+        });
+      }
     } catch (e) {
       // pop the loading circle
       Future.delayed(const Duration(milliseconds: 500), () {
         Navigator.of(context, rootNavigator: true).pop();
       });
 
-      //  update data format alert
+      // height, weight form alert
       Future.delayed(const Duration(milliseconds: 900), () {
         showDialog(
             context: context,
             builder: (context) {
               return flexibleDialog(context, 200, 30, '알림', 15, e.toString(),
-                  20, () {}, () {}, () {}, () {});
+                  16, () {}, () {}, () {}, () {});
             });
       });
     }
@@ -151,7 +176,7 @@ class _SettingPageState extends State<SettingPage> {
       await userData.update({'weight': newWeight});
     }
 
-    //  reload page
+    //  Reload page
     setState(() {
       isEdited = false;
       isNameEdited = false;
@@ -179,6 +204,15 @@ class _SettingPageState extends State<SettingPage> {
 
     //  delete user profile image
     await deleteUserProfileImage.delete();
+
+    //  delete subcollection
+    await userData.collection('running record').get().then(
+          (snapshot) => snapshot.docs.forEach(
+            (doccument) {
+              doccument.reference.delete();
+            },
+          ),
+        );
 
     //  delete user data
     await userData.delete();
@@ -445,6 +479,7 @@ class _SettingPageState extends State<SettingPage> {
                                                   filled: true,
                                                   hintText: '${user_name}',
                                                   hintStyle: TextStyle(
+                                                    fontFamily: 'Roboto',
                                                     color: isNameEdited
                                                         ? Colors.white
                                                             .withOpacity(0)
@@ -455,6 +490,7 @@ class _SettingPageState extends State<SettingPage> {
                                                 ),
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
+                                                  fontFamily: 'Roboto',
                                                   color: Color.fromRGBO(
                                                       186, 104, 186, 1),
                                                   fontWeight: FontWeight.bold,
@@ -469,6 +505,7 @@ class _SettingPageState extends State<SettingPage> {
                                             Text(
                                               '${email}',
                                               style: TextStyle(
+                                                fontFamily: 'Roboto',
                                                 color: Colors.grey[500],
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.bold,
@@ -494,6 +531,44 @@ class _SettingPageState extends State<SettingPage> {
                           ],
                         )
                       ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                      color: Color.fromARGB(255, 46, 36, 80),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return rcSelectDialog(
+                                context,
+                                350,
+                                30,
+                                'RC 선택하기',
+                                15,
+                                'WOW',
+                                17,
+                                () {},
+                                () {},
+                                () {},
+                                () {},
+                                () {},
+                              );
+                            });
+                      },
+                      child: const Text('RC select'),
                     ),
                   ),
                 ),
@@ -540,7 +615,7 @@ class _SettingPageState extends State<SettingPage> {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white,
-                                                  fontSize: 15,
+                                                  fontSize: 17,
                                                 ),
                                               ),
                                               const SizedBox(height: 7),
@@ -586,6 +661,7 @@ class _SettingPageState extends State<SettingPage> {
                                                     suffixIcon: const Text(
                                                       'kg',
                                                       style: TextStyle(
+                                                        fontFamily: 'Roboto',
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: Colors.white,
@@ -594,9 +670,10 @@ class _SettingPageState extends State<SettingPage> {
                                                     ),
                                                     suffixIconConstraints:
                                                         const BoxConstraints(
-                                                            minHeight: 39),
+                                                            minHeight: 38),
                                                     hintText: '${weight}',
                                                     hintStyle: TextStyle(
+                                                      //fontFamily: 'Roboto',
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: isWeightEdited
@@ -634,7 +711,7 @@ class _SettingPageState extends State<SettingPage> {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white,
-                                                  fontSize: 15,
+                                                  fontSize: 17,
                                                 ),
                                               ),
                                               const SizedBox(height: 7),
@@ -682,6 +759,7 @@ class _SettingPageState extends State<SettingPage> {
                                                       suffixIcon: const Text(
                                                         'cm',
                                                         style: TextStyle(
+                                                          fontFamily: 'Roboto',
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           color: Colors.white,
@@ -690,9 +768,10 @@ class _SettingPageState extends State<SettingPage> {
                                                       ),
                                                       suffixIconConstraints:
                                                           const BoxConstraints(
-                                                              minHeight: 39),
+                                                              minHeight: 38),
                                                       hintText: '${height}',
                                                       hintStyle: TextStyle(
+                                                        //fontFamily: 'Roboto',
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: isHeightEdited
@@ -842,7 +921,7 @@ class _SettingPageState extends State<SettingPage> {
                                   FirebaseAuth.instance.signOut,
                                   () {
                                     Navigator.pushNamedAndRemoveUntil(
-                                        context, '/', (route) => false);
+                                        context, '/second', (route) => false);
                                   },
                                   () {},
                                   () {},
