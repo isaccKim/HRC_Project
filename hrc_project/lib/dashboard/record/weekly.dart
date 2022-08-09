@@ -303,6 +303,16 @@ List<double> testDis = [];
 Map<String, dynamic> testMap = {};
 Map<int, double> result = {};
 
+void mapToList({required Map<int, double> mps, required List<FlSpot> lists}) {
+  for (int keys = 2; keys <= 14; keys += 2) {
+    if (mps.containsKey(keys)) {
+      lists.add(FlSpot(keys.toDouble(), mps[keys]!.toDouble()));
+    } else {
+      lists.add(FlSpot(keys.toDouble(), 0));
+    }
+  }
+}
+
 Future getData() async {
   testId.clear();
   await FirebaseFirestore.instance
@@ -320,10 +330,10 @@ Future getData() async {
   // });
 }
 
-void mapToList(Map mp, List list) {}
-
-Widget testWidget(Map<int, double> result, BuildContext context) {
-  result.clear();
+Widget testWidget(Map<int, double> results, BuildContext context) {
+  int currentIndex = 0;
+  results.clear();
+  weeks.clear();
   return FutureBuilder(
     future: getData(),
     builder: (context, snapshot) {
@@ -339,8 +349,14 @@ Widget testWidget(Map<int, double> result, BuildContext context) {
                     snapshot.data!.data() as Map<String, dynamic>;
                 updates(
                     result, convertTimeStamp(temp['date']), temp['distance']);
-                print("${result.toString()} : $index");
-                return Text("${result.toString()} : $index");
+                print("${results.toString()} : $index");
+
+                if (currentIndex == testId.length - 1) {
+                  mapToList(mps: results, lists: weeks);
+                  print(weeks.toString());
+                }
+                currentIndex++;
+                return Text("${result.toString()} : $index \n ${weeks}");
 
                 // weeks.add(dataToXY(convertTimeStamp(temp['date']),
                 //     temp['distacne']));
