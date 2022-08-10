@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hrc_project/running_main/countdown.dart';
-import '../auth/auth_page.dart';
 import 'package:video_player/video_player.dart';
 
 class StartPageWidget extends StatefulWidget {
