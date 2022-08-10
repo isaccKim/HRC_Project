@@ -29,9 +29,18 @@ String formatTimeStamp(DateTime t) {
   return text.format(t);
 }
 
-class Weekly extends StatelessWidget {
-  const Weekly({Key? key}) : super(key: key);
+List<FlSpot> weeks = [
+  // 0 : Sun ~ 6 ; Sat
+];
 
+class Weekly extends StatefulWidget {
+  Weekly({Key? key}) : super(key: key);
+
+  @override
+  State<Weekly> createState() => _WeeklyState();
+}
+
+class _WeeklyState extends State<Weekly> {
   @override
   Widget build(BuildContext context) {
     date1 = firstDayOfWeek;
@@ -50,27 +59,43 @@ class Weekly extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                grad.GradientText(
+                // ignore: prefer_const_constructors
+                Text(
                   style: const TextStyle(
+                    color: Colors.white,
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                   ),
                   'Weekly Running ',
-                  gradient: textGradient,
                 ),
-                TestTitle()
+                SelectDate(),
               ],
             ),
           ),
-          const SizedBox(
-            height: 30,
-          ),
+          Divider(height: MediaQuery.of(context).size.height * 0.035),
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.03,
+              horizontal: MediaQuery.of(context).size.width * 0.05,
             ),
-            child: WeeklyChart(),
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.25,
+                child: const WeeklyChart()),
           ),
+          Divider(height: MediaQuery.of(context).size.height * 0.035),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Column(children: [
+              ChartPage_Distance(context),
+              Divider(height: 15, color: Colors.white.withOpacity(0))
+            ]),
+            Column(children: [
+              ChartPage_Running_duration(context),
+              Divider(height: 15, color: Colors.white.withOpacity(0))
+            ]),
+            Column(children: [
+              ChartPage_Running_pace(context),
+              Divider(height: 15, color: Colors.white.withOpacity(0))
+            ]),
+          ])
         ],
       ),
     );
@@ -93,35 +118,17 @@ class _WeeklyChartState extends State<WeeklyChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1.42,
-          child: Container(
-            decoration:
-                const BoxDecoration(color: Color.fromARGB(0, 255, 255, 255)),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  right: 18.0, left: 12.0, top: 24, bottom: 12),
-              // child: FutureBuilder(
-              //     future: getData(),
-              // builder: (context, snapshot) {
-              //   if (snapshot.connectionState == ConnectionState.done) {
-              //     return Text(
-              //         '$testMap\n ${formatTimeStamp(titleFirstOfWeek)} ~ ${formatTimeStamp(titleEndOfWeek)}');
-              //   }
-              //   return const Center(
-              //     child: CircularProgressIndicator(),
-              //   );
-              // }),
-              child: testWidget(result, context),
-            ),
-          ),
-        ),
-      ],
+    return AspectRatio(
+      aspectRatio: 2,
+      child: Container(
+        decoration:
+            const BoxDecoration(color: Color.fromARGB(0, 255, 255, 255)),
+        child: _MakeChart(result, context),
+      ),
     );
   }
 
+//Axis Title
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       color: Color.fromARGB(255, 234, 241, 247),
@@ -163,6 +170,7 @@ class _WeeklyChartState extends State<WeeklyChart> {
     );
   }
 
+//Chart data
   LineChartData mainData() {
     return LineChartData(
       gridData: FlGridData(
@@ -211,7 +219,7 @@ class _WeeklyChartState extends State<WeeklyChart> {
       minX: 2,
       maxX: 14,
       minY: 0,
-      maxY: 10,
+      maxY: findMaxinMap(result),
       lineBarsData: [
         LineChartBarData(
           spots: weeks,
@@ -240,18 +248,89 @@ class _WeeklyChartState extends State<WeeklyChart> {
       ],
     );
   }
-}
 
-List<FlSpot> weeks = [
-  // 0 : Sun ~ 6 ; Sat
-  FlSpot(2, 0),
-  FlSpot(4, 0),
-  FlSpot(6, 0),
-  FlSpot(8, 0),
-  FlSpot(10, 0),
-  FlSpot(12, 0),
-  FlSpot(14, 0)
-];
+  Future getData() async {
+    testId.clear();
+    await FirebaseFirestore.instance
+        .collection('test_data')
+        .orderBy('date', descending: false)
+        .where('date', isGreaterThan: titleFirstOfWeek)
+        .where('date', isLessThanOrEqualTo: titleEndOfWeek)
+        .get()
+        .then(((value) => value.docs.forEach((element) {
+              testId.add(element.reference.id);
+            })));
+  }
+
+  Widget _MakeChart(Map<int, double> results, BuildContext context) {
+    Record_Weekly.dist = 0;
+    Record_Weekly.pace = 0;
+    Record_Weekly.t = 0;
+    int currentIndex = 0;
+    results.clear();
+    weeks.clear();
+    return FutureBuilder(
+      future: getData(),
+      builder: (context, snapshot) {
+        final data = FirebaseFirestore.instance.collection('test_data');
+        if (snapshot.connectionState == ConnectionState.done) {
+          return ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: testId.length,
+            itemBuilder: (context, index) {
+              return FutureBuilder<DocumentSnapshot>(
+                future: data.doc(testId[index]).get(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    Map<String, dynamic> temp =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    updates(result, convertTimeStamp(temp['date']),
+                        temp['distance']);
+                    // print("${results.toString()} : $index");
+
+                    setState(() {
+                      Record_Weekly.dist += temp['distance'];
+                      Record_Weekly.t += int.parse(temp['time'].toString());
+                      Record_Weekly.pace += temp['pace'];
+                    });
+
+                    if (currentIndex == testId.length - 1) {
+                      mapToList(mps: results, lists: weeks);
+                      // print(weeks.toString());
+                      return SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.23,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width * 0.05),
+                            child: LineChart(mainData()),
+                          ));
+                    } else {
+                      currentIndex++;
+                      return const SizedBox.shrink();
+                    }
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              );
+            },
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  double findMaxinMap(Map<int, double> mp) {
+    double max = 0.0;
+    for (var element in mp.entries) {
+      max = element.value > max ? element.value : max;
+    }
+    return max;
+  }
+}
 
 FlSpot dataToXY(String a, double b) {
   if (a == 'Sun') {
@@ -303,6 +382,7 @@ List<double> testDis = [];
 Map<String, dynamic> testMap = {};
 Map<int, double> result = {};
 
+//데이터 가공  : Map으로 저장했던 running data -> FlSpot List로 바꾸기
 void mapToList({required Map<int, double> mps, required List<FlSpot> lists}) {
   for (int keys = 2; keys <= 14; keys += 2) {
     if (mps.containsKey(keys)) {
@@ -313,59 +393,10 @@ void mapToList({required Map<int, double> mps, required List<FlSpot> lists}) {
   }
 }
 
-Future getData() async {
-  testId.clear();
-  await FirebaseFirestore.instance
-      .collection('test_data')
-      //  데이터 정렬!!
-      .orderBy('date', descending: false)
-      .where('date', isGreaterThan: titleFirstOfWeek)
-      .where('date', isLessThanOrEqualTo: titleEndOfWeek)
-      .get()
-      .then(((value) => value.docs.forEach((element) {
-            testId.add(element.reference.id);
-          })));
-  // setState(() {
-  //   testMap;
-  // });
-}
+//weekly data 가져오기
 
-Widget testWidget(Map<int, double> results, BuildContext context) {
-  int currentIndex = 0;
-  results.clear();
-  weeks.clear();
-  return FutureBuilder(
-    future: getData(),
-    builder: (context, snapshot) {
-      final data = FirebaseFirestore.instance.collection('test_data');
-      return ListView.builder(
-        itemCount: testId.length,
-        itemBuilder: (context, index) {
-          return FutureBuilder<DocumentSnapshot>(
-            future: data.doc(testId[index]).get(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                Map<String, dynamic> temp =
-                    snapshot.data!.data() as Map<String, dynamic>;
-                updates(
-                    result, convertTimeStamp(temp['date']), temp['distance']);
-                print("${results.toString()} : $index");
-
-                if (currentIndex == testId.length - 1) {
-                  mapToList(mps: results, lists: weeks);
-                  print(weeks.toString());
-                }
-                currentIndex++;
-                return Text("${result.toString()} : $index \n ${weeks}");
-
-                // weeks.add(dataToXY(convertTimeStamp(temp['date']),
-                //     temp['distacne']));
-              }
-              return SizedBox.shrink();
-            },
-          );
-        },
-      );
-    },
-  );
+class Record_Weekly {
+  static double dist = 0;
+  static double pace = 0;
+  static int t = 0;
 }

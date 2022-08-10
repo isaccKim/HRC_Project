@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/dashboard/widget_source/source.dart';
-import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as grad;
+
 import 'package:intl/intl.dart';
 
 class GetDailyData extends StatelessWidget {
