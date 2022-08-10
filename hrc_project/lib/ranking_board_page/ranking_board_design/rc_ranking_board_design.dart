@@ -588,6 +588,7 @@ Widget RcImage(
                 '${data['rc_name']}',
                 '${data['rc_image']}',
                 '${data['message']}',
+                ' ',
                 rank,
                 () {},
                 () {},
