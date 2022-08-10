@@ -22,7 +22,7 @@ double? t_t;
 final List numbers = [
   ['calorie', '0', 'kcal'],
   ['distance', '0', 'km'],
-  ['pace', '0', 'pace'],
+  ['pace(km/h)', '0', 'pace'],
   ['time', ' ', 'minute']
 ];
 
@@ -38,7 +38,7 @@ String saveDay() {
 
   String? test;
   List<String> docsId = [];
-
+  String recent_doscs_id = '0';
   Future getRunDocs() async {
     final user = await FirebaseAuth.instance.currentUser;
     docsId.clear();
@@ -56,7 +56,10 @@ String saveDay() {
             },
           ),
         );
-        _getOneData();
+        if(docsId.length!=0){
+          recent_doscs_id = docsId[0];
+          _getOneData();
+        }
   }
 
   Future _getOneData() async {
@@ -65,13 +68,13 @@ String saveDay() {
         .collection('users')
         .doc(user!.uid)
         .collection('running record')
-        .doc(docsId[0]);
+        .doc(recent_doscs_id);
         
         await userData.get().then(
           (value) => {
-            numbers[1][1] = value['distance'],
-            numbers[2][1] = value['pace'],
-            numbers[3][1] = value['time'],
+            numbers[1][1] = value['distance'].toStringAsFixed(2),
+            numbers[2][1] = value['pace'].toStringAsFixed(2),
+            numbers[3][1] = value['time'].toString(),
           },
         );
   }
@@ -108,7 +111,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(95, 11, 2, 95),
+      backgroundColor:  const Color.fromARGB(255, 35, 25, 60),
       body: Stack(
 
         children: [
@@ -496,7 +499,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                                 MediaQuery.of(context).size.width *
                                                     0.1),
                                         child: Text(
-                                          '${docsId[0]}km',
+                                          '${numbers[1][1]} km',
                                           style: TextStyle(
                                               fontSize: 30,
                                               fontWeight: FontWeight.bold,
@@ -554,6 +557,84 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                           ),
                         ],
                       ),
+                         FutureBuilder(
+                future: getRunDocs(),
+                builder: (context, snapshot) {
+                  return Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 24.0),
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: numbers.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width * 0.45,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30.0))),
+                                      color: Color.fromARGB(0, 84, 121, 177)
+                                          .withOpacity(0.8),
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 7,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 100),
+                                            child: Container(
+                                              child: Text(
+                                                numbers[index][0],
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            numbers[index][1],
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontStyle: FontStyle.italic,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          SizedBox(height: 7),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 80),
+                                            child: Container(
+                                              child: Text(
+                                                numbers[index][2],
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      Color.fromARGB(255, 0, 0, 0),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                }
+              ),
+
                     ],
                 );
                }

@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_new, deprecated_member_use, sort_child_properties_last, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,18 +16,19 @@ import 'package:timer_count_down/timer_count_down.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 var strToday;
-late double u_sum_dist;
-late int u_sum_time;
+late double u_sum_dist ;
+late int u_sum_time ;
 late int number;
+late String u_rc ;
+late double u_rc_distance = 0;
+
 List<String> running_num = [];
   var prc =[0.0,0.0];
 
 final List<dynamic> sum_record = [
-  ['Kuyper', 'Distance', '0', '0', '0'], //km/number/percent
-  ['Kuyper', 'Time', '0', '0', '0'], //minute/number/percent
+  ['0', 'Distance', '0', '0', '0'], //km/number/percent
+  ['0', 'Time', '0', '0', '0'], //minute/number/percent
 ];
-
-void set_data() {}
 
 Future getUserData() async {
   final user = await FirebaseAuth.instance.currentUser;
@@ -40,20 +40,30 @@ Future getUserData() async {
           email = value['email'],
           u_sum_dist = value['sum_distance'],
           u_sum_time = value['sum_time'],
+          u_rc = value['user_RC'],
         },
       );
-  await FirebaseFirestore.instance.collection('users').get().then(
+ await FirebaseFirestore.instance.collection('users').get().then(
         (snapshot) => snapshot.docs.forEach(
           (doccument) {
             running_num.add(doccument.reference.id);
           },
         ),
       );
+  final rcData =
+      await FirebaseFirestore.instance.collection('rc').doc('Kuyper');
+  await userData.get().then(
+        (value) => {
+          u_rc_distance= value['sum_distance'],
+        },
+      );
+      
   number = running_num.length;
   double temp_dist = 1;
   int temp_time = 1;
   double temp_prc = 1;
-
+  sum_record[0][0] = u_rc;
+  sum_record[0][1] = u_rc;
   sum_record[0][2] = u_sum_dist.toString()+' km';
   sum_record[1][2] = (u_sum_time/3600).toStringAsFixed(2)+' hours';
 

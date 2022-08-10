@@ -32,26 +32,7 @@ String user_image = '';
   double speed = 0;
   double _avgSpeed = 0;
   int _speedCounter = 0;
-  double temp_dist = 0;
-  double temp_time = 0;
 
-
-Future _getUserData() async {
-  final user = await FirebaseAuth.instance.currentUser;
-  final userData =
-      await FirebaseFirestore.instance.collection('users').doc(user!.uid);
-  temp_time = 0;
-  temp_time = 0;
-  await userData.get().then(
-        (value) => {
-          user_name = value['user_name'],
-          email = value['email'],
-          user_image = value['user_image'],
-          temp_dist= value['sum_distance'],
-          temp_time = value['sum_time'],
-        },
-      );
-}
 
 class stop extends StatefulWidget {
   @override
@@ -99,7 +80,7 @@ class MapSampleState extends State<stop> {
 
         if (_lastTime != null && timeDuration != 0) {
           speed = (appendDist / (timeDuration / 100)) * 3.6;
-          if (speed != 0) {
+          if (speed>0) {
             _avgSpeed = _avgSpeed + speed;
             _speedCounter++;
           }
@@ -263,7 +244,7 @@ class MapSampleState extends State<stop> {
                             ),
                             Container(
                               child: Text(
-                                'Time',
+                                u_rc,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontStyle: FontStyle.italic,
@@ -350,12 +331,13 @@ class MapSampleState extends State<stop> {
                            InkWell(
                                       child: Image.asset('image/stop_btn.png',
                                           width: 50, height: 50),
-                                      onLongPress: () {
+                                       onLongPress: (){
                                         startcounter();
                                         _stopWatchTimer.onExecute
                                             .add(StopWatchExecute.stop);
-                                            updatePersonalRecord();
-                                            addSubCollection();
+                                             addSubCollection();
+                                             updatePersonalRecord();
+                                             updateRCRecord();
                                         Navigator.pop(context);
                                         Navigator.push(
                                           context,
@@ -399,15 +381,25 @@ final user = await FirebaseAuth.instance.currentUser;
 final userData =
       await FirebaseFirestore.instance.collection('users').doc(user!.uid);
 
-  temp_time += ut.timeToDouble(displayTime);
-  temp_dist += double.parse((dist/1000).toStringAsFixed(2));
+  u_sum_time += ut.timeToInt(displayTime);
+  u_sum_dist += double.parse((dist/1000).toStringAsFixed(2));
   
   await userData.update({
-    'sum_distance': temp_dist,
-    'sum_time': temp_time,
+    'sum_distance': u_sum_dist,
+    'sum_time': u_sum_time,
   });
 
 }
+Future updateRCRecord() async {
+Util ut = new Util();
+    final rcData =
+      await FirebaseFirestore.instance.collection('rc').doc(u_rc);
+      u_rc_distance += double.parse((dist/1000).toStringAsFixed(2))+1.1;
+await rcData.update({
+    'sum_distance': u_rc_distance,
+  });      
+}
+
 
 Future addSubCollection() async {
   Util ut = new Util();
@@ -419,7 +411,7 @@ Future addSubCollection() async {
       .collection('running record')
       .add({
     'distance': double.parse((dist/1000).toStringAsFixed(2)),
-    'time': ut.timeToDouble(displayTime),
+    'time': ut.timeToInt(displayTime),
     'pace': speed,
     'date': DateTime.now(),
   });
