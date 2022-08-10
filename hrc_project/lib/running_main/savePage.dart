@@ -613,12 +613,90 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                           },
                         ),
                       ),
-                    ],
-                  ),
-                ],
+
+                       FutureBuilder(
+                future: getRunDocs(),
+                builder: (context, snapshot) {
+                  return Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 24.0),
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: numbers.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width * 0.45,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30.0))),
+                                      color: Color.fromARGB(0, 84, 121, 177)
+                                          .withOpacity(0.8),
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 7,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 100),
+                                            child: Container(
+                                              child: Text(
+                                                numbers[index][0],
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            numbers[index][1],
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontStyle: FontStyle.italic,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          SizedBox(height: 7),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 80),
+                                            child: Container(
+                                              child: Text(
+                                                numbers[index][2],
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      Color.fromARGB(255, 0, 0, 0),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                }
               ),
-            ],
-          ),
+                    ],
+                );
+               }
+             ),
+           ],
+         ),
         ],
       ),
     );
