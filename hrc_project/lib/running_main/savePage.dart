@@ -554,11 +554,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                           ),
                         ],
                       ),
-                    ],
-                );
-               }
-             ),
-              FutureBuilder(
+                       FutureBuilder(
                 future: getRunDocs(),
                 builder: (context, snapshot) {
                   return Container(
@@ -635,6 +631,10 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                             );
                 }
               ),
+                    ],
+                );
+               }
+             ),
            ],
          ),
         ],
