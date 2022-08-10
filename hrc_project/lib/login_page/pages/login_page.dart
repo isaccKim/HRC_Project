@@ -135,9 +135,21 @@ class _LoginPageState extends State<LoginPage> {
       debugShowCheckedModeBanner: false,
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            //isLogin = false;
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.black.withOpacity(0.2),
+                  child: CircularProgressIndicator()),
+            );
+          } else if (snapshot.hasError) {
+            return flexibleDialog(context, 210, 30, '알림', 15, '로그인 에러.', 15,
+                () {
+              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+            }, () {}, () {}, () {});
+          } else if (snapshot.hasData) {
             return NavigationBarPage();
           } else {
             //  Login page

@@ -239,7 +239,9 @@ class _SettingPageState extends State<SettingPage> {
     await userData.delete();
 
     //  delete user account
-    await user.delete().then((value) => FirebaseAuth.instance.signOut());
+    await user.delete().then((value) async {
+      await FirebaseAuth.instance.signOut();
+    });
 
     // //  signOut
     // await FirebaseAuth.instance.signOut();
