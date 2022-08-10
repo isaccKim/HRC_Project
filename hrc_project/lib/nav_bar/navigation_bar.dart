@@ -28,7 +28,7 @@ class _NavigationBarState extends State<NavigationBarPage> {
 
   final List<Widget> _pages = [
     const RankingBoardPage(),
-    MapSample(), //Map sample
+    const TestPage(), //merge시 삭제!
     //MapSample(),
     const DashBoard(),
     const SettingPage(),
@@ -114,30 +114,39 @@ class _NavigationBarState extends State<NavigationBarPage> {
       //  Gnav bar
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black,
-              spreadRadius: 0.2,
-              blurRadius: 4,
-              offset: Offset(0, 1),
-            )
-          ],
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-          color: Color.fromRGBO(159, 101, 230, 1),
-        ),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.black,
+            //     spreadRadius: 0.2,
+            //     blurRadius: 4,
+            //     offset: Offset(0, 1),
+            //   )
+            // ],
+            // borderRadius: BorderRadius.only(
+            //   topLeft: Radius.circular(10),
+            //   topRight: Radius.circular(10),
+            // ),
+            // color: Color.fromARGB(255, 0, 0, 0),
+            ),
         child: Padding(
-          padding: const EdgeInsets.only(top: 3.0),
+          padding: const EdgeInsets.only(top: 2.0),
           child: Container(
             height: 65,
             decoration: const BoxDecoration(
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Colors.black,
+              //     spreadRadius: 0.1,
+              //     blurRadius: 4,
+              //     offset: Offset(0, 1),
+              //   )
+              // ],
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
               ),
-              color: Color.fromRGBO(46, 36, 70, 1),
+              color: const Color.fromARGB(255, 35, 25, 60),
+              //const Color.fromRGBO(46, 36, 70, 1),
             ),
             child: Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 4),
@@ -147,7 +156,8 @@ class _NavigationBarState extends State<NavigationBarPage> {
                   haptic: true,
                   duration: const Duration(
                       milliseconds: 450), // tab animation duration
-                  backgroundColor: const Color.fromRGBO(46, 36, 70, 1),
+                  backgroundColor: const Color.fromARGB(
+                      255, 35, 25, 60), //const Color.fromRGBO(46, 36, 70, 1),
                   color: Colors.white,
                   activeColor: Colors.white,
                   padding: const EdgeInsets.only(

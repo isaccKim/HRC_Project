@@ -7,6 +7,7 @@ class GetRcData extends StatefulWidget {
   final int number;
   BuildContext context;
   final String userRC;
+  GlobalKey typeKey;
 
   GetRcData({
     Key? key,
@@ -14,6 +15,7 @@ class GetRcData extends StatefulWidget {
     required this.number,
     required this.context,
     required this.userRC,
+    required this.typeKey,
   }) : super(key: key);
 
   @override
@@ -33,8 +35,8 @@ class _GetRcDataState extends State<GetRcData> {
               snapshot.data!.data() as Map<String, dynamic>;
 
           if (widget.number == 0) {
-            return rcRanking1st(
-                data, widget.number + 1, widget.documentId, context);
+            return rcRanking1st(data, widget.number + 1, widget.documentId,
+                context, widget.typeKey);
           } else if (widget.number == 1) {
             return rcRanking2nd(
                 data, widget.number + 1, widget.documentId, context);

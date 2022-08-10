@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:hrc_project/nav_bar/navigation_bar.dart';
@@ -331,6 +332,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: GestureDetector(
                       onTap: () {
+                        HapticFeedback.heavyImpact();
                         // loading circle
                         showDialog(
                           barrierDismissible: false,
@@ -412,6 +414,7 @@ class _EmailVerifyState extends State<EmailVerify> {
                   //  Sign in button
                   GestureDetector(
                     onTap: () async {
+                      HapticFeedback.heavyImpact();
                       // loading circle
                       showDialog(
                         barrierDismissible: false,

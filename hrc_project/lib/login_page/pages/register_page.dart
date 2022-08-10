@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import '../../setting_page/rc_select_button.dart';
@@ -793,7 +794,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: GestureDetector(
-                      onTap: signUp,
+                      onTap: () {
+                        HapticFeedback.heavyImpact();
+                        signUp;
+                      },
                       child: Container(
                         width: (MediaQuery.of(context).size.width * 0.6),
                         height: 45,

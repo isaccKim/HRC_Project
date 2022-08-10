@@ -3,6 +3,7 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../auth/auth_page.dart';
 import '/dialog_page/show_dialog.dart';
@@ -195,7 +196,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       //     );
                       //   },
                       // );
-
+                      HapticFeedback.heavyImpact();
                       passwordReset();
                     },
                     child: Container(

@@ -14,13 +14,13 @@ class TestPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: ElevatedButton(
-            onPressed: () {},
-            child: const Text('Test Page!'),
-          ),
+          child: Align(
+        alignment: Alignment.center,
+        child: IconButton(
+          icon: Icon(Icons.arrow_upward),
+          onPressed: () {},
         ),
-      ),
+      )),
     );
   }
 }

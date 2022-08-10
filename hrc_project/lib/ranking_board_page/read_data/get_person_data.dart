@@ -7,6 +7,7 @@ class GetPersonData extends StatelessWidget {
   final int number;
   final bool isTime;
   BuildContext context;
+  GlobalKey typeKey;
 
   GetPersonData({
     Key? key,
@@ -14,6 +15,7 @@ class GetPersonData extends StatelessWidget {
     required this.number,
     required this.isTime,
     required this.context,
+    required this.typeKey,
   }) : super(key: key);
 
   @override
@@ -27,7 +29,8 @@ class GetPersonData extends StatelessWidget {
               snapshot.data!.data() as Map<String, dynamic>;
 
           if (number == 0) {
-            return ranking1st(data, number + 1, isTime, documentId, context);
+            return ranking1st(
+                data, number + 1, isTime, documentId, context, typeKey);
           } else if (number == 1) {
             return ranking2nd(data, number + 1, isTime, documentId, context);
           } else if (number == 2) {

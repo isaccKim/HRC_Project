@@ -201,8 +201,9 @@ Widget noData(bool isTime, BuildContext context) {
 
 //  1st, ranking type
 Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
-    String documentId, BuildContext context) {
+    String documentId, BuildContext context, GlobalKey typeKey) {
   return Padding(
+    key: typeKey,
     padding: const EdgeInsets.only(top: 90.0),
     child: Column(
       children: [
@@ -734,6 +735,7 @@ Widget UserImage(
                 '${data['user_name']}',
                 '${data['user_image']}',
                 '${data['email']}',
+                '${data['user_RC']}',
                 rank,
                 () {},
                 () {},

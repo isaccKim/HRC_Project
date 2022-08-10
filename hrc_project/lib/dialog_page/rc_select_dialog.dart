@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class rcSelectDialogWidget extends StatefulWidget {
@@ -95,6 +96,7 @@ class _rcSelectDialogWidgetState extends State<rcSelectDialogWidget> {
                         viewportFraction: 0.55,
                         onPageChanged: (index, reason) {
                           setState(() {
+                            HapticFeedback.heavyImpact();
                             activeIndex = index;
                           });
                         }),

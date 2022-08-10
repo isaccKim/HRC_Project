@@ -68,6 +68,8 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
     return Future.delayed(Duration(milliseconds: 0));
   }
 
+  final typeKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,94 +79,134 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
           backgroundColor: const Color.fromARGB(255, 35, 25, 60),
           color: const Color.fromRGBO(220, 76, 220, 0.8),
           onRefresh: refreshPage,
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                //  3rd or higher
-                FutureBuilder(
-                  future: getDocId2(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (docIDs2.length > 2) {
-                        return Column(
-                          children: [
-                            GetRcData(
-                              documentId: docIDs2[0],
-                              number: 0,
-                              context: context,
-                              userRC: userRC,
-                            ),
-                            GetRcData(
-                              documentId: docIDs2[1],
-                              number: 1,
-                              context: context,
-                              userRC: userRC,
-                            ),
-                            GetRcData(
-                              documentId: docIDs2[2],
-                              number: 2,
-                              context: context,
-                              userRC: userRC,
-                            ),
-                          ],
-                        );
-                      } else {
-                        return noData(context);
-                      }
-                    } else {
-                      return const Padding(
-                        padding: EdgeInsets.only(top: 300.0),
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ),
-                //  Read user RC data
-                FutureBuilder(
-                  future: getDocId(),
-                  builder: ((context, snapshot) {
-                    //  4th or below list view
-                    return FutureBuilder(
-                      future: getUserRCData(),
-                      builder: (context, snapshot) {
-                        return ListView.separated(
-                          primary: false,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: docIDs.length + 1,
-                          itemBuilder: (context, index) {
-                            if (docIDs.length != index && index > 2) {
-                              return GetRcData(
-                                documentId: docIDs[index],
-                                number: index,
+          child: Stack(children: [
+            SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  //  3rd or higher
+                  FutureBuilder(
+                    future: getDocId2(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (docIDs2.length > 2) {
+                          return Column(
+                            children: [
+                              GetRcData(
+                                documentId: docIDs2[0],
+                                number: 0,
                                 context: context,
                                 userRC: userRC,
-                              );
-                            } else if (index > 2) {
-                              return const SizedBox(height: 80);
-                            } else {
-                              return const SizedBox.shrink();
-                            }
-                          },
-                          separatorBuilder: (context, index) {
-                            if (index > 2) {
-                              return Divider(
-                                height: 15,
-                                color: Colors.white.withOpacity(0),
-                              );
-                            } else {
-                              return const SizedBox.shrink();
-                            }
-                          },
+                                typeKey: typeKey,
+                              ),
+                              GetRcData(
+                                documentId: docIDs2[1],
+                                number: 1,
+                                context: context,
+                                userRC: userRC,
+                                typeKey: typeKey,
+                              ),
+                              GetRcData(
+                                documentId: docIDs2[2],
+                                number: 2,
+                                context: context,
+                                userRC: userRC,
+                                typeKey: typeKey,
+                              ),
+                            ],
+                          );
+                        } else {
+                          return noData(context);
+                        }
+                      } else {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 300.0),
+                          child: CircularProgressIndicator(),
                         );
-                      },
-                    );
-                  }),
-                ),
-              ],
+                      }
+                    },
+                  ),
+                  //  Read user RC data
+                  FutureBuilder(
+                    future: getDocId(),
+                    builder: ((context, snapshot) {
+                      //  4th or below list view
+                      return FutureBuilder(
+                        future: getUserRCData(),
+                        builder: (context, snapshot) {
+                          return ListView.separated(
+                            primary: false,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: docIDs.length + 1,
+                            itemBuilder: (context, index) {
+                              if (docIDs.length != index && index > 2) {
+                                return GetRcData(
+                                  documentId: docIDs[index],
+                                  number: index,
+                                  context: context,
+                                  userRC: userRC,
+                                  typeKey: typeKey,
+                                );
+                              } else if (index > 2) {
+                                return const SizedBox(height: 60);
+                              } else {
+                                return const SizedBox.shrink();
+                              }
+                            },
+                            separatorBuilder: (context, index) {
+                              if (index > 2) {
+                                return Divider(
+                                  height: 15,
+                                  color: Colors.white.withOpacity(0),
+                                );
+                              } else {
+                                return const SizedBox.shrink();
+                              }
+                            },
+                          );
+                        },
+                      );
+                    }),
+                  ),
+                ],
+              ),
             ),
-          ),
+
+            // page up button
+            Padding(
+              padding: const EdgeInsets.only(bottom: 75.0, right: 10),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Scrollable.ensureVisible(typeKey.currentContext!,
+                        duration: const Duration(milliseconds: 600));
+                  },
+                  child: Container(
+                    height: 45,
+                    width: 45,
+                    decoration: const BoxDecoration(
+                      color: Color.fromRGBO(147, 99, 201, 1),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black,
+                          spreadRadius: 0.5,
+                          blurRadius: 4,
+                          offset: Offset(0, 1),
+                        )
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.arrow_upward,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ]),
         ),
       ),
     );

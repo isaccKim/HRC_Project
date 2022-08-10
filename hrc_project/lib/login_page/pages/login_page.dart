@@ -323,7 +323,10 @@ class _LoginPageState extends State<LoginPage> {
                           Column(
                             children: [
                               GestureDetector(
-                                onTap: signIn,
+                                onTap: () {
+                                  HapticFeedback.heavyImpact();
+                                  signIn;
+                                },
                                 child: Container(
                                   width:
                                       (MediaQuery.of(context).size.width * 0.6),

@@ -599,6 +599,7 @@ Container userProfile(
   String user_name,
   String user_image,
   String email,
+  String userRC,
   String rank,
   Function executableFuc1,
   Function executableFuc2,
@@ -623,7 +624,7 @@ Container userProfile(
                   children: [
                     Container(height: 70),
 
-                    //  user name, email
+                    //  user name, email, RC
                     Column(
                       children: [
                         Text(
@@ -647,6 +648,17 @@ Container userProfile(
                             color: Colors.grey[500],
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(
+                          height: userRC != '' ? 20 : 0,
+                          child: Text(
+                            '${userRC}',
+                            style: TextStyle(
+                              color: Colors.grey[500],
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
