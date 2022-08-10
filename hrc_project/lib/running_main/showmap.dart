@@ -63,7 +63,7 @@ Future getUserData() async {
   int temp_time = 1;
   double temp_prc = 1;
   sum_record[0][0] = u_rc;
-  sum_record[0][1] = u_rc;
+  sum_record[1][0] = u_rc;
   sum_record[0][2] = u_sum_dist.toString()+' km';
   sum_record[1][2] = (u_sum_time/3600).toStringAsFixed(2)+' hours';
 
