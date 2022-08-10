@@ -327,7 +327,7 @@ class MapSampleState extends State<stop> {
                                   children: [
                                     Container(
                                       child: Text(
-                                      _avgSpeed.toStringAsFixed(2),
+                                      speed.toStringAsFixed(2),
                                         style: TextStyle(
                                             fontSize: 25,
                                             color: Colors.black,
