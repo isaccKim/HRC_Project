@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -588,7 +586,6 @@ Widget RcImage(
                 '${data['rc_name']}',
                 '${data['rc_image']}',
                 '${data['message']}',
-                ' ',
                 rank,
                 () {},
                 () {},
