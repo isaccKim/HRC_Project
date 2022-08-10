@@ -28,8 +28,7 @@ class _NavigationBarState extends State<NavigationBarPage> {
 
   final List<Widget> _pages = [
     const RankingBoardPage(),
-    const TestPage(), //merge시 삭제!
-    //MapSample(),
+    MapSample(),
     const DashBoard(),
     const SettingPage(),
   ];
