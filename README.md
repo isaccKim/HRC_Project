@@ -49,6 +49,7 @@ class Name_def{
   double ?sum_time;
   String ?r_title;
   int ?user_image;
+  String user_RC;
   
   //running
   double ?r_distance;
