@@ -48,7 +48,6 @@ class _MyHomePageState extends State<start> {
                   fontSize: 100,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'JostSemi',
                 ),
               ),
               onFinished: (){

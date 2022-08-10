@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
+import '../../setting_page/rc_select_button.dart';
 import 'email_verify_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -27,6 +28,11 @@ class _RegisterPageState extends State<RegisterPage> {
   final _userHeightController = TextEditingController();
   final _userWeightController = TextEditingController();
   File? _userImage;
+
+  //  RC state
+  String userRC = 'none';
+  bool isEdited = false;
+  int selectedIndex = 3;
 
   @override
   void initState() {
@@ -68,7 +74,8 @@ class _RegisterPageState extends State<RegisterPage> {
           _confirmPasswordController.text.isNotEmpty &&
           _userNameController.text.isNotEmpty &&
           _userHeightController.text.isNotEmpty &&
-          _userWeightController.text.isNotEmpty) {
+          _userWeightController.text.isNotEmpty &&
+          isEdited) {
         //  email form validation
         if (RegExp(
                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -102,6 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   _user_image.trim(),
                   double.parse(_userHeightController.text.trim()),
                   double.parse(_userWeightController.text.trim()),
+                  userRC.trim(),
                 );
 
                 //  data add 방식 함수 호출
@@ -226,7 +234,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   //  data set 방식
   Future addUserDetails(UserCredential newUser, String username, String email,
-      String user_image, double height, double weight) async {
+      String user_image, double height, double weight, String userRC) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(newUser.user!.uid)
@@ -238,6 +246,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'weight': weight,
       'sum_distance': 0,
       'sum_time': 0,
+      'user_RC': userRC,
     });
   }
 
@@ -296,6 +305,25 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.of(context).pop();
     });
   }
+
+  //  Get user RC data
+  void getRCData(int index) {
+    setState(() {
+      userRC = rcNames[index];
+      selectedIndex = index;
+      isEdited = true;
+    });
+  }
+
+  final rcNames = [
+    'Philadelphos',
+    'Sonyangwon',
+    'Torrey',
+    'none',
+    'Jangkiryeo',
+    'Carmichael',
+    'Kuyper'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -436,7 +464,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(70, 180, 70, 0),
                         child: TextField(
-                          textInputAction: TextInputAction.next,
+                          textInputAction: TextInputAction.none,
                           controller: _userNameController,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.person),
@@ -466,6 +494,18 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ],
+                  ),
+
+                  SizedBox(height: 25),
+
+                  //  RC select button
+                  rcSelectButton(
+                    context,
+                    isEdited,
+                    selectedIndex,
+                    getRCData,
+                    () {},
+                    () {},
                   ),
 
                   SizedBox(height: 25),

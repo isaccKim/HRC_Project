@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dialog_page/rc_select_dialog.dart';
 import 'dialog_page/show_dialog.dart';
 
 void main() {
@@ -15,27 +16,8 @@ class TestPage extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: ElevatedButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return rcSelectDialog(
-                      context,
-                      350,
-                      30,
-                      'RC 선택하기',
-                      15,
-                      'WOW',
-                      17,
-                      () {},
-                      () {},
-                      () {},
-                      () {},
-                      () {},
-                    );
-                  });
-            },
-            child: const Text('RC select'),
+            onPressed: () {},
+            child: const Text('Test Page!'),
           ),
         ),
       ),

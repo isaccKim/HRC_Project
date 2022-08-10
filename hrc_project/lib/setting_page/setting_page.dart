@@ -8,8 +8,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
+import 'package:hrc_project/setting_page/rc_select_button.dart';
 
 import 'package:image_picker/image_picker.dart';
+
+import '../dialog_page/rc_select_dialog.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -25,6 +28,14 @@ class _SettingPageState extends State<SettingPage> {
   bool isWeightEdited = false;
   bool isHeightEdited = false;
   bool isImageEdited = false;
+  bool isUserRCEdited = false;
+
+  //  RC state
+  String userRC = 'none';
+  int selectedIndex = 3;
+  int originalIndex = 3;
+  bool isBuild = false;
+  bool isUserRCUpdate = false;
 
   final _userNameController = TextEditingController();
   final _userWeightController = TextEditingController();
@@ -50,8 +61,13 @@ class _SettingPageState extends State<SettingPage> {
             weight = value['weight'],
             height = value['height'],
             user_image = value['user_image'],
+            userRC = value['user_RC'],
           },
         );
+
+    if (!isUserRCUpdate) {
+      setUserRCIndex();
+    }
   }
 
   //  Update user data from cloud Firestore
@@ -103,6 +119,7 @@ class _SettingPageState extends State<SettingPage> {
           _userWeightController.text.trim().isNotEmpty
               ? double.parse(_userWeightController.text.trim())
               : weight,
+          selectedIndex,
         );
 
         // pop the loading circle
@@ -155,7 +172,7 @@ class _SettingPageState extends State<SettingPage> {
 
   //  data update 방식
   Future updateUserDatails(String newUserName, String newUserImage,
-      double newHeight, double newWeight) async {
+      double newHeight, double newWeight, int newSelectedIndex) async {
     final user = await FirebaseAuth.instance.currentUser;
     final userData =
         await FirebaseFirestore.instance.collection('users').doc(user!.uid);
@@ -176,6 +193,10 @@ class _SettingPageState extends State<SettingPage> {
       await userData.update({'weight': newWeight});
     }
 
+    if (newSelectedIndex != originalIndex) {
+      await userData.update({'user_RC': rcNames[newSelectedIndex]});
+    }
+
     //  Reload page
     setState(() {
       isEdited = false;
@@ -183,6 +204,9 @@ class _SettingPageState extends State<SettingPage> {
       isWeightEdited = false;
       isHeightEdited = false;
       isImageEdited = false;
+      isUserRCEdited = false;
+
+      originalIndex = selectedIndex;
 
       _userNameController.clear();
       _userHeightController.clear();
@@ -238,7 +262,8 @@ class _SettingPageState extends State<SettingPage> {
     if (_userNameController.text.trim().isNotEmpty ||
         _userWeightController.text.trim().isNotEmpty ||
         _userHeightController.text.trim().isNotEmpty ||
-        isImageEdited) {
+        isImageEdited ||
+        isUserRCEdited) {
       isEdited = true;
     } else {
       isEdited = false;
@@ -315,6 +340,41 @@ class _SettingPageState extends State<SettingPage> {
 
     return true;
   }
+
+  //  Get user RC data
+  void getRCData(int index) {
+    setState(() {
+      isUserRCUpdate = true;
+      userRC = rcNames[index];
+      selectedIndex = index;
+      if (originalIndex != selectedIndex) {
+        isUserRCEdited = true;
+      } else {
+        isUserRCEdited = false;
+      }
+      isUserDataChanged();
+    });
+  }
+
+  //  Show user RC data on button
+  void setUserRCIndex() {
+    if (mounted) {
+      setState(() {
+        isBuild = true;
+        originalIndex = selectedIndex = rcNames.indexOf(userRC);
+      });
+    }
+  }
+
+  final rcNames = [
+    'Philadelphos',
+    'Sonyangwon',
+    'Torrey',
+    'none',
+    'Jangkiryeo',
+    'Carmichael',
+    'Kuyper'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -401,6 +461,8 @@ class _SettingPageState extends State<SettingPage> {
                                             //  Image edit floating button
                                             GestureDetector(
                                               onTap: () {
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                                 showDialog(
                                                     context: context,
                                                     builder: (context) {
@@ -537,40 +599,14 @@ class _SettingPageState extends State<SettingPage> {
 
                 const SizedBox(height: 20),
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Container(
-                    height: 100,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15),
-                      ),
-                      color: Color.fromARGB(255, 46, 36, 80),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return rcSelectDialog(
-                                context,
-                                350,
-                                30,
-                                'RC 선택하기',
-                                15,
-                                'WOW',
-                                17,
-                                () {},
-                                () {},
-                                () {},
-                                () {},
-                                () {},
-                              );
-                            });
-                      },
-                      child: const Text('RC select'),
-                    ),
-                  ),
+                //  RC select button
+                rcSelectButton(
+                  context,
+                  isBuild,
+                  selectedIndex,
+                  getRCData,
+                  () {},
+                  () {},
                 ),
 
                 const SizedBox(height: 20),

@@ -1,8 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:hrc_project/dialog_page/rc_select_dialog.dart';
 
 //  with yes and no textbutton
 Dialog alternativeDialog(
@@ -523,7 +521,7 @@ Function confirmDialog(
                                 showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return flexibleDialog(context, 150, 30,
+                                      return flexibleDialog(context, 210, 30,
                                           '알림', 15, '계정이 삭제되었습니다.', 15, () {
                                         Navigator.pushNamedAndRemoveUntil(
                                             context, '/', (route) => false);
@@ -805,142 +803,4 @@ List<Color> rankBadge(String rank) {
   } else {
     return [];
   }
-}
-
-//  RC select with yes and no textbutton
-Dialog rcSelectDialog(
-  BuildContext context,
-  double boxHeight,
-  double topBarHeight,
-  String topBarText,
-  double topBarTextSize,
-  String mainText,
-  double mainTextSize,
-  Function executableFuc1,
-  Function executableFuc2,
-  Function executableFuc3,
-  Function executableFuc4,
-  Function executableFuc5,
-) {
-  final images = [
-    '',
-    'image/ranking_board/rc images/Ro.png',
-    'image/ranking_board/rc images/Be.png',
-    'image/ranking_board/rc images/Vi.png',
-    'image/ranking_board/rc images/Ja.png',
-    'image/ranking_board/rc images/Ca.png',
-    'image/ranking_board/rc images/Ky.png'
-  ];
-  int activeIndex = 0;
-  return Dialog(
-    backgroundColor: Colors.white.withOpacity(0),
-    child: Container(
-        height: boxHeight,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Text(
-                '$topBarText',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.deepPurpleAccent,
-                  fontSize: topBarTextSize,
-                ),
-              ),
-            ),
-
-            //  Page indicator
-            buildIndicatior(images.length, activeIndex),
-
-            //  RC image slider
-            CarouselSlider.builder(
-              itemCount: images.length,
-              options: CarouselOptions(
-                  height: 150,
-                  enlargeCenterPage: true,
-                  onPageChanged: (index, reason) {
-                    activeIndex = index;
-                  }),
-              itemBuilder: (context, index, realIndex) {
-                return buildImage(images[index], index);
-              },
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Container(
-                    height: 50,
-                    color: Colors.white.withOpacity(0),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        executableFuc1();
-                        executableFuc2();
-                        executableFuc3();
-                        executableFuc4();
-                      },
-                      style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.white,
-                          elevation: 0,
-                          primary: Colors.deepPurpleAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                            ),
-                          )),
-                      child: Text(
-                        '선택하기',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Container(
-                    height: 50,
-                    color: Colors.white.withOpacity(0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        executableFuc5();
-                        //  pop the alert
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.white,
-                          elevation: 0,
-                          primary: Colors.deepPurpleAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(10),
-                            ),
-                          )),
-                      child: Text(
-                        '취소하기',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        )),
-  );
 }
