@@ -19,7 +19,7 @@ var strToday;
 late double u_sum_dist ;
 late int u_sum_time ;
 late int number;
-late String u_rc ;
+late String u_rc =' ' ;
 late double u_rc_distance = 0;
 
 List<String> running_num = [];
