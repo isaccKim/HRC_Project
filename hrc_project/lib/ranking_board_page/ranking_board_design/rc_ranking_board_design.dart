@@ -135,8 +135,9 @@ Widget noData(BuildContext context) {
 
 //  1st, ranking type
 Widget rcRanking1st(Map<String, dynamic> data, int number, String documentId,
-    BuildContext context) {
+    BuildContext context, GlobalKey typeKey) {
   return Padding(
+    key: typeKey,
     padding: const EdgeInsets.only(top: 90.0),
     child: Column(
       children: [

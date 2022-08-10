@@ -61,6 +61,8 @@ class _DistanceRankState extends State<DistanceRank>
     return Future.delayed(Duration(milliseconds: 0));
   }
 
+  final typeKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -71,116 +73,159 @@ class _DistanceRankState extends State<DistanceRank>
           backgroundColor: const Color.fromARGB(255, 35, 25, 60),
           color: const Color.fromRGBO(220, 76, 220, 0.8),
           onRefresh: refreshPage,
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                FutureBuilder(
-                  future: getDocId2(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (docIDs2.length > 2) {
-                        return Column(
-                          children: [
-                            GetPersonData(
-                              documentId: docIDs2[0],
-                              number: 0,
-                              isTime: false,
-                              context: context,
-                            ),
-                            GetPersonData(
-                              documentId: docIDs2[1],
-                              number: 1,
-                              isTime: false,
-                              context: context,
-                            ),
-                            GetPersonData(
-                              documentId: docIDs2[2],
-                              number: 2,
-                              isTime: false,
-                              context: context,
-                            ),
-                          ],
-                        );
-                      } else if (docIDs2.length > 1) {
-                        return Column(
-                          children: [
-                            GetPersonData(
-                              documentId: docIDs2[0],
-                              number: 0,
-                              isTime: false,
-                              context: context,
-                            ),
-                            GetPersonData(
-                              documentId: docIDs2[1],
-                              number: 1,
-                              isTime: false,
-                              context: context,
-                            ),
-                            const SizedBox(height: 200),
-                          ],
-                        );
-                      } else if (docIDs2.isNotEmpty) {
-                        return Column(
-                          children: [
-                            GetPersonData(
-                              documentId: docIDs2[0],
-                              number: 0,
-                              isTime: false,
-                              context: context,
-                            ),
-                            const SizedBox(height: 80),
-                          ],
-                        );
+          child: Stack(children: [
+            SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  FutureBuilder(
+                    future: getDocId2(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (docIDs2.length > 2) {
+                          return Column(
+                            children: [
+                              GetPersonData(
+                                documentId: docIDs2[0],
+                                number: 0,
+                                isTime: false,
+                                context: context,
+                                typeKey: typeKey,
+                              ),
+                              GetPersonData(
+                                documentId: docIDs2[1],
+                                number: 1,
+                                isTime: false,
+                                context: context,
+                                typeKey: typeKey,
+                              ),
+                              GetPersonData(
+                                documentId: docIDs2[2],
+                                number: 2,
+                                isTime: false,
+                                context: context,
+                                typeKey: typeKey,
+                              ),
+                            ],
+                          );
+                        } else if (docIDs2.length > 1) {
+                          return Column(
+                            children: [
+                              GetPersonData(
+                                documentId: docIDs2[0],
+                                number: 0,
+                                isTime: false,
+                                context: context,
+                                typeKey: typeKey,
+                              ),
+                              GetPersonData(
+                                documentId: docIDs2[1],
+                                number: 1,
+                                isTime: false,
+                                context: context,
+                                typeKey: typeKey,
+                              ),
+                              const SizedBox(height: 200),
+                            ],
+                          );
+                        } else if (docIDs2.isNotEmpty) {
+                          return Column(
+                            children: [
+                              GetPersonData(
+                                documentId: docIDs2[0],
+                                number: 0,
+                                isTime: false,
+                                context: context,
+                                typeKey: typeKey,
+                              ),
+                              const SizedBox(height: 80),
+                            ],
+                          );
+                        } else {
+                          return noData(false, context);
+                        }
                       } else {
-                        return noData(false, context);
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 300.0),
+                          child: CircularProgressIndicator(),
+                        );
                       }
-                    } else {
-                      return const Padding(
-                        padding: EdgeInsets.only(top: 300.0),
-                        child: CircularProgressIndicator(),
+                    },
+                  ),
+                  FutureBuilder(
+                    future: getDocId(),
+                    builder: (context, snapshot) {
+                      return ListView.separated(
+                        primary: false,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: docIDs.length + 1,
+                        itemBuilder: (context, index) {
+                          if (docIDs.length != index && index > 2) {
+                            return GetPersonData(
+                              documentId: docIDs[index],
+                              number: index,
+                              isTime: false,
+                              context: context,
+                              typeKey: typeKey,
+                            );
+                          } else if (index > 2) {
+                            return const SizedBox(height: 60);
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                        separatorBuilder: (context, index) {
+                          if (index > 2) {
+                            return Divider(
+                              height: 15,
+                              color: Colors.white.withOpacity(0),
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
                       );
-                    }
-                  },
-                ),
-                FutureBuilder(
-                  future: getDocId(),
-                  builder: (context, snapshot) {
-                    return ListView.separated(
-                      primary: false,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: docIDs.length + 1,
-                      itemBuilder: (context, index) {
-                        if (docIDs.length != index && index > 2) {
-                          return GetPersonData(
-                            documentId: docIDs[index],
-                            number: index,
-                            isTime: false,
-                            context: context,
-                          );
-                        } else if (index > 2) {
-                          return const SizedBox(height: 80);
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      },
-                      separatorBuilder: (context, index) {
-                        if (index > 2) {
-                          return Divider(
-                            height: 15,
-                            color: Colors.white.withOpacity(0),
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      },
-                    );
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
+
+            // page up button
+            Padding(
+              padding: const EdgeInsets.only(bottom: 75.0, right: 10),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Scrollable.ensureVisible(typeKey.currentContext!,
+                        duration: const Duration(milliseconds: 600));
+                  },
+                  child: Container(
+                    height: 45,
+                    width: 45,
+                    decoration: const BoxDecoration(
+                      color: Color.fromRGBO(147, 99, 201, 1),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black,
+                          spreadRadius: 0.5,
+                          blurRadius: 4,
+                          offset: Offset(0, 1),
+                        )
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.arrow_upward,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ]),
         ),
       ),
     );
