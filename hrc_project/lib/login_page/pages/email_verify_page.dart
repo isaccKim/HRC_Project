@@ -85,10 +85,10 @@ class _EmailVerifyState extends State<EmailVerify> {
     await userData.delete();
 
     //  delete user account
-    user.delete();
+    await user.delete().then((value) => FirebaseAuth.instance.signOut());
 
-    //  signOut
-    await FirebaseAuth.instance.signOut();
+    // //  signOut
+    // await FirebaseAuth.instance.signOut();
   }
 
   @override
