@@ -35,6 +35,29 @@ Image Running_pace(BuildContext context) {
       height: MediaQuery.of(context).size.width * 0.1);
 }
 
+//chart page source
+//
+
+Image ChartPage_Distance(BuildContext context) {
+  return Image.asset('image/distance.png',
+      width: MediaQuery.of(context).size.width * 0.12,
+      height: MediaQuery.of(context).size.width * 0.12);
+}
+
+Image ChartPage_Running_duration(BuildContext context) {
+  return Image.asset('image/hourglass.png',
+      color: Colors.black.withOpacity(0.7),
+      width: MediaQuery.of(context).size.width * 0.12,
+      height: MediaQuery.of(context).size.width * 0.12);
+}
+
+Image ChartPage_Running_pace(BuildContext context) {
+  return Image.asset('image/running-shoe.png',
+      color: Colors.black.withOpacity(0.7),
+      width: MediaQuery.of(context).size.width * 0.12,
+      height: MediaQuery.of(context).size.width * 0.12);
+}
+
 BoxDecoration boxdeco = BoxDecoration(
   gradient: LinearGradient(
     colors: [

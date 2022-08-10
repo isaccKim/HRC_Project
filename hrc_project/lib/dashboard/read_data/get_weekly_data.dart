@@ -44,7 +44,7 @@ class _WeekSelectionInPickerState extends State<WeekSelectionInPicker> {
                 onPressed: () {
                   setState(() {
                     // result.clear();
-                    testWidget(result, context);
+
                     titleFirstOfWeek = date1;
                     titleEndOfWeek = date2;
                     print('${formatTimeStamp(titleFirstOfWeek)}');
@@ -102,14 +102,14 @@ class _WeekSelectionInPickerState extends State<WeekSelectionInPicker> {
   }
 }
 
-class TestTitle extends StatefulWidget {
-  TestTitle({Key? key}) : super(key: key);
+class SelectDate extends StatefulWidget {
+  SelectDate({Key? key}) : super(key: key);
 
   @override
-  State<TestTitle> createState() => _TestTitleState();
+  State<SelectDate> createState() => _SelectDateState();
 }
 
-class _TestTitleState extends State<TestTitle> {
+class _SelectDateState extends State<SelectDate> {
   @override
   Widget build(BuildContext context) {
     return TextButton(

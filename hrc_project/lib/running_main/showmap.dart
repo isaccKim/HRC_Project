@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +15,14 @@ import 'package:timer_count_down/timer_count_down.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 var strToday;
-late double u_sum_dist ;
-late int u_sum_time ;
+late double u_sum_dist;
+late int u_sum_time;
 late int number;
 late String u_rc =' ' ;
 late double u_rc_distance = 0;
 
 List<String> running_num = [];
-  var prc =[0.0,0.0];
+var prc = [0.0, 0.0];
 
 final List<dynamic> sum_record = [
   ['0', 'Distance', '0', '0', '0'], //km/number/percent
@@ -43,7 +42,7 @@ Future getUserData() async {
           u_rc = value['user_RC'],
         },
       );
- await FirebaseFirestore.instance.collection('users').get().then(
+  await FirebaseFirestore.instance.collection('users').get().then(
         (snapshot) => snapshot.docs.forEach(
           (doccument) {
             running_num.add(doccument.reference.id);
@@ -54,30 +53,33 @@ Future getUserData() async {
       await FirebaseFirestore.instance.collection('rc').doc('Kuyper');
   await userData.get().then(
         (value) => {
-          u_rc_distance= value['sum_distance'],
+          u_rc_distance = value['sum_distance'],
         },
       );
-      
+
   number = running_num.length;
   double temp_dist = 1;
   int temp_time = 1;
   double temp_prc = 1;
   sum_record[0][0] = u_rc;
   sum_record[1][0] = u_rc;
-  sum_record[0][2] = u_sum_dist.toString()+' km';
-  sum_record[1][2] = (u_sum_time/3600).toStringAsFixed(2)+' hours';
+  sum_record[0][2] = u_sum_dist.toString() + ' km';
+  sum_record[1][2] = (u_sum_time / 3600).toStringAsFixed(2) + ' hours';
 
   temp_dist = u_sum_dist;
   temp_prc = temp_dist / 30 * 100;
-  prc[0] = temp_prc/100; // 거리 퍼센트
-  if(prc[0]>1){prc[0] = 1.0;}
+  prc[0] = temp_prc / 100; // 거리 퍼센트
+  if (prc[0] > 1) {
+    prc[0] = 1.0;
+  }
   sum_record[0][4] = temp_prc.toStringAsFixed(1); //temp_prc;
   temp_time = u_sum_time;
-  temp_prc = temp_time / 15 * 100/3600;
-  prc[1] = temp_prc/100; // 시간 퍼센트
-  if(prc[1]>1){prc[1] = 1.0;}
+  temp_prc = temp_time / 15 * 100 / 3600;
+  prc[1] = temp_prc / 100; // 시간 퍼센트
+  if (prc[1] > 1) {
+    prc[1] = 1.0;
+  }
   sum_record[1][4] = temp_prc.toStringAsFixed(1); // temp_prc;
-  
 }
 
 String getToday() {
@@ -138,12 +140,12 @@ class _MapPageState extends State<MapSample> {
       _mapController.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(target: loc, zoom: 15)));
 
-      if (route.length >=2) {
+      if (route.length >= 2) {
         appendDist = Geolocator.distanceBetween(route.last.latitude,
             route.last.longitude, loc.latitude, loc.longitude);
-            if(appendDist>3){
-              _dist = _dist + appendDist;
-            }
+        if (appendDist > 3) {
+          _dist = _dist + appendDist;
+        }
         int timeDuration = (_time - _lastTime);
 
         if (_lastTime != null && timeDuration != 0) {
@@ -303,7 +305,6 @@ class _MapPageState extends State<MapSample> {
                                           ),
                                           Text(
                                             '${sum_record[index][4]} %',
-
                                             style: TextStyle(
                                               fontSize: 11,
                                               color: Colors.white,
