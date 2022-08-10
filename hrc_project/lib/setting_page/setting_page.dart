@@ -9,10 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:hrc_project/setting_page/rc_select_button.dart';
-
 import 'package:image_picker/image_picker.dart';
-
-import '../dialog_page/rc_select_dialog.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
