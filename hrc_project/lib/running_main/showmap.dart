@@ -128,10 +128,12 @@ class _MapPageState extends State<MapSample> {
       _mapController.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(target: loc, zoom: 15)));
 
-      if (route.length > 0) {
+      if (route.length >=2) {
         appendDist = Geolocator.distanceBetween(route.last.latitude,
             route.last.longitude, loc.latitude, loc.longitude);
-        _dist = _dist + appendDist;
+            if(appendDist>3){
+              _dist = _dist + appendDist;
+            }
         int timeDuration = (_time - _lastTime);
 
         if (_lastTime != null && timeDuration != 0) {
