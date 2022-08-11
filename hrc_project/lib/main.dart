@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (BuildContext context) => savePage(),
+        '/': (BuildContext context) => StartPageWidget(),
         '/second': (BuildContext context) => AuthPage(),
       },
       theme: ThemeData(

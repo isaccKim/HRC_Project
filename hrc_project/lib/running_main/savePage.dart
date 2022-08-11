@@ -153,7 +153,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.65),
+                                                0.6),
                                         Row(
                                           children: [
                                             Container(
@@ -367,7 +367,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                                   width: MediaQuery.of(context)
                                                           .size
                                                           .width *
-                                                      0.73,
+                                                      0.7,
                                                   animation: true,
                                                   lineHeight:
                                                       MediaQuery.of(context)
@@ -547,7 +547,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                     style: TextStyle(
                                       fontSize: 9,
                                       color: Color.fromARGB(255, 41, 39, 39),
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w500,
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
@@ -584,10 +584,10 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.25,
+                                                0.15,
                                           ),
                                           Text(
-                                            '${sum_record[0][4]} %',
+                                            '${sum_record[0][4]}%',
                                             style: TextStyle(
                                               fontSize: 11,
                                               color: Colors.white,
@@ -608,7 +608,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.6,
+                                                0.55,
                                             animation: true,
                                             lineHeight: MediaQuery.of(context)
                                                     .size
