@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hrc_project/dashboard/widget_source/source.dart';
 import 'package:hrc_project/ranking_board_page/read_data/get_person_data.dart';
 import 'package:hrc_project/ranking_board_page/ranking_board_design/ranking_borad_design.dart';
+
+import '../dialog_page/show_dialog.dart';
 
 class TimeRank extends StatefulWidget {
   const TimeRank({Key? key}) : super(key: key);
@@ -62,7 +63,8 @@ class _TimeRankState extends State<TimeRank>
     return Future.delayed(Duration(milliseconds: 0));
   }
 
-  final typeKey = GlobalKey();
+  final typeKey = GlobalKey(); //  page up
+  final userKey = GlobalKey(); //  find user record
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +95,7 @@ class _TimeRankState extends State<TimeRank>
                                   isTime: true,
                                   context: context,
                                   typeKey: typeKey,
+                                  userKey: userKey,
                                 ),
                                 GetPersonData(
                                   documentId: docIDs2[1],
@@ -100,6 +103,7 @@ class _TimeRankState extends State<TimeRank>
                                   isTime: true,
                                   context: context,
                                   typeKey: typeKey,
+                                  userKey: userKey,
                                 ),
                                 GetPersonData(
                                   documentId: docIDs2[2],
@@ -107,6 +111,7 @@ class _TimeRankState extends State<TimeRank>
                                   isTime: true,
                                   context: context,
                                   typeKey: typeKey,
+                                  userKey: userKey,
                                 ),
                               ],
                             );
@@ -119,6 +124,7 @@ class _TimeRankState extends State<TimeRank>
                                   isTime: true,
                                   context: context,
                                   typeKey: typeKey,
+                                  userKey: userKey,
                                 ),
                                 GetPersonData(
                                   documentId: docIDs2[1],
@@ -126,6 +132,7 @@ class _TimeRankState extends State<TimeRank>
                                   isTime: true,
                                   context: context,
                                   typeKey: typeKey,
+                                  userKey: userKey,
                                 ),
                                 const SizedBox(height: 200),
                               ],
@@ -139,6 +146,7 @@ class _TimeRankState extends State<TimeRank>
                                   isTime: true,
                                   context: context,
                                   typeKey: typeKey,
+                                  userKey: userKey,
                                 ),
                                 const SizedBox(height: 80),
                               ],
@@ -170,6 +178,7 @@ class _TimeRankState extends State<TimeRank>
                                 isTime: true,
                                 context: context,
                                 typeKey: typeKey,
+                                userKey: userKey,
                               );
                             } else if (index > 2) {
                               return const SizedBox(height: 60);
@@ -196,7 +205,7 @@ class _TimeRankState extends State<TimeRank>
 
               // page up button
               Padding(
-                padding: const EdgeInsets.only(bottom: 75.0, right: 10),
+                padding: const EdgeInsets.only(bottom: 130.0, right: 7),
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
@@ -221,6 +230,46 @@ class _TimeRankState extends State<TimeRank>
                       ),
                       child: const Icon(
                         Icons.arrow_upward,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              // find user button
+              Padding(
+                padding: const EdgeInsets.only(bottom: 75.0, right: 7),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      var nullCheck = userKey.currentContext;
+                      if (nullCheck != null) {
+                        Scrollable.ensureVisible(userKey.currentContext!,
+                            duration: const Duration(milliseconds: 600));
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(customSnackBar('랭킹 정보가 없습니다.'));
+                      }
+                    },
+                    child: Container(
+                      height: 45,
+                      width: 45,
+                      decoration: const BoxDecoration(
+                        color: Color.fromRGBO(61, 90, 230, 1),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black,
+                            spreadRadius: 0.5,
+                            blurRadius: 4,
+                            offset: Offset(0, 1),
+                          )
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.person,
                         color: Colors.white,
                       ),
                     ),

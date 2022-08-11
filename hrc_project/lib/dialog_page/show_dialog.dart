@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 //  with yes and no textbutton
 Dialog alternativeDialog(
@@ -825,4 +826,24 @@ List<Color> rankBadge(String rank) {
   } else {
     return [];
   }
+}
+
+//  Snack bar
+SnackBar customSnackBar(String message) {
+  return SnackBar(
+    content: Text(
+      message,
+      style: TextStyle(
+        color: Color.fromARGB(255, 46, 36, 80),
+      ),
+      textAlign: TextAlign.center,
+    ),
+    margin: EdgeInsets.only(bottom: 300, left: 50, right: 50),
+    backgroundColor: Colors.white, //const Color.fromARGB(255, 46, 36, 80),
+    duration: Duration(milliseconds: 900),
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+  );
 }

@@ -133,7 +133,12 @@ Widget noData(BuildContext context) {
 
 //  1st, ranking type
 Widget rcRanking1st(Map<String, dynamic> data, int number, String documentId,
-    BuildContext context, GlobalKey typeKey) {
+    BuildContext context, String userRC, GlobalKey typeKey, GlobalKey userKey) {
+  bool isMyRC = false;
+
+  if (documentId == userRC) {
+    isMyRC = true;
+  }
   return Padding(
     key: typeKey,
     padding: const EdgeInsets.only(top: 90.0),
@@ -230,6 +235,7 @@ Widget rcRanking1st(Map<String, dynamic> data, int number, String documentId,
           children: [
             Center(
               child: Container(
+                key: isMyRC ? userKey : null,
                 height: 400,
                 width: MediaQuery.of(context).size.width * 0.85,
                 child: RadiantGradientMask(
@@ -302,13 +308,19 @@ Widget rcRanking1st(Map<String, dynamic> data, int number, String documentId,
 
 //  2nd
 Widget rcRanking2nd(Map<String, dynamic> data, int number, String documentId,
-    BuildContext context) {
+    BuildContext context, String userRC, GlobalKey userKey) {
+  bool isMyRC = false;
+
+  if (documentId == userRC) {
+    isMyRC = true;
+  }
   return Align(
     heightFactor: 0.4,
     child: Stack(
       children: [
         Center(
           child: Container(
+            key: isMyRC ? userKey : null,
             height: 400,
             width: MediaQuery.of(context).size.width * 0.85,
             child: RadiantGradientMask(
@@ -379,11 +391,17 @@ Widget rcRanking2nd(Map<String, dynamic> data, int number, String documentId,
 
 //  3rd
 Widget rcRanking3rd(Map<String, dynamic> data, int number, String documentId,
-    BuildContext context) {
+    BuildContext context, String userRC, GlobalKey userKey) {
+  bool isMyRC = false;
+
+  if (documentId == userRC) {
+    isMyRC = true;
+  }
   return Stack(
     children: [
       Center(
         child: Container(
+          key: isMyRC ? userKey : null,
           height: 400,
           width: MediaQuery.of(context).size.width * 0.85,
           child: RadiantGradientMask(
@@ -453,16 +471,16 @@ Widget rcRanking3rd(Map<String, dynamic> data, int number, String documentId,
 
 //  4th or below
 Widget rcRankingDesign(Map<String, dynamic> data, int number, String documentId,
-    BuildContext context, String userRC) {
+    BuildContext context, String userRC, GlobalKey userKey) {
   bool isMyRC = false;
 
   if (documentId == userRC) {
     isMyRC = true;
   }
-
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 25.0),
     child: Container(
+      key: isMyRC ? userKey : null,
       height: 120,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(

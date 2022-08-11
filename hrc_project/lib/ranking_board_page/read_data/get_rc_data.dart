@@ -8,6 +8,7 @@ class GetRcData extends StatefulWidget {
   BuildContext context;
   final String userRC;
   GlobalKey typeKey;
+  GlobalKey userKey;
 
   GetRcData({
     Key? key,
@@ -16,6 +17,7 @@ class GetRcData extends StatefulWidget {
     required this.context,
     required this.userRC,
     required this.typeKey,
+    required this.userKey,
   }) : super(key: key);
 
   @override
@@ -36,16 +38,16 @@ class _GetRcDataState extends State<GetRcData> {
 
           if (widget.number == 0) {
             return rcRanking1st(data, widget.number + 1, widget.documentId,
-                context, widget.typeKey);
+                context, widget.userRC, widget.typeKey, widget.userKey);
           } else if (widget.number == 1) {
-            return rcRanking2nd(
-                data, widget.number + 1, widget.documentId, context);
+            return rcRanking2nd(data, widget.number + 1, widget.documentId,
+                context, widget.userRC, widget.userKey);
           } else if (widget.number == 2) {
-            return rcRanking3rd(
-                data, widget.number + 1, widget.documentId, context);
+            return rcRanking3rd(data, widget.number + 1, widget.documentId,
+                context, widget.userRC, widget.userKey);
           }
           return rcRankingDesign(data, widget.number + 1, widget.documentId,
-              context, widget.userRC);
+              context, widget.userRC, widget.userKey);
         }
 
         return const SizedBox.shrink();
