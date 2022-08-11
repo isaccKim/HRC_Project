@@ -59,6 +59,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   shake: ^2.1.0
   percent_indicator: ^4.2.2
+  flutter_rating_bar: ^4.0.1
 
 
 dev_dependencies:
@@ -112,6 +113,10 @@ flutter:
     - image/ranking_board/rc images/Ky.png
     - image/distance.png
     - image/ranking_board/rc images/independent.png
+    - image/trophy.png
+    - image/star.png 
+    - image/click.png 
+    - image/save.png 
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
