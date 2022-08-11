@@ -28,7 +28,8 @@ class _NavigationBarState extends State<NavigationBarPage> {
 
   final List<Widget> _pages = [
     const RankingBoardPage(),
-    MapSample(),
+    TestPage(),
+    //MapSample(),
     const DashBoard(),
     const SettingPage(),
   ];

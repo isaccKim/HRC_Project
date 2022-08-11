@@ -200,8 +200,21 @@ Widget noData(bool isTime, BuildContext context) {
 }
 
 //  1st, ranking type
-Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
-    String documentId, BuildContext context, GlobalKey typeKey) {
+Widget ranking1st(
+    Map<String, dynamic> data,
+    int number,
+    bool isTime,
+    String documentId,
+    BuildContext context,
+    GlobalKey typeKey,
+    GlobalKey userKey) {
+  bool isMe = false;
+
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (documentId == user!.uid) {
+    isMe = true;
+  }
   return Padding(
     key: typeKey,
     padding: const EdgeInsets.only(top: 90.0),
@@ -362,6 +375,7 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
           children: [
             Center(
               child: Container(
+                key: isMe ? userKey : null,
                 height: 400,
                 width: MediaQuery.of(context).size.width * 0.85,
                 child: RadiantGradientMask(
@@ -442,13 +456,21 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
 
 //  2nd
 Widget ranking2nd(Map<String, dynamic> data, int number, bool isTime,
-    String documentId, BuildContext context) {
+    String documentId, BuildContext context, GlobalKey userKey) {
+  bool isMe = false;
+
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (documentId == user!.uid) {
+    isMe = true;
+  }
   return Align(
     heightFactor: 0.4,
     child: Stack(
       children: [
         Center(
           child: Container(
+            key: isMe ? userKey : null,
             height: 400,
             width: MediaQuery.of(context).size.width * 0.85,
             child: RadiantGradientMask(
@@ -519,11 +541,19 @@ Widget ranking2nd(Map<String, dynamic> data, int number, bool isTime,
 
 //  3rd
 Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
-    String documentId, BuildContext context) {
+    String documentId, BuildContext context, GlobalKey userKey) {
+  bool isMe = false;
+
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (documentId == user!.uid) {
+    isMe = true;
+  }
   return Stack(
     children: [
       Center(
         child: Container(
+          key: isMe ? userKey : null,
           height: 400,
           width: MediaQuery.of(context).size.width * 0.85,
           child: RadiantGradientMask(
@@ -593,7 +623,7 @@ Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
 
 //  4th or below
 Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
-    String documentId, BuildContext context) {
+    String documentId, BuildContext context, GlobalKey userKey) {
   bool isMe = false;
 
   final user = FirebaseAuth.instance.currentUser;
@@ -604,6 +634,7 @@ Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 25.0),
     child: Container(
+      key: isMe ? userKey : null,
       height: 120,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(
