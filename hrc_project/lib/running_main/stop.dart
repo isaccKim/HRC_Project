@@ -70,7 +70,7 @@ class MapSampleState extends State<stop> {
     _location.onLocationChanged.listen((event) {
       LatLng loc = LatLng(event.latitude!, event.longitude!);
       _mapController.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: loc, zoom: 13)));
+          CameraPosition(target: loc, zoom: 16)));
 
       if (route.length > 0) {
         appendDist = Geolocator.distanceBetween(route.last.latitude,
@@ -120,7 +120,7 @@ class MapSampleState extends State<stop> {
             zoomControlsEnabled: false,
             onMapCreated: _onMapCreated,
             myLocationEnabled: true,
-            initialCameraPosition: CameraPosition(target: _center, zoom: 11),
+            initialCameraPosition: CameraPosition(target: _center, zoom: 13),
           )),
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 30),
@@ -308,7 +308,7 @@ class MapSampleState extends State<stop> {
                                   children: [
                                     Container(
                                       child: Text(
-                                      _avgSpeed.toStringAsFixed(2),
+                                      speed.toStringAsFixed(2),
                                         style: TextStyle(
                                             fontSize: 25,
                                             color: Colors.black,
