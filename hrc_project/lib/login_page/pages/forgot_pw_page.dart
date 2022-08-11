@@ -128,7 +128,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ],
                   ),
 
-                  SizedBox(height: 50),
+                  SizedBox(height: 40),
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -136,51 +136,69 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       'Enter your Email and we will send you a password reset link',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 17,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
 
-                  SizedBox(height: 30),
+                  SizedBox(height: 25),
 
                   //  email textField
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: TextField(
-                      // onSubmitted: ((value) {
-                      //   passwordReset();
-                      // }),
-                      keyboardType: TextInputType.emailAddress,
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.email),
-                        suffixIcon: GestureDetector(
-                          child: Icon(
-                            Icons.cancel,
-                            color: Color.fromRGBO(129, 97, 208, 0.75),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              ' ID(email)',
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.5),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 3),
+                        TextField(
+                          // onSubmitted: ((value) {
+                          //   passwordReset();
+                          // }),
+                          keyboardType: TextInputType.emailAddress,
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.email),
+                            suffixIcon: GestureDetector(
+                              child: Icon(
+                                Icons.cancel,
+                                color: Color.fromRGBO(129, 97, 208, 0.75),
+                              ),
+                              onTap: () => _emailController.clear(),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.deepPurpleAccent),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            hintText: 'Email address',
+                            fillColor: Colors.grey[200],
+                            filled: true,
                           ),
-                          onTap: () => _emailController.clear(),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.deepPurpleAccent),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        hintText: 'Email address',
-                        fillColor: Colors.grey[200],
-                        filled: true,
-                      ),
+                      ],
                     ),
                   ),
 
                   //  SizedBox(height: 20),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.28),
 
                   //  Reset password email send button
                   GestureDetector(

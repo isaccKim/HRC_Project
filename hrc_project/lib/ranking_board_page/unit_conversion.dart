@@ -1,3 +1,5 @@
+import 'dart:math';
+
 //  second convert
 String convertTime(String time) {
   int hr, min, sec;
@@ -29,8 +31,19 @@ String convertDist(String distance) {
   convertedDist = '${(double.parse(distance) * 1000).round()}';
 
   if (double.parse(distance) >= 1) {
-    return distance;
+    convertedDist = roundDouble(double.parse(distance), 2).toString();
+    if (double.parse(convertedDist) == double.parse(convertedDist).round()) {
+      convertedDist = double.parse(convertedDist).round().toString();
+      return convertedDist;
+    } else {
+      return convertedDist;
+    }
   } else {
     return convertedDist;
   }
+}
+
+double roundDouble(double val, int place) {
+  num mod = pow(10.0, place);
+  return ((val * mod).round().toDouble() / mod);
 }

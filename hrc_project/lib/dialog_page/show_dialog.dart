@@ -67,7 +67,7 @@ Dialog alternativeDialog(
                         executableFuc4();
                       },
                       style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.white,
+                          onPrimary: Colors.blueAccent,
                           elevation: 0,
                           primary: Colors.deepPurpleAccent,
                           shape: RoundedRectangleBorder(
@@ -98,7 +98,7 @@ Dialog alternativeDialog(
                         Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.white,
+                          onPrimary: Colors.redAccent,
                           elevation: 0,
                           primary: Colors.deepPurpleAccent,
                           shape: RoundedRectangleBorder(
@@ -436,8 +436,22 @@ Function confirmDialog(
 
                     Container(
                       padding: EdgeInsets.only(top: 30, bottom: 5),
-                      child: Text(
-                        '계정을 삭제하려면 ID(email)를 입력하세요.',
+                      child: Text.rich(
+                        TextSpan(
+                          text: '계정을 삭제하려면 ',
+                          children: [
+                            TextSpan(
+                              text: 'ID(email)',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.deepPurpleAccent,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '를 입력하세요.',
+                            ),
+                          ],
+                        ),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
@@ -533,7 +547,7 @@ Function confirmDialog(
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                                onPrimary: Colors.white,
+                                onPrimary: Colors.blueAccent,
                                 elevation: 0,
                                 primary: Colors.deepPurpleAccent,
                                 shape: RoundedRectangleBorder(
@@ -542,7 +556,7 @@ Function confirmDialog(
                                   ),
                                 )),
                             child: Text(
-                              '확인했습니다',
+                              '삭제하기',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -563,7 +577,7 @@ Function confirmDialog(
                               Navigator.of(context).pop();
                             },
                             style: ElevatedButton.styleFrom(
-                                onPrimary: Colors.white,
+                                onPrimary: Colors.redAccent,
                                 elevation: 0,
                                 primary: Colors.deepPurpleAccent,
                                 shape: RoundedRectangleBorder(
