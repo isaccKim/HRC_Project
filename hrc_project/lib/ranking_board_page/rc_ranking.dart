@@ -229,7 +229,7 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
                             duration: const Duration(milliseconds: 600));
                       } else {
                         ScaffoldMessenger.of(context)
-                            .showSnackBar(customSnackBar('현재 무소속 입니다.'));
+                            .showSnackBar(customSnackBar('현재 소속이 없습니다.'));
                       }
                     },
                     child: Container(

@@ -583,7 +583,7 @@ class RadiantGradientMask extends StatelessWidget {
   }
 }
 
-//  User profile slot
+//  RC profile slot
 Widget RcImage(
   Map<String, dynamic> data,
   String documentId,
@@ -650,7 +650,7 @@ Widget RcImage(
   );
 }
 
-//  User name, statistic
+//  RC name, statistic
 Widget RcStatic(
   Map<String, dynamic> data,
   BuildContext context,
@@ -661,6 +661,7 @@ Widget RcStatic(
   Color? unitColor,
   double unitSize,
 ) {
+  String displayedDist = convertDist('${data['sum_distance']}');
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -676,12 +677,12 @@ Widget RcStatic(
       const SizedBox(height: 5),
       Text.rich(
         TextSpan(
-          text: convertDist('${data['sum_distance']}'),
+          text: displayedDist,
           //text: '${data['sum_distance']}',
           style: TextStyle(
             fontFamily: 'Jost',
             color: staticColor,
-            fontSize: '${data['sum_distance']}'.length > 4 ? 22 : staticSize,
+            fontSize: displayedDist.length > 4 ? 22 : staticSize,
             //fontWeight: FontWeight.bold,
           ),
           children: <TextSpan>[

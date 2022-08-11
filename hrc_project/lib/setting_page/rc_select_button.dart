@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../dialog_page/rc_select_dialog.dart';
 
 final rcNames = [
   '열송학사 RC',
   '손양원 RC',
   '토레이 RC',
-  '무소속',
+  '소속 없음',
   '장기려 RC',
   '카마이클 RC',
   '카이퍼 RC'
@@ -32,6 +33,7 @@ Widget rcSelectButton(
   return //  edit RC button
       GestureDetector(
     onTap: () {
+      HapticFeedback.heavyImpact();
       FocusScope.of(context).unfocus();
       showDialog(
         context: context,

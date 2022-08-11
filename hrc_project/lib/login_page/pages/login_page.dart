@@ -27,59 +27,69 @@ class _LoginPageState extends State<LoginPage> {
 
   //  Signin
   Future signIn() async {
-    // loading circle
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) {
-        return Center(child: CircularProgressIndicator());
-      },
-    );
-
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
+    if (_emailController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty) {
+      // loading circle
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return Center(child: CircularProgressIndicator());
+        },
       );
 
-      if (FirebaseAuth.instance.currentUser!.emailVerified) {
-        //  pop the loading circle
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-        _emailController.clear();
-        _passwordController.clear();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return NavigationBarPage();
-            },
-          ),
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
         );
-      } else {
-        //  pop the loading circle
-        Navigator.of(context).pop();
-        _emailController.clear();
-        _passwordController.clear();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return EmailVerify();
-            },
-          ),
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      // pop the loading circle
-      Navigator.of(context).pop();
 
-      //  email or password error
+        if (FirebaseAuth.instance.currentUser!.emailVerified) {
+          //  pop the loading circle
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+          _emailController.clear();
+          _passwordController.clear();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return NavigationBarPage();
+              },
+            ),
+          );
+        } else {
+          //  pop the loading circle
+          Navigator.of(context).pop();
+          _emailController.clear();
+          _passwordController.clear();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return EmailVerify();
+              },
+            ),
+          );
+        }
+      } on FirebaseAuthException catch (e) {
+        // pop the loading circle
+        Navigator.of(context).pop();
+
+        //  email or password error
+        showDialog(
+            context: context,
+            builder: (context) {
+              return flexibleDialog(context, 200, 30, '알림', 15,
+                  e.message.toString(), 17, () {}, () {}, () {}, () {});
+            });
+      }
+    } else {
       showDialog(
           context: context,
           builder: (context) {
-            return flexibleDialog(context, 200, 30, '알림', 15,
-                e.message.toString(), 17, () {}, () {}, () {}, () {});
+            return flexibleDialog(context, 200, 30, '알림', 15, '모든 정보를 기입해주십시오.',
+                17, () {}, () {}, () {}, () {});
           });
     }
   }
@@ -166,128 +176,169 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // exit icon button
-                          Align(
-                            heightFactor: 1,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 20, top: 15),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      FocusScope.of(context).unfocus();
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return alternativeDialog(
-                                              context,
-                                              200,
-                                              30,
-                                              '앱 종료하기',
-                                              15,
-                                              '앱을 종료하시겠습니까?',
-                                              17,
-                                              Navigator.of(context).pop,
-                                              SystemNavigator.pop,
-                                              () {},
-                                              () {},
-                                              () {},
-                                            );
-                                          });
-                                    },
-                                    child: Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                      size: 30,
-                                    ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 20, top: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return alternativeDialog(
+                                            context,
+                                            200,
+                                            30,
+                                            '앱 종료하기',
+                                            15,
+                                            '앱을 종료하시겠습니까?',
+                                            17,
+                                            Navigator.of(context).pop,
+                                            SystemNavigator.pop,
+                                            () {},
+                                            () {},
+                                            () {},
+                                          );
+                                        });
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 30,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
+
                           //  HRC Logo
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: SvgPicture.asset(
-                                  'image/Logo.svg',
-                                  height: 80,
+                          Align(
+                            heightFactor: 0.85,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: SvgPicture.asset(
+                                    'image/Logo.svg',
+                                    height: 80,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
 
-                          SizedBox(height: 50),
+                          SizedBox(height: 30),
 
                           //  email textField
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 40.0),
-                            child: TextField(
-                              textInputAction: TextInputAction.next,
-                              keyboardType: TextInputType.emailAddress,
-                              controller: _emailController,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.email),
-                                suffixIcon: GestureDetector(
-                                  child: Icon(
-                                    Icons.cancel,
-                                    color: Color.fromRGBO(129, 97, 208, 0.75),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      ' ID(email)',
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                TextField(
+                                  textInputAction: TextInputAction.next,
+                                  keyboardType: TextInputType.emailAddress,
+                                  controller: _emailController,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.email),
+                                    suffixIcon: GestureDetector(
+                                      child: Icon(
+                                        Icons.cancel,
+                                        color:
+                                            Color.fromRGBO(129, 97, 208, 0.75),
+                                      ),
+                                      onTap: () => _emailController.clear(),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.deepPurpleAccent),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    hintText: 'Email address',
+                                    fillColor: Colors.grey[200],
+                                    filled: true,
                                   ),
-                                  onTap: () => _emailController.clear(),
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.deepPurpleAccent),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                hintText: 'Email address',
-                                fillColor: Colors.grey[200],
-                                filled: true,
-                              ),
+                              ],
                             ),
                           ),
 
-                          SizedBox(height: 15),
+                          SizedBox(height: 7),
 
                           //  password textField
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 40.0),
-                            child: TextField(
-                              onSubmitted: ((value) {
-                                signIn();
-                              }),
-                              obscureText: true,
-                              controller: _passwordController,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.lock),
-                                suffixIcon: GestureDetector(
-                                  child: Icon(
-                                    Icons.cancel,
-                                    color: Color.fromRGBO(129, 97, 208, 0.75),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      ' Password',
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                TextField(
+                                  onSubmitted: ((value) {
+                                    signIn();
+                                  }),
+                                  obscureText: true,
+                                  controller: _passwordController,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.lock),
+                                    suffixIcon: GestureDetector(
+                                      child: Icon(
+                                        Icons.cancel,
+                                        color:
+                                            Color.fromRGBO(129, 97, 208, 0.75),
+                                      ),
+                                      onTap: () => _passwordController.clear(),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.deepPurpleAccent),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    hintText: 'Password',
+                                    fillColor: Colors.grey[200],
+                                    filled: true,
                                   ),
-                                  onTap: () => _passwordController.clear(),
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.deepPurpleAccent),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                hintText: 'Password',
-                                fillColor: Colors.grey[200],
-                                filled: true,
-                              ),
+                              ],
                             ),
                           ),
 
@@ -329,7 +380,7 @@ class _LoginPageState extends State<LoginPage> {
 
                           SizedBox(
                               height:
-                                  MediaQuery.of(context).size.height * 0.25),
+                                  MediaQuery.of(context).size.height * 0.23),
 
                           //  Sign in button
                           Column(
@@ -337,7 +388,7 @@ class _LoginPageState extends State<LoginPage> {
                               GestureDetector(
                                 onTap: () {
                                   HapticFeedback.heavyImpact();
-                                  signIn;
+                                  signIn();
                                 },
                                 child: Container(
                                   width:

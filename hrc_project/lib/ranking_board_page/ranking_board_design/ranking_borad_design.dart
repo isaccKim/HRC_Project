@@ -824,6 +824,7 @@ Widget UserNameStatic(
   Color? unitColor,
   double unitSize,
 ) {
+  String displayedDist = convertDist('${data['sum_distance']}');
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -862,13 +863,12 @@ Widget UserNameStatic(
             )
           : Text.rich(
               TextSpan(
-                text: convertDist('${data['sum_distance']}'),
+                text: displayedDist,
                 //text: '${data['sum_distance']}',
                 style: TextStyle(
                   fontFamily: 'Jost',
                   color: staticColor,
-                  fontSize:
-                      '${data['sum_distance']}'.length > 4 ? 22 : staticSize,
+                  fontSize: displayedDist.length > 4 ? 22 : staticSize,
                   //fontWeight: FontWeight.bold,
                 ),
                 children: <TextSpan>[
