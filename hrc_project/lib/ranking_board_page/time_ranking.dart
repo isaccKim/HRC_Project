@@ -152,7 +152,7 @@ class _TimeRankState extends State<TimeRank>
                               ],
                             );
                           } else {
-                            return noData(true, context);
+                            return noData(true, context, typeKey);
                           }
                         } else {
                           return const Padding(
