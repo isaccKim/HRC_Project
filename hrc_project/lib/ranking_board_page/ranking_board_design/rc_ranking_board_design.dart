@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrc_project/ranking_board_page/unit_conversion.dart';
 
 //  if there is no Data
-Widget noData(BuildContext context) {
+Widget noData(BuildContext context, GlobalKey typeKey) {
   return Padding(
     padding: const EdgeInsets.only(top: 90.0),
     child: Column(
@@ -16,6 +16,7 @@ Widget noData(BuildContext context) {
             children: [
               Center(
                 child: SizedBox(
+                  key: typeKey,
                   height: 400,
                   width: MediaQuery.of(context).size.width * 0.85,
                   child: RadiantGradientMask(

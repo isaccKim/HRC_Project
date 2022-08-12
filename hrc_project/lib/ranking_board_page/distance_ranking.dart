@@ -152,7 +152,7 @@ class _DistanceRankState extends State<DistanceRank>
                               ],
                             );
                           } else {
-                            return noData(false, context);
+                            return noData(false, context, typeKey);
                           }
                         } else {
                           return const Padding(

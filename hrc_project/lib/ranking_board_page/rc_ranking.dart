@@ -124,7 +124,7 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
                               ],
                             );
                           } else {
-                            return noData(context);
+                            return noData(context, typeKey);
                           }
                         } else {
                           return const Padding(
