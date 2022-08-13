@@ -460,6 +460,7 @@ class _SettingPageState extends State<SettingPage> {
                                             //  Image edit floating button
                                             GestureDetector(
                                               onTap: () {
+                                                HapticFeedback.heavyImpact();
                                                 FocusScope.of(context)
                                                     .unfocus();
                                                 showDialog(
@@ -844,6 +845,7 @@ class _SettingPageState extends State<SettingPage> {
                 GestureDetector(
                   onTap: isEdited
                       ? () {
+                          HapticFeedback.heavyImpact();
                           showDialog(
                             context: context,
                             builder: (context) {
@@ -942,6 +944,7 @@ class _SettingPageState extends State<SettingPage> {
                             primary: const Color.fromARGB(255, 46, 36, 80),
                           ),
                           onPressed: () {
+                            HapticFeedback.heavyImpact();
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -985,6 +988,7 @@ class _SettingPageState extends State<SettingPage> {
                             primary: const Color.fromARGB(255, 46, 36, 80),
                           ),
                           onPressed: () {
+                            HapticFeedback.heavyImpact();
                             showDialog(
                               context: context,
                               builder: (context) {

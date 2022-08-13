@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:hrc_project/ranking_board_page/ranking_board_design/rc_ranking_board_design.dart';
 import 'package:hrc_project/ranking_board_page/read_data/get_rc_data.dart';
 
@@ -189,6 +190,7 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
                     onTap: () {
+                      HapticFeedback.heavyImpact();
                       Scrollable.ensureVisible(typeKey.currentContext!,
                           duration: const Duration(milliseconds: 600));
                     },
@@ -223,6 +225,7 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
                     onTap: () {
+                      HapticFeedback.heavyImpact();
                       var nullCheck = userKey.currentContext;
                       if (nullCheck != null) {
                         Scrollable.ensureVisible(userKey.currentContext!,

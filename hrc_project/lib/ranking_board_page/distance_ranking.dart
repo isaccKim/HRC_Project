@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hrc_project/ranking_board_page/read_data/get_person_data.dart';
 import 'package:hrc_project/ranking_board_page/ranking_board_design/ranking_borad_design.dart';
 
@@ -210,6 +211,7 @@ class _DistanceRankState extends State<DistanceRank>
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
                     onTap: () {
+                      HapticFeedback.heavyImpact();
                       Scrollable.ensureVisible(typeKey.currentContext!,
                           duration: const Duration(milliseconds: 600));
                     },
@@ -244,6 +246,7 @@ class _DistanceRankState extends State<DistanceRank>
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
                     onTap: () {
+                      HapticFeedback.heavyImpact();
                       var nullCheck = userKey.currentContext;
                       if (nullCheck != null) {
                         Scrollable.ensureVisible(userKey.currentContext!,

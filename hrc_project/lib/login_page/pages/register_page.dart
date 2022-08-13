@@ -352,7 +352,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         GestureDetector(
-                          onTap: widget.showLoginPage,
+                          onTap: () {
+                            HapticFeedback.heavyImpact();
+                            widget.showLoginPage();
+                          },
                           child: Icon(
                             Icons.arrow_back,
                             color: Colors.white,
@@ -417,6 +420,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Center(
                           child: GestureDetector(
                             onTap: () {
+                              HapticFeedback.heavyImpact();
                               showDialog(
                                   context: context,
                                   builder: (context) {
