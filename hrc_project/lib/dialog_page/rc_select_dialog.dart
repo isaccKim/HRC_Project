@@ -122,6 +122,7 @@ class _rcSelectDialogWidgetState extends State<rcSelectDialogWidget> {
                       color: Colors.white.withOpacity(0),
                       child: ElevatedButton(
                         onPressed: () async {
+                          HapticFeedback.heavyImpact();
                           //  pop the alert
                           Navigator.of(context).pop();
                           widget.executableFuc1(activeIndex);
@@ -156,6 +157,7 @@ class _rcSelectDialogWidgetState extends State<rcSelectDialogWidget> {
                       color: Colors.white.withOpacity(0),
                       child: ElevatedButton(
                         onPressed: () {
+                          HapticFeedback.heavyImpact();
                           widget.executableFuc5();
                           //  pop the alert
                           Navigator.of(context).pop();

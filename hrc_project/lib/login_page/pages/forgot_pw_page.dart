@@ -94,12 +94,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 children: [
                   // page back arrow
                   Padding(
-                    padding: EdgeInsets.only(left: 20, top: 15),
+                    padding: EdgeInsets.only(left: 20, top: 25),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         GestureDetector(
                           onTap: () {
+                            HapticFeedback.heavyImpact();
                             FocusScope.of(context).unfocus();
                             Navigator.of(context).pop();
                           },

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 
 //  with yes and no textbutton
 Dialog alternativeDialog(
@@ -61,6 +61,7 @@ Dialog alternativeDialog(
                     color: Colors.white.withOpacity(0),
                     child: ElevatedButton(
                       onPressed: () async {
+                        HapticFeedback.heavyImpact();
                         executableFuc1();
                         executableFuc2();
                         executableFuc3();
@@ -93,6 +94,7 @@ Dialog alternativeDialog(
                     color: Colors.white.withOpacity(0),
                     child: ElevatedButton(
                       onPressed: () {
+                        HapticFeedback.heavyImpact();
                         executableFuc5();
                         //  pop the alert
                         Navigator.of(context).pop();
@@ -182,6 +184,7 @@ Dialog flexibleDialog(
                     color: Colors.white.withOpacity(0),
                     child: ElevatedButton(
                       onPressed: () async {
+                        HapticFeedback.heavyImpact();
                         //  pop the alert
                         Navigator.of(context).pop();
                         executableFuc1();
@@ -200,7 +203,7 @@ Dialog flexibleDialog(
                             ),
                           )),
                       child: Text(
-                        '예',
+                        '확인했습니다',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -255,6 +258,7 @@ Dialog imageDialog(
                   children: [
                     GestureDetector(
                       onTap: () async {
+                        HapticFeedback.heavyImpact();
                         cameraFunc();
                       },
                       child: Icon(
@@ -266,7 +270,7 @@ Dialog imageDialog(
                     Text(
                       '카메라로 사진 찍기',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     )
@@ -294,6 +298,7 @@ Dialog imageDialog(
                   children: [
                     GestureDetector(
                       onTap: () async {
+                        HapticFeedback.heavyImpact();
                         galleryFunc();
                       },
                       child: Icon(
@@ -305,7 +310,7 @@ Dialog imageDialog(
                     Text(
                       '갤러리에서 선택하기',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     )
@@ -324,6 +329,7 @@ Dialog imageDialog(
                     color: Colors.white.withOpacity(0),
                     child: ElevatedButton(
                       onPressed: () async {
+                        HapticFeedback.heavyImpact();
                         //  pop the alert
                         Navigator.of(context).pop();
                       },
@@ -367,7 +373,6 @@ Function confirmDialog(
   return () {
     final _emailController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
-    String userInput = '';
 
     bool _tryValidation() {
       final isValid = _formKey.currentState!.validate();
@@ -474,9 +479,7 @@ Function confirmDialog(
                             }
                             return null;
                           },
-                          onSaved: (value) {
-                            userInput = value!;
-                          },
+                          onSaved: (value) {},
                           textInputAction: TextInputAction.done,
                           keyboardType: TextInputType.emailAddress,
                           controller: _emailController,
@@ -531,6 +534,7 @@ Function confirmDialog(
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_tryValidation()) {
+                                HapticFeedback.heavyImpact();
                                 executableFuc1();
                                 executableFuc2();
                                 showDialog(
@@ -573,6 +577,7 @@ Function confirmDialog(
                           color: Colors.white.withOpacity(0),
                           child: ElevatedButton(
                             onPressed: () {
+                              HapticFeedback.heavyImpact();
                               //  pop the alert
                               Navigator.of(context).pop();
                             },
@@ -699,6 +704,7 @@ Container userProfile(
                             color: Colors.white.withOpacity(0),
                             child: ElevatedButton(
                               onPressed: () async {
+                                HapticFeedback.heavyImpact();
                                 //  pop the alert
                                 Future.delayed(
                                     const Duration(milliseconds: 200), () {

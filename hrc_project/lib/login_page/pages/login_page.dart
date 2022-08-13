@@ -177,12 +177,13 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           // exit icon button
                           Padding(
-                            padding: EdgeInsets.only(right: 20, top: 15),
+                            padding: EdgeInsets.only(right: 20, top: 25),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 GestureDetector(
                                   onTap: () {
+                                    HapticFeedback.heavyImpact();
                                     FocusScope.of(context).unfocus();
                                     showDialog(
                                         context: context,

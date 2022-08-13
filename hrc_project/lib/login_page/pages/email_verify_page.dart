@@ -107,12 +107,13 @@ class _EmailVerifyState extends State<EmailVerify> {
             children: [
               //  Page back arrow
               Padding(
-                padding: EdgeInsets.only(left: 20, top: 15),
+                padding: EdgeInsets.only(left: 20, top: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     GestureDetector(
                       onTap: () async {
+                        HapticFeedback.heavyImpact();
                         await FirebaseAuth.instance.signOut();
                         Navigator.of(context).pop();
                       },
