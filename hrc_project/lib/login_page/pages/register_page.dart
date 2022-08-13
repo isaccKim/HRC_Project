@@ -598,9 +598,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                         AutovalidateMode.onUserInteraction,
                                     child: TextFormField(
                                       validator: (value) {
-                                        if (RegExp(
-                                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                            .hasMatch(value!.trim())) {
+                                        if (RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                                .hasMatch(value!.trim()) &&
+                                            value.isNotEmpty) {
                                           emailValidate.value = 1;
                                         } else {
                                           emailValidate.value = 0;
@@ -716,7 +716,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                         AutovalidateMode.onUserInteraction,
                                     child: TextFormField(
                                       validator: (value) {
-                                        if (value!.length > 6) {
+                                        if (value!.length > 6 &&
+                                            value.isNotEmpty) {
                                           passwordLength.value = 1;
                                         } else {
                                           passwordLength.value = 0;
@@ -833,7 +834,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                     child: TextFormField(
                                       validator: (value) {
                                         if (value ==
-                                            _passwordController.text.trim()) {
+                                                _passwordController.text
+                                                    .trim() &&
+                                            value!.length > 6) {
                                           passwordIdentical.value = 1;
                                         } else {
                                           passwordIdentical.value = 0;
