@@ -231,8 +231,15 @@ class _RcRankState extends State<RcRank> with AutomaticKeepAliveClientMixin {
                         Scrollable.ensureVisible(userKey.currentContext!,
                             duration: const Duration(milliseconds: 600));
                       } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(customSnackBar('현재 소속이 없습니다.'));
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              Future.delayed(const Duration(milliseconds: 1100),
+                                  () {
+                                Navigator.pop(context);
+                              });
+                              return customAlert('현재 소속이 없습니다');
+                            });
                       }
                     },
                     child: Container(
