@@ -17,7 +17,8 @@ import 'package:percent_indicator/percent_indicator.dart';
 
 var strToday;
 late double u_sum_dist;
-late int u_sum_time;
+late String tmep;
+late int  u_sum_time;
 late int number;
 late String u_rc =' ' ;
 late double u_rc_distance = 0;
@@ -228,12 +229,12 @@ class _MapPageState extends State<MapSample> {
                 future: getUserData(),
                 builder: (context, snapshot) {
                   return CarouselSlider(
-                        options: CarouselOptions(height: MediaQuery.of(context).size.height*0.3),
+                        options: CarouselOptions(height: MediaQuery.of(context).size.height*0.34),
                         items: [0,1].map((i) {
                           return Builder(
                             builder: (BuildContext context) {
                               return Container(
-                          width: MediaQuery.of(context).size.width*1.3,
+                          width: MediaQuery.of(context).size.width,
                           child: Card(
                             shape: RoundedRectangleBorder(
                                 borderRadius:

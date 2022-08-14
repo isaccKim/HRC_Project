@@ -171,6 +171,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                                                 .width *
                                                             0.1),
                                                 onTap: () {
+                                                  updateRunningRate();
                                                   Navigator.pop(context);
                                                   Navigator.push(
                                                     context,
@@ -751,7 +752,6 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
   //  ),
    onRatingUpdate: (rating) {
      running_rate = rating;
-     updateRunningRate();
    },
 )
                         // Image.asset('image/star.png',
