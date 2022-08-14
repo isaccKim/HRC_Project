@@ -252,8 +252,15 @@ class _TimeRankState extends State<TimeRank>
                         Scrollable.ensureVisible(userKey.currentContext!,
                             duration: const Duration(milliseconds: 600));
                       } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(customSnackBar('랭킹 정보가 없습니다.'));
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              Future.delayed(const Duration(milliseconds: 1100),
+                                  () {
+                                Navigator.pop(context);
+                              });
+                              return customAlert('랭킹 정보가 없습니다');
+                            });
                       }
                     },
                     child: Container(

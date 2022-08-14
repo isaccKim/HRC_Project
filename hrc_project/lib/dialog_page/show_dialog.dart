@@ -533,6 +533,7 @@ Function confirmDialog(
                           color: Colors.white.withOpacity(0),
                           child: ElevatedButton(
                             onPressed: () async {
+                              HapticFeedback.heavyImpact();
                               if (_tryValidation()) {
                                 HapticFeedback.heavyImpact();
                                 executableFuc1();
@@ -848,22 +849,23 @@ List<Color> rankBadge(String rank) {
   }
 }
 
-//  Snack bar
-SnackBar customSnackBar(String message) {
-  return SnackBar(
-    content: Text(
-      message,
-      style: TextStyle(
-        color: Color.fromARGB(255, 46, 36, 80),
+//  AlertDialog
+Padding customAlert(String message) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 25),
+    child: AlertDialog(
+      title: Center(
+        child: Text(
+          message,
+          style: TextStyle(
+            fontSize: 17,
+          ),
+        ),
       ),
-      textAlign: TextAlign.center,
-    ),
-    margin: EdgeInsets.only(bottom: 300, left: 50, right: 50),
-    backgroundColor: Colors.white, //const Color.fromARGB(255, 46, 36, 80),
-    duration: Duration(milliseconds: 900),
-    behavior: SnackBarBehavior.floating,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(5),
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
     ),
   );
 }
