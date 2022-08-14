@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:hrc_project/ranking_board_page/ranking_board_design/rc_ranking_board_design.dart';
 import 'package:hrc_project/ranking_board_page/read_data/get_rc_data.dart';

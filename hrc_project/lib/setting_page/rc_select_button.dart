@@ -36,6 +36,7 @@ Widget rcSelectButton(
       HapticFeedback.heavyImpact();
       FocusScope.of(context).unfocus();
       showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return rcSelectDialogWidget(

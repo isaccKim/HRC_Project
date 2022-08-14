@@ -32,6 +32,7 @@ class _RankingBoardPageState extends State<RankingBoardPage> {
     if (isExite) {
       isExite = false;
       showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) {
             return alternativeDialog(
