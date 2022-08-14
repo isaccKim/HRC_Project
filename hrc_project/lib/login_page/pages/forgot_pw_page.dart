@@ -113,7 +113,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ],
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
                   //  HRC Logo
                   Row(
@@ -133,13 +132,27 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: Text(
-                      'Enter your Email and we will send you a password reset link',
+                    child: Text.rich(
+                      TextSpan(
+                        text: 'Enter your ',
+                        children: const [
+                          TextSpan(
+                            text: 'ID(email)',
+                            style: TextStyle(
+                              fontSize: 19,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ' and we will send you a password reset link',
+                          ),
+                        ],
+                      ),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 17,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
+                        fontSize: 17,
                       ),
                     ),
                   ),
