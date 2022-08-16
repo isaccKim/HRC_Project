@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hrc_project/nav_bar/navigation_bar.dart';
+import 'package:hrc_project/ranking_board_page/read_data/get_rc_data.dart';
 import 'package:hrc_project/running_main/showmap.dart';
 import 'package:hrc_project/running_main/stop.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +21,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 double? t_distance;
 double? t_pace;
 double? t_t;
-double? running_rate;
+double? running_rate = null;
 final List numbers = [
   ['calorie', '0', 'kcal'],
   ['distance', '0', 'km'],
@@ -269,7 +270,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              'Running Record',
+                                              'Personal Record',
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 color: Colors.white,
@@ -469,6 +470,13 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                                           FontStyle.italic,
                                                     ),
                                                   ),
+                                                   SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.03,
+                                                  ),
                                                   Image.asset(
                                                     'image/run.png',
                                                     width:
@@ -481,22 +489,6 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                                                 .size
                                                                 .width *
                                                             0.04,
-                                                  ),
-                                                  SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.01,
-                                                  ),
-                                                  Text(
-                                                    '${sum_record[i][3]}',
-                                                    style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -515,121 +507,125 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                           height: MediaQuery.of(context).size.height * 0.04,
                         ),
                         // Goal Container
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Color.fromARGB(0, 65, 188, 226)
-                                  .withOpacity(0.8),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          height: MediaQuery.of(context).size.height * 0.14,
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.03,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                        FutureBuilder(
+                          future: (_get_update_RcData()),
+                          builder: (context, snapshot) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                  color: Color.fromARGB(0, 65, 188, 226)
+                                      .withOpacity(0.8),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: MediaQuery.of(context).size.height * 0.14,
+                              child: Row(
                                 children: [
-                                  Image.asset(
-                                    'image/trophy.png',
-                                    width: MediaQuery.of(context).size.width *
-                                        0.09,
-                                    height: MediaQuery.of(context).size.width *
-                                        0.09,
-                                  ),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.01,
+                                    width: MediaQuery.of(context).size.width * 0.03,
                                   ),
-                                  Text(
-                                    'RC Goal: 100km ',
-                                    style: TextStyle(
-                                      fontSize: 9,
-                                      color: Color.fromARGB(255, 41, 39, 39),
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.03,
+                                      Image.asset(
+                                        'image/trophy.png',
+                                        width: MediaQuery.of(context).size.width *
+                                            0.09,
+                                        height: MediaQuery.of(context).size.width *
+                                            0.09,
                                       ),
-                                      Row(
+                                      SizedBox(
+                                        height: MediaQuery.of(context).size.height *
+                                            0.01,
+                                      ),
+                                      Text(
+                                        'RC Goal: 100km ',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Color.fromARGB(255, 41, 39, 39),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.01,
+                                            height:
+                                                MediaQuery.of(context).size.height *
+                                                    0.03,
                                           ),
-                                          Text(
-                                            'Current: 35km',
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontStyle: FontStyle.italic,
-                                            ),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.01,
+                                              ),
+                                              Text(
+                                                'Current: ${u_sum_dist}km',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.15,
+                                              ),
+                                              Text(
+                                                '${(u_rc_distance/30*100).toStringAsFixed(2)}%',
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                           SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.15,
+                                            height:
+                                                MediaQuery.of(context).size.height *
+                                                    0.01,
                                           ),
-                                          Text(
-                                            '${sum_record[0][4]}%',
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 3),
+                                            child: Center(
+                                              child: new LinearPercentIndicator(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.55,
+                                                animation: true,
+                                                lineHeight: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.01,
+                                                animationDuration: 2000,
+                                                percent: prc[0],
+                                                barRadius: Radius.circular(20),
+                                                linearStrokeCap:
+                                                    LinearStrokeCap.roundAll,
+                                                progressColor: Colors.greenAccent,
+                                              ),
                                             ),
                                           ),
                                         ],
-                                      ),
-                                      SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.01,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 3),
-                                        child: Center(
-                                          child: new LinearPercentIndicator(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.55,
-                                            animation: true,
-                                            lineHeight: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.01,
-                                            animationDuration: 2000,
-                                            percent: prc[0],
-                                            barRadius: Radius.circular(20),
-                                            linearStrokeCap:
-                                                LinearStrokeCap.roundAll,
-                                            progressColor: Colors.greenAccent,
-                                          ),
-                                        ),
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
+                            );
+                          }
                         ),
                         FutureBuilder(
                             future: getRunDocs(),
@@ -873,7 +869,6 @@ class FilledRadio<T> extends StatelessWidget {
     );
   }
 }
-
 Future updateRunningRate() async {
 Util ut = new Util();
 final user = await FirebaseAuth.instance.currentUser;
@@ -886,5 +881,19 @@ final userData =
       .doc(recent_doscs_id)
       .update({
     'running_rate': running_rate
+  });
+}
+
+_get_update_RcData() async {
+  final rcData =
+      await FirebaseFirestore.instance.collection('rc').doc(u_rc);
+  await rcData.get().then(
+        (value) => {
+          u_rc_distance = value['sum_distance'],
+        }, 
+      );
+      u_sum_dist += double.parse((dist / 1000).toStringAsFixed(2));
+  await rcData.update({
+    'sum_distance': u_rc_distance.toStringAsFixed(2)
   });
 }
