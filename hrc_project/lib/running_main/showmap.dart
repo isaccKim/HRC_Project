@@ -78,7 +78,7 @@ Future getUserData() async {
   sum_record[1][2] = (u_sum_time / 3600).toStringAsFixed(2) + ' hours';
 
   temp_dist = u_sum_dist;
-  temp_prc = temp_dist / 30 * 100;
+  temp_prc = temp_dist / 75 * 100;
   prc[0] = temp_prc / 100; // 거리 퍼센트
   if (prc[0] > 1) {
     prc[0] = 1.0;
@@ -220,6 +220,9 @@ class _MapPageState extends State<MapSample> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.1,
+            ),
             FutureBuilder(
                 future: getUserData(),
                 builder: (context, snapshot) {
@@ -235,7 +238,7 @@ class _MapPageState extends State<MapSample> {
                               shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(30.0))),
-                              color: Color.fromARGB(0, 18, 13, 65)
+                              color: Color.fromARGB(0, 16, 13, 65)
                                   .withOpacity(0.8),
                               child: Column(
                                 children: [
@@ -249,7 +252,7 @@ class _MapPageState extends State<MapSample> {
                                       Text(
                                         'Personal Record',
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 16,
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                           fontStyle: FontStyle.italic,
@@ -298,7 +301,7 @@ class _MapPageState extends State<MapSample> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.5,
+                                                0.47,
                                           ),
                                           Text(
                                             '${sum_record[i][4]} %',
@@ -509,22 +512,221 @@ class _MapPageState extends State<MapSample> {
                                   builder: (BuildContext context) {
                                     return Dialog(
                                       backgroundColor:
-                                          Color.fromARGB(255, 122, 236, 125),
+                                          const Color.fromARGB(255, 35, 25, 60).withOpacity(0.75),
+                                      
                                       child: Container(
                                           width:
                                               MediaQuery.of(context).size.width,
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height *
-                                              0.6,
+                                              0.75,
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Color.fromARGB(
-                                                255, 122, 236, 125),
+                                                BorderRadius.circular(20),
+                                            color: const Color.fromARGB(
+                                                255, 35, 25, 60).withOpacity(0.75),
                                           ),
                                           child: Column(
                                             children: [
+                                              SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.03,
+                                              ),
+                                              Row(
+                                                //crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Image.asset('image/goal.png',height: MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.06,),
+                                                         SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.03,
+                                              ),
+                                                        Text(getMonth()+' Goal',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 20,
+                                                        ),),
+                                                ],
+                                              ),
+                                                    SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.02,
+                                              ),
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.7,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.16,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.white
+                                                      .withOpacity(0.1),
+                                                ),
+                                                child: Row(children: [
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.04,
+                                                  ),
+                                                  Center(
+                                                    child: Column(
+                                                      children: [
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.03,
+                                                        ),
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.05,
+                                                        ),
+                                                        Text(
+                                                          'Distance',
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      246,
+                                                                      246,
+                                                                      246),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontStyle:
+                                                                  FontStyle
+                                                                      .italic),
+                                                        ),
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.01,
+                                                        ),
+                                                        Image.asset(
+                                                          'image/distance.png',
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.14,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  //SizedBox(width: MediaQuery.of(context).size.width*0.04,),
+                                                  Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.06,
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(7.0),
+                                                        child: Center(
+                                                          child:
+                                                              new LinearPercentIndicator(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.45,
+                                                            animation: true,
+                                                            lineHeight:
+                                                                MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.01,
+                                                            animationDuration:
+                                                                2000,
+                                                            percent: 1,
+                                                            barRadius:
+                                                                Radius.circular(
+                                                                    20),
+                                                            linearStrokeCap:
+                                                                LinearStrokeCap
+                                                                    .roundAll,
+                                                            progressColor: Colors
+                                                                .greenAccent,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.02,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.2,
+                                                          ),
+                                                          Image.asset(
+                                                            'image/trophy.png',
+                                                            width: 20,
+                                                          ),
+                                                          SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.02,
+                                                          ),
+                                                          Text(
+                                                            '50 km',
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      246,
+                                                                      246,
+                                                                      246),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ]),
+                                              ),
                                               SizedBox(
                                                 height: MediaQuery.of(context)
                                                         .size
@@ -539,23 +741,349 @@ class _MapPageState extends State<MapSample> {
                                                 height: MediaQuery.of(context)
                                                         .size
                                                         .height *
-                                                    0.13,
-                                                
+                                                    0.16,
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
-                                                  color: Color.fromARGB(
-                                                      255, 51, 224, 210),
+                                                  color: Colors.white
+                                                      .withOpacity(0.1),
                                                 ),
+                                                child: Row(children: [
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.04,
+                                                  ),
+                                                  Center(
+                                                    child: Column(
+                                                      children: [
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.03,
+                                                        ),
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.05,
+                                                        ),
+                                                        Text(
+                                                          'Time',
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      246,
+                                                                      246,
+                                                                      246),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontStyle:
+                                                                  FontStyle
+                                                                      .italic),
+                                                        ),
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.01,
+                                                        ),
+                                                        Image.asset(
+                                                          'image/stopwatch.png',
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.14,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  //SizedBox(width: MediaQuery.of(context).size.width*0.04,),
+                                                  Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.06,
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(7.0),
+                                                        child: Center(
+                                                          child:
+                                                              new LinearPercentIndicator(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.45,
+                                                            animation: true,
+                                                            lineHeight:
+                                                                MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.01,
+                                                            animationDuration:
+                                                                2000,
+                                                            percent: 1,
+                                                            barRadius:
+                                                                Radius.circular(
+                                                                    20),
+                                                            linearStrokeCap:
+                                                                LinearStrokeCap
+                                                                    .roundAll,
+                                                            progressColor: Colors
+                                                                .greenAccent,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.02,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.2,
+                                                          ),
+                                                          Image.asset(
+                                                            'image/trophy.png',
+                                                            width: 20,
+                                                          ),
+                                                          SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.02,
+                                                          ),
+                                                          Text(
+                                                            '4 hours',
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      246,
+                                                                      246,
+                                                                      246),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ]),
                                               ),
-                                              ElevatedButton.icon(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                icon: const Icon(
-                                                  Icons.close,
+                                              SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.03,
+                                              ),
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.7,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.16,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.white
+                                                      .withOpacity(0.1),
                                                 ),
-                                                label: const Text('close'),
+                                                child: Row(children: [
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.04,
+                                                  ),
+                                                  Center(
+                                                    child: Column(
+                                                      children: [
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.03,
+                                                        ),
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.05,
+                                                        ),
+                                                        Text(
+                                                          'RC',
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      246,
+                                                                      246,
+                                                                      246),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontStyle:
+                                                                  FontStyle
+                                                                      .italic),
+                                                        ),
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.01,
+                                                        ),
+                                                        Image.asset(
+                                                          'image/dorm.png',
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.14,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.06,
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(7.0),
+                                                        child: Center(
+                                                          child:
+                                                              new LinearPercentIndicator(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.45,
+                                                            animation: true,
+                                                            lineHeight:
+                                                                MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.01,
+                                                            animationDuration:
+                                                                2000,
+                                                            percent: 1,
+                                                            barRadius:
+                                                                Radius.circular(
+                                                                    20),
+                                                            linearStrokeCap:
+                                                                LinearStrokeCap
+                                                                    .roundAll,
+                                                            progressColor: Colors
+                                                                .greenAccent,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.02,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.2,
+                                                          ),
+                                                          Image.asset(
+                                                            'image/trophy.png',
+                                                            width: 20,
+                                                          ),
+                                                          SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.02,
+                                                          ),
+                                                          Text(
+                                                            '100 km',
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      246,
+                                                                      246,
+                                                                      246),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ]),
+                                              ),
+                                              SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height*
+                                                    0.02,
+                                              ),
+                                              InkWell(
+                                                child: Image.asset(
+                                                  'image/out.png',
+                                                  width: 50,
+                                                ),
+                                                onTap: () {
+                                                  Navigator.pop(
+                                                    context,
+                                                  );
+                                                },
                                               ),
                                             ],
                                           )),
@@ -570,7 +1098,8 @@ class _MapPageState extends State<MapSample> {
                               color: Color.fromARGB(255, 97, 89, 22),
                               fontWeight: FontWeight.bold,
                             ),
-                          )
+                          ),
+                          SizedBox(height: MediaQuery.of(context).size.height*0.1,),
                         ],
                       ),
                     ],

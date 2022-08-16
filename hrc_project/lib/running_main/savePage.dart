@@ -173,7 +173,6 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                                             0.1),
                                                 onTap: () {
                                                   updateRunningRate();
-                                                  _updateRCData();
                                                   Navigator.pop(context);
                                                   Navigator.push(
                                                     context,
@@ -509,7 +508,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                         ),
                         // Goal Container
                         FutureBuilder(
-                          future: (_getRcData()),
+                          future: (_get_update_RcData()),
                           builder: (context, snapshot) {
                             return Container(
                               decoration: BoxDecoration(
@@ -568,7 +567,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                                     0.01,
                                               ),
                                               Text(
-                                                'Current: ${u_rc_distance}km',
+                                                'Current: ${u_sum_dist}km',
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   color: Colors.white,
@@ -885,7 +884,7 @@ final userData =
   });
 }
 
-_getRcData() async {
+_get_update_RcData() async {
   final rcData =
       await FirebaseFirestore.instance.collection('rc').doc(u_rc);
   await rcData.get().then(
@@ -893,13 +892,8 @@ _getRcData() async {
           u_rc_distance = value['sum_distance'],
         }, 
       );
-}
-
-Future _updateRCData() async {
-final rcData =
-      await FirebaseFirestore.instance.collection('rc').doc(u_rc);
+      u_sum_dist += double.parse((dist / 1000).toStringAsFixed(2));
   await rcData.update({
-    'temp': 32.1,
+    'sum_distance': u_rc_distance.toStringAsFixed(2)
   });
-  //u_sum_dist += double.parse((dist / 1000).toStringAsFixed(2));
 }
