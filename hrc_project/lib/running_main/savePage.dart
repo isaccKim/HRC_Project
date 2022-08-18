@@ -21,7 +21,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 double? t_distance;
 double? t_pace;
 double? t_t;
-double? running_rate = null;
+String? running_rate = '0';
 final List numbers = [
   ['calorie', '0', 'kcal'],
   ['distance', '0', 'km'],
@@ -747,7 +747,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
      color: Colors.amber,
    ),
    onRatingUpdate: (rating) {
-     running_rate = rating;
+     running_rate = rating.toStringAsFixed(2);
    },
 )
                       ],
