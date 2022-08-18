@@ -110,7 +110,7 @@ class _DashBoardState extends State<DashBoard> {
                     children: [
                       DailyMain(),
                       Weekly(),
-                      MainBox.getContainer(Monthly()),
+                      Monthly(),
                       MainBox.getContainer(Yearly()),
                     ],
                   ),
