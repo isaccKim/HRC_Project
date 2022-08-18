@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hrc_project/login_page/auth/auth_page.dart';
 import 'package:hrc_project/nav_bar/navigation_bar.dart';
 import 'email_verify_page.dart';
 import 'forgot_pw_page.dart';

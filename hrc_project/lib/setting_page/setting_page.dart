@@ -127,6 +127,7 @@ class _SettingPageState extends State<SettingPage> {
         //  update completion alert
         Future.delayed(const Duration(milliseconds: 900), () {
           showDialog(
+              barrierDismissible: false,
               context: context,
               builder: (context) {
                 return flexibleDialog(context, 200, 30, '알림', 15,
@@ -142,6 +143,7 @@ class _SettingPageState extends State<SettingPage> {
         //  update data format alert
         Future.delayed(const Duration(milliseconds: 900), () {
           showDialog(
+              barrierDismissible: false,
               context: context,
               builder: (context) {
                 return flexibleDialog(context, 200, 30, '알림', 15, e.toString(),
@@ -158,6 +160,7 @@ class _SettingPageState extends State<SettingPage> {
       // height, weight form alert
       Future.delayed(const Duration(milliseconds: 900), () {
         showDialog(
+            barrierDismissible: false,
             context: context,
             builder: (context) {
               return flexibleDialog(context, 200, 30, '알림', 15, e.toString(),
@@ -316,6 +319,7 @@ class _SettingPageState extends State<SettingPage> {
     if (isExite) {
       isExite = false;
       showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) {
             return alternativeDialog(
@@ -464,6 +468,7 @@ class _SettingPageState extends State<SettingPage> {
                                                 FocusScope.of(context)
                                                     .unfocus();
                                                 showDialog(
+                                                    barrierDismissible: false,
                                                     context: context,
                                                     builder: (context) {
                                                       return imageDialog(
@@ -847,6 +852,7 @@ class _SettingPageState extends State<SettingPage> {
                       ? () {
                           HapticFeedback.heavyImpact();
                           showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (context) {
                               return alternativeDialog(
@@ -946,6 +952,7 @@ class _SettingPageState extends State<SettingPage> {
                           onPressed: () {
                             HapticFeedback.heavyImpact();
                             showDialog(
+                              barrierDismissible: false,
                               context: context,
                               builder: (context) {
                                 return alternativeDialog(
@@ -990,6 +997,7 @@ class _SettingPageState extends State<SettingPage> {
                           onPressed: () {
                             HapticFeedback.heavyImpact();
                             showDialog(
+                              barrierDismissible: false,
                               context: context,
                               builder: (context) {
                                 return alternativeDialog(
