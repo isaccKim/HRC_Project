@@ -85,10 +85,12 @@ class _EmailVerifyState extends State<EmailVerify> {
     await userData.delete();
 
     //  delete user account
-    user.delete();
+    await user.delete().then((value) async {
+      await FirebaseAuth.instance.signOut();
+    });
 
-    //  signOut
-    await FirebaseAuth.instance.signOut();
+    // //  signOut
+    // await FirebaseAuth.instance.signOut();
   }
 
   @override
@@ -105,12 +107,13 @@ class _EmailVerifyState extends State<EmailVerify> {
             children: [
               //  Page back arrow
               Padding(
-                padding: EdgeInsets.only(left: 20, top: 15),
+                padding: EdgeInsets.only(left: 20, top: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     GestureDetector(
                       onTap: () async {
+                        HapticFeedback.heavyImpact();
                         await FirebaseAuth.instance.signOut();
                         Navigator.of(context).pop();
                       },

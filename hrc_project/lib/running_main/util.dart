@@ -22,6 +22,14 @@ class  Util{
     return time;
   }
   
+  double calculator_percent(double n,double g){
+    double percent= 1;
+     percent = n/g;
+     if(percent>1){
+       percent = 1;
+     }
+    return percent;
+  }
 }
 
   

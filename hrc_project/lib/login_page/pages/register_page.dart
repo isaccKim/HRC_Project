@@ -145,7 +145,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     context: context,
                     builder: (context) {
                       return flexibleDialog(context, 200, 30, '알림', 15,
-                          e.message.toString(), 17, () {}, () {}, () {}, () {});
+                          e.message.toString(), 14, () {}, () {}, () {}, () {});
                     });
               }
             } catch (e) {
@@ -157,7 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   context: context,
                   builder: (context) {
                     return flexibleDialog(context, 200, 30, '알림', 15,
-                        e.toString(), 16, () {}, () {}, () {}, () {});
+                        e.toString(), 15, () {}, () {}, () {}, () {});
                   });
             }
           } else {
@@ -174,7 +174,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       '알림',
                       15,
                       '비밀번호를 다시 확인해 주십시오.\n(7자 이상의 비밀번호를 사용해 주세요)',
-                      15,
+                      14,
                       () {},
                       () {},
                       () {},
@@ -189,7 +189,7 @@ class _RegisterPageState extends State<RegisterPage> {
               context: context,
               builder: (context) {
                 return flexibleDialog(context, 200, 30, '알림', 15,
-                    '올바른 형식의 이메일을 입력해주세요.', 16, () {}, () {}, () {}, () {});
+                    '올바른 형식의 이메일을 입력해주세요.', 15, () {}, () {}, () {}, () {});
               });
         }
       }
@@ -326,6 +326,11 @@ class _RegisterPageState extends State<RegisterPage> {
     'Kuyper'
   ];
 
+  //  ID/PW validator
+  final ValueNotifier<int> emailValidate = ValueNotifier<int>(0);
+  final ValueNotifier<int> passwordLength = ValueNotifier<int>(0);
+  final ValueNotifier<int> passwordIdentical = ValueNotifier<int>(0);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -347,7 +352,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         GestureDetector(
-                          onTap: widget.showLoginPage,
+                          onTap: () {
+                            HapticFeedback.heavyImpact();
+                            widget.showLoginPage();
+                          },
                           child: Icon(
                             Icons.arrow_back,
                             color: Colors.white,
@@ -380,7 +388,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: Container(
-                          height: 260,
+                          height: 280,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
@@ -408,10 +416,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       // profile image picker dialog
                       Padding(
-                        padding: const EdgeInsets.only(top: 50.0),
+                        padding: const EdgeInsets.only(top: 55.0),
                         child: Center(
                           child: GestureDetector(
                             onTap: () {
+                              HapticFeedback.heavyImpact();
                               showDialog(
                                   context: context,
                                   builder: (context) {
@@ -463,35 +472,53 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       //  User name textField
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(70, 180, 70, 0),
-                        child: TextField(
-                          textInputAction: TextInputAction.none,
-                          controller: _userNameController,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            suffixIcon: GestureDetector(
-                              child: Icon(
-                                Icons.cancel,
-                                color: Color.fromRGBO(129, 97, 208, 0.75),
+                        padding: const EdgeInsets.fromLTRB(70, 170, 70, 0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  ' User name',
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.5),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 3),
+                            TextField(
+                              textInputAction: TextInputAction.none,
+                              controller: _userNameController,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.person),
+                                suffixIcon: GestureDetector(
+                                  child: Icon(
+                                    Icons.cancel,
+                                    color: Color.fromRGBO(129, 97, 208, 0.75),
+                                  ),
+                                  onTap: () => _userNameController.clear(),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.deepPurpleAccent),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                hintText: 'User Name',
+                                fillColor: Colors.grey[200],
+                                filled: true,
                               ),
-                              onTap: () => _userNameController.clear(),
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.deepPurpleAccent),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            hintText: 'User Name',
-                            fillColor: Colors.grey[200],
-                            filled: true,
-                          ),
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
+                          ],
                         ),
                       ),
                     ],
@@ -517,7 +544,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: Container(
-                          height: 285,
+                          height: 445,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
@@ -550,73 +577,232 @@ class _RegisterPageState extends State<RegisterPage> {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
-                              child: TextField(
-                                textInputAction: TextInputAction.next,
-                                keyboardType: TextInputType.emailAddress,
-                                controller: _emailController,
-                                decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.email),
-                                  suffixIcon: GestureDetector(
-                                    child: Icon(
-                                      Icons.cancel,
-                                      color: Color.fromRGBO(129, 97, 208, 0.75),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        ' ID(email)',
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.5),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 3),
+                                  Form(
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    child: TextFormField(
+                                      validator: (value) {
+                                        if (RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                                .hasMatch(value!.trim()) &&
+                                            value.isNotEmpty) {
+                                          emailValidate.value = 1;
+                                        } else {
+                                          emailValidate.value = 0;
+                                        }
+                                      },
+                                      textInputAction: TextInputAction.done,
+                                      keyboardType: TextInputType.emailAddress,
+                                      controller: _emailController,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.email),
+                                        suffixIcon: GestureDetector(
+                                            child: Icon(
+                                              Icons.cancel,
+                                              color: Color.fromRGBO(
+                                                  129, 97, 208, 0.75),
+                                            ),
+                                            onTap: () {
+                                              _emailController.clear();
+                                              emailValidate.value = 0;
+                                            }),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.deepPurpleAccent),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        hintText: 'Email address',
+                                        fillColor: Colors.grey[200],
+                                        filled: true,
+                                      ),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                    onTap: () => _emailController.clear(),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
+                                ],
+                              ),
+                            ),
+
+                            // email validator
+                            Padding(
+                              padding: const EdgeInsets.only(left: 55, top: 3),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ValueListenableBuilder(
+                                    valueListenable: emailValidate,
+                                    builder: (context, value, child) {
+                                      return Row(
+                                        children: [
+                                          value == 0
+                                              ? Icon(
+                                                  Icons.done,
+                                                  color: Colors.grey,
+                                                  size: 20,
+                                                )
+                                              : Icon(
+                                                  Icons.done,
+                                                  color: Colors.lightBlueAccent
+                                                      .withOpacity(0.9),
+                                                  size: 20,
+                                                ),
+                                          Text(
+                                            ' Valid email form',
+                                            style: TextStyle(
+                                              color: value == 0
+                                                  ? Colors.white
+                                                      .withOpacity(0.5)
+                                                  : Colors.lightBlueAccent
+                                                      .withOpacity(0.9),
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  hintText: 'Email address',
-                                  fillColor: Colors.grey[200],
-                                  filled: true,
-                                ),
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
+                                ],
                               ),
                             ),
 
                             SizedBox(height: 10),
 
-                            //  password textField
+                            //  password textFormField
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
-                              child: TextField(
-                                textInputAction: TextInputAction.next,
-                                obscureText: true,
-                                controller: _passwordController,
-                                decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.lock),
-                                  suffixIcon: GestureDetector(
-                                    child: Icon(
-                                      Icons.cancel,
-                                      color: Color.fromRGBO(129, 97, 208, 0.75),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        ' Password',
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.5),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 3),
+                                  Form(
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    child: TextFormField(
+                                      validator: (value) {
+                                        if (value!.length > 6 &&
+                                            value.isNotEmpty) {
+                                          passwordLength.value = 1;
+                                        } else {
+                                          passwordLength.value = 0;
+                                        }
+                                      },
+                                      textInputAction: TextInputAction.done,
+                                      obscureText: true,
+                                      controller: _passwordController,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.lock),
+                                        suffixIcon: GestureDetector(
+                                            child: Icon(
+                                              Icons.cancel,
+                                              color: Color.fromRGBO(
+                                                  129, 97, 208, 0.75),
+                                            ),
+                                            onTap: () {
+                                              _passwordController.clear();
+                                              passwordLength.value = 0;
+                                            }),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.deepPurpleAccent),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        hintText: 'Password',
+                                        fillColor: Colors.grey[200],
+                                        filled: true,
+                                      ),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                    onTap: () => _passwordController.clear(),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
+                                ],
+                              ),
+                            ),
+
+                            // password validator
+                            Padding(
+                              padding: const EdgeInsets.only(left: 55, top: 3),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ValueListenableBuilder(
+                                    valueListenable: passwordLength,
+                                    builder: (context, value, child) {
+                                      return Row(
+                                        children: [
+                                          value == 0
+                                              ? Icon(
+                                                  Icons.done,
+                                                  color: Colors.grey,
+                                                  size: 20,
+                                                )
+                                              : Icon(
+                                                  Icons.done,
+                                                  color: Colors.lightBlueAccent
+                                                      .withOpacity(0.9),
+                                                  size: 20,
+                                                ),
+                                          Text(
+                                            ' Password of 7 or more digits',
+                                            style: TextStyle(
+                                              color: value == 0
+                                                  ? Colors.white
+                                                      .withOpacity(0.5)
+                                                  : Colors.lightBlueAccent
+                                                      .withOpacity(0.9),
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  hintText: 'Password',
-                                  fillColor: Colors.grey[200],
-                                  filled: true,
-                                ),
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
+                                ],
                               ),
                             ),
 
@@ -626,36 +812,117 @@ class _RegisterPageState extends State<RegisterPage> {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
-                              child: TextField(
-                                textInputAction: TextInputAction.next,
-                                obscureText: true,
-                                controller: _confirmPasswordController,
-                                decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.lock),
-                                  suffixIcon: GestureDetector(
-                                    child: Icon(
-                                      Icons.cancel,
-                                      color: Color.fromRGBO(129, 97, 208, 0.75),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        ' Confirm Password',
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.5),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 3),
+                                  Form(
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    child: TextFormField(
+                                      validator: (value) {
+                                        if (value ==
+                                                _passwordController.text
+                                                    .trim() &&
+                                            value!.length > 6) {
+                                          passwordIdentical.value = 1;
+                                        } else {
+                                          passwordIdentical.value = 0;
+                                        }
+                                      },
+                                      textInputAction: TextInputAction.done,
+                                      obscureText: true,
+                                      controller: _confirmPasswordController,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.lock),
+                                        suffixIcon: GestureDetector(
+                                            child: Icon(
+                                              Icons.cancel,
+                                              color: Color.fromRGBO(
+                                                  129, 97, 208, 0.75),
+                                            ),
+                                            onTap: () {
+                                              _confirmPasswordController
+                                                  .clear();
+                                              passwordIdentical.value = 0;
+                                            }),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.deepPurpleAccent),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        hintText: 'Confirm Password',
+                                        fillColor: Colors.grey[200],
+                                        filled: true,
+                                      ),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                    onTap: () =>
-                                        _confirmPasswordController.clear(),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
+                                ],
+                              ),
+                            ),
+
+                            // confirm password validator
+                            Padding(
+                              padding: const EdgeInsets.only(left: 55, top: 3),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ValueListenableBuilder(
+                                    valueListenable: passwordIdentical,
+                                    builder: (context, value, child) {
+                                      return Row(
+                                        children: [
+                                          value == 0
+                                              ? Icon(
+                                                  Icons.done,
+                                                  color: Colors.grey,
+                                                  size: 20,
+                                                )
+                                              : Icon(
+                                                  Icons.done,
+                                                  color: Colors.lightBlueAccent
+                                                      .withOpacity(0.9),
+                                                  size: 20,
+                                                ),
+                                          Text(
+                                            ' Identical password',
+                                            style: TextStyle(
+                                              color: value == 0
+                                                  ? Colors.white
+                                                      .withOpacity(0.5)
+                                                  : Colors.lightBlueAccent
+                                                      .withOpacity(0.9),
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  hintText: 'Confirm Password',
-                                  fillColor: Colors.grey[200],
-                                  filled: true,
-                                ),
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
+                                ],
                               ),
                             ),
                           ],
@@ -672,7 +939,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: Container(
-                          height: 215,
+                          height: 275,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
@@ -704,38 +971,59 @@ class _RegisterPageState extends State<RegisterPage> {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
-                              child: TextField(
-                                textInputAction: TextInputAction.next,
-                                keyboardType: TextInputType.number,
-                                controller: _userHeightController,
-                                decoration: InputDecoration(
-                                  suffixText: '(cm)',
-                                  suffixStyle: TextStyle(
-                                      color: Colors.black, fontSize: 15),
-                                  prefixIcon: Icon(Icons.height),
-                                  suffixIcon: GestureDetector(
-                                    child: Icon(
-                                      Icons.cancel,
-                                      color: Color.fromRGBO(129, 97, 208, 0.75),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        ' Height',
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.5),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 3),
+                                  TextField(
+                                    textInputAction: TextInputAction.next,
+                                    keyboardType: TextInputType.number,
+                                    controller: _userHeightController,
+                                    decoration: InputDecoration(
+                                      suffixText: '(cm)',
+                                      suffixStyle: TextStyle(
+                                          color: Colors.black, fontSize: 15),
+                                      prefixIcon: Icon(Icons.height),
+                                      suffixIcon: GestureDetector(
+                                        child: Icon(
+                                          Icons.cancel,
+                                          color: Color.fromRGBO(
+                                              129, 97, 208, 0.75),
+                                        ),
+                                        onTap: () =>
+                                            _userHeightController.clear(),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.deepPurpleAccent),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      hintText: 'Your height (cm)',
+                                      fillColor: Colors.grey[200],
+                                      filled: true,
                                     ),
-                                    onTap: () => _userHeightController.clear(),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  hintText: 'Your height (cm)',
-                                  fillColor: Colors.grey[200],
-                                  filled: true,
-                                ),
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
+                                ],
                               ),
                             ),
 
@@ -745,41 +1033,62 @@ class _RegisterPageState extends State<RegisterPage> {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
-                              child: TextField(
-                                onSubmitted: ((value) {
-                                  signUp();
-                                }),
-                                keyboardType: TextInputType.number,
-                                controller: _userWeightController,
-                                decoration: InputDecoration(
-                                  suffixText: '(kg)',
-                                  suffixStyle: TextStyle(
-                                      color: Colors.black, fontSize: 15),
-                                  prefixIcon:
-                                      Icon(Icons.monitor_weight_outlined),
-                                  suffixIcon: GestureDetector(
-                                    child: Icon(
-                                      Icons.cancel,
-                                      color: Color.fromRGBO(129, 97, 208, 0.75),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        ' Weight',
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.5),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 3),
+                                  TextField(
+                                    onSubmitted: ((value) {
+                                      signUp();
+                                    }),
+                                    keyboardType: TextInputType.number,
+                                    controller: _userWeightController,
+                                    decoration: InputDecoration(
+                                      suffixText: '(kg)',
+                                      suffixStyle: TextStyle(
+                                          color: Colors.black, fontSize: 15),
+                                      prefixIcon:
+                                          Icon(Icons.monitor_weight_outlined),
+                                      suffixIcon: GestureDetector(
+                                        child: Icon(
+                                          Icons.cancel,
+                                          color: Color.fromRGBO(
+                                              129, 97, 208, 0.75),
+                                        ),
+                                        onTap: () =>
+                                            _userWeightController.clear(),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.deepPurpleAccent),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      hintText: 'Your weight (kg)',
+                                      fillColor: Colors.grey[200],
+                                      filled: true,
                                     ),
-                                    onTap: () => _userWeightController.clear(),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.deepPurpleAccent),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  hintText: 'Your weight (kg)',
-                                  fillColor: Colors.grey[200],
-                                  filled: true,
-                                ),
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
+                                ],
                               ),
                             ),
                           ],
@@ -796,7 +1105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: GestureDetector(
                       onTap: () {
                         HapticFeedback.heavyImpact();
-                        signUp;
+                        signUp();
                       },
                       child: Container(
                         width: (MediaQuery.of(context).size.width * 0.6),
@@ -862,7 +1171,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
 
-                  SizedBox(height: 45),
+                  SizedBox(height: 30),
                 ],
               ),
             ),

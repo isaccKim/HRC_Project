@@ -9,10 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:hrc_project/setting_page/rc_select_button.dart';
-
 import 'package:image_picker/image_picker.dart';
-
-import '../dialog_page/rc_select_dialog.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -130,6 +127,7 @@ class _SettingPageState extends State<SettingPage> {
         //  update completion alert
         Future.delayed(const Duration(milliseconds: 900), () {
           showDialog(
+              barrierDismissible: false,
               context: context,
               builder: (context) {
                 return flexibleDialog(context, 200, 30, '알림', 15,
@@ -145,6 +143,7 @@ class _SettingPageState extends State<SettingPage> {
         //  update data format alert
         Future.delayed(const Duration(milliseconds: 900), () {
           showDialog(
+              barrierDismissible: false,
               context: context,
               builder: (context) {
                 return flexibleDialog(context, 200, 30, '알림', 15, e.toString(),
@@ -161,6 +160,7 @@ class _SettingPageState extends State<SettingPage> {
       // height, weight form alert
       Future.delayed(const Duration(milliseconds: 900), () {
         showDialog(
+            barrierDismissible: false,
             context: context,
             builder: (context) {
               return flexibleDialog(context, 200, 30, '알림', 15, e.toString(),
@@ -242,10 +242,12 @@ class _SettingPageState extends State<SettingPage> {
     await userData.delete();
 
     //  delete user account
-    await user.delete();
+    await user.delete().then((value) async {
+      await FirebaseAuth.instance.signOut();
+    });
 
-    //  signOut
-    await FirebaseAuth.instance.signOut();
+    // //  signOut
+    // await FirebaseAuth.instance.signOut();
   }
 
   @override
@@ -317,6 +319,7 @@ class _SettingPageState extends State<SettingPage> {
     if (isExite) {
       isExite = false;
       showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) {
             return alternativeDialog(
@@ -461,9 +464,11 @@ class _SettingPageState extends State<SettingPage> {
                                             //  Image edit floating button
                                             GestureDetector(
                                               onTap: () {
+                                                HapticFeedback.heavyImpact();
                                                 FocusScope.of(context)
                                                     .unfocus();
                                                 showDialog(
+                                                    barrierDismissible: false,
                                                     context: context,
                                                     builder: (context) {
                                                       return imageDialog(
@@ -845,7 +850,9 @@ class _SettingPageState extends State<SettingPage> {
                 GestureDetector(
                   onTap: isEdited
                       ? () {
+                          HapticFeedback.heavyImpact();
                           showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (context) {
                               return alternativeDialog(
@@ -943,7 +950,9 @@ class _SettingPageState extends State<SettingPage> {
                             primary: const Color.fromARGB(255, 46, 36, 80),
                           ),
                           onPressed: () {
+                            HapticFeedback.heavyImpact();
                             showDialog(
+                              barrierDismissible: false,
                               context: context,
                               builder: (context) {
                                 return alternativeDialog(
@@ -986,7 +995,9 @@ class _SettingPageState extends State<SettingPage> {
                             primary: const Color.fromARGB(255, 46, 36, 80),
                           ),
                           onPressed: () {
+                            HapticFeedback.heavyImpact();
                             showDialog(
+                              barrierDismissible: false,
                               context: context,
                               builder: (context) {
                                 return alternativeDialog(

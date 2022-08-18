@@ -60,7 +60,8 @@ dependencies:
   shake: ^2.1.0
   percent_indicator: ^4.2.2
   month_picker_dialog_2: ^0.5.4+1
- 
+  flutter_rating_bar: ^4.0.1
+
 
 
 dev_dependencies:
@@ -114,6 +115,15 @@ flutter:
     - image/ranking_board/rc images/Ky.png
     - image/distance.png
     - image/ranking_board/rc images/independent.png
+    - image/trophy.png
+    - image/star.png 
+    - image/click.png 
+    - image/save.png 
+    - image/personal.png 
+    - image/stopwatch.png 
+    - image/dorm.png 
+    - image/out.png 
+    - image/goal.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

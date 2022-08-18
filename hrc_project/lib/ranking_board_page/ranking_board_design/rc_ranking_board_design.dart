@@ -1,12 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/dialog_page/show_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrc_project/ranking_board_page/unit_conversion.dart';
 
 //  if there is no Data
-Widget noData(BuildContext context) {
+Widget noData(BuildContext context, GlobalKey typeKey) {
   return Padding(
     padding: const EdgeInsets.only(top: 90.0),
     child: Column(
@@ -18,6 +16,7 @@ Widget noData(BuildContext context) {
             children: [
               Center(
                 child: SizedBox(
+                  key: typeKey,
                   height: 400,
                   width: MediaQuery.of(context).size.width * 0.85,
                   child: RadiantGradientMask(
@@ -135,7 +134,12 @@ Widget noData(BuildContext context) {
 
 //  1st, ranking type
 Widget rcRanking1st(Map<String, dynamic> data, int number, String documentId,
-    BuildContext context, GlobalKey typeKey) {
+    BuildContext context, String userRC, GlobalKey typeKey, GlobalKey userKey) {
+  bool isMyRC = false;
+
+  if (documentId == userRC) {
+    isMyRC = true;
+  }
   return Padding(
     key: typeKey,
     padding: const EdgeInsets.only(top: 90.0),
@@ -232,6 +236,7 @@ Widget rcRanking1st(Map<String, dynamic> data, int number, String documentId,
           children: [
             Center(
               child: Container(
+                key: isMyRC ? userKey : null,
                 height: 400,
                 width: MediaQuery.of(context).size.width * 0.85,
                 child: RadiantGradientMask(
@@ -304,13 +309,19 @@ Widget rcRanking1st(Map<String, dynamic> data, int number, String documentId,
 
 //  2nd
 Widget rcRanking2nd(Map<String, dynamic> data, int number, String documentId,
-    BuildContext context) {
+    BuildContext context, String userRC, GlobalKey userKey) {
+  bool isMyRC = false;
+
+  if (documentId == userRC) {
+    isMyRC = true;
+  }
   return Align(
     heightFactor: 0.4,
     child: Stack(
       children: [
         Center(
           child: Container(
+            key: isMyRC ? userKey : null,
             height: 400,
             width: MediaQuery.of(context).size.width * 0.85,
             child: RadiantGradientMask(
@@ -381,11 +392,17 @@ Widget rcRanking2nd(Map<String, dynamic> data, int number, String documentId,
 
 //  3rd
 Widget rcRanking3rd(Map<String, dynamic> data, int number, String documentId,
-    BuildContext context) {
+    BuildContext context, String userRC, GlobalKey userKey) {
+  bool isMyRC = false;
+
+  if (documentId == userRC) {
+    isMyRC = true;
+  }
   return Stack(
     children: [
       Center(
         child: Container(
+          key: isMyRC ? userKey : null,
           height: 400,
           width: MediaQuery.of(context).size.width * 0.85,
           child: RadiantGradientMask(
@@ -455,16 +472,16 @@ Widget rcRanking3rd(Map<String, dynamic> data, int number, String documentId,
 
 //  4th or below
 Widget rcRankingDesign(Map<String, dynamic> data, int number, String documentId,
-    BuildContext context, String userRC) {
+    BuildContext context, String userRC, GlobalKey userKey) {
   bool isMyRC = false;
 
   if (documentId == userRC) {
     isMyRC = true;
   }
-
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 25.0),
     child: Container(
+      key: isMyRC ? userKey : null,
       height: 120,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(
@@ -567,7 +584,7 @@ class RadiantGradientMask extends StatelessWidget {
   }
 }
 
-//  User profile slot
+//  RC profile slot
 Widget RcImage(
   Map<String, dynamic> data,
   String documentId,
@@ -588,7 +605,6 @@ Widget RcImage(
                 '${data['rc_name']}',
                 '${data['rc_image']}',
                 '${data['message']}',
-                ' ',
                 rank,
                 () {},
                 () {},
@@ -635,7 +651,7 @@ Widget RcImage(
   );
 }
 
-//  User name, statistic
+//  RC name, statistic
 Widget RcStatic(
   Map<String, dynamic> data,
   BuildContext context,
@@ -646,6 +662,7 @@ Widget RcStatic(
   Color? unitColor,
   double unitSize,
 ) {
+  String displayedDist = convertDist('${data['sum_distance']}');
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -661,12 +678,12 @@ Widget RcStatic(
       const SizedBox(height: 5),
       Text.rich(
         TextSpan(
-          text: convertDist('${data['sum_distance']}'),
+          text: displayedDist,
           //text: '${data['sum_distance']}',
           style: TextStyle(
             fontFamily: 'Jost',
             color: staticColor,
-            fontSize: '${data['sum_distance']}'.length > 4 ? 22 : staticSize,
+            fontSize: displayedDist.length > 4 ? 22 : staticSize,
             //fontWeight: FontWeight.bold,
           ),
           children: <TextSpan>[

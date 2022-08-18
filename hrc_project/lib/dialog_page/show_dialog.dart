@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 //  with yes and no textbutton
 Dialog alternativeDialog(
@@ -60,13 +61,14 @@ Dialog alternativeDialog(
                     color: Colors.white.withOpacity(0),
                     child: ElevatedButton(
                       onPressed: () async {
+                        HapticFeedback.heavyImpact();
                         executableFuc1();
                         executableFuc2();
                         executableFuc3();
                         executableFuc4();
                       },
                       style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.white,
+                          onPrimary: Colors.blueAccent,
                           elevation: 0,
                           primary: Colors.deepPurpleAccent,
                           shape: RoundedRectangleBorder(
@@ -92,12 +94,13 @@ Dialog alternativeDialog(
                     color: Colors.white.withOpacity(0),
                     child: ElevatedButton(
                       onPressed: () {
+                        HapticFeedback.heavyImpact();
                         executableFuc5();
                         //  pop the alert
                         Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.white,
+                          onPrimary: Colors.redAccent,
                           elevation: 0,
                           primary: Colors.deepPurpleAccent,
                           shape: RoundedRectangleBorder(
@@ -181,6 +184,7 @@ Dialog flexibleDialog(
                     color: Colors.white.withOpacity(0),
                     child: ElevatedButton(
                       onPressed: () async {
+                        HapticFeedback.heavyImpact();
                         //  pop the alert
                         Navigator.of(context).pop();
                         executableFuc1();
@@ -199,7 +203,7 @@ Dialog flexibleDialog(
                             ),
                           )),
                       child: Text(
-                        '예',
+                        '확인했습니다',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -254,6 +258,7 @@ Dialog imageDialog(
                   children: [
                     GestureDetector(
                       onTap: () async {
+                        HapticFeedback.heavyImpact();
                         cameraFunc();
                       },
                       child: Icon(
@@ -265,7 +270,7 @@ Dialog imageDialog(
                     Text(
                       '카메라로 사진 찍기',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     )
@@ -293,6 +298,7 @@ Dialog imageDialog(
                   children: [
                     GestureDetector(
                       onTap: () async {
+                        HapticFeedback.heavyImpact();
                         galleryFunc();
                       },
                       child: Icon(
@@ -304,7 +310,7 @@ Dialog imageDialog(
                     Text(
                       '갤러리에서 선택하기',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     )
@@ -323,6 +329,7 @@ Dialog imageDialog(
                     color: Colors.white.withOpacity(0),
                     child: ElevatedButton(
                       onPressed: () async {
+                        HapticFeedback.heavyImpact();
                         //  pop the alert
                         Navigator.of(context).pop();
                       },
@@ -366,7 +373,6 @@ Function confirmDialog(
   return () {
     final _emailController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
-    String userInput = '';
 
     bool _tryValidation() {
       final isValid = _formKey.currentState!.validate();
@@ -435,8 +441,22 @@ Function confirmDialog(
 
                     Container(
                       padding: EdgeInsets.only(top: 30, bottom: 5),
-                      child: Text(
-                        '계정을 삭제하려면 ID(email)를 입력하세요.',
+                      child: Text.rich(
+                        TextSpan(
+                          text: '계정을 삭제하려면 ',
+                          children: [
+                            TextSpan(
+                              text: 'ID(email)',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.deepPurpleAccent,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '를 입력하세요.',
+                            ),
+                          ],
+                        ),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
@@ -459,9 +479,7 @@ Function confirmDialog(
                             }
                             return null;
                           },
-                          onSaved: (value) {
-                            userInput = value!;
-                          },
+                          onSaved: (value) {},
                           textInputAction: TextInputAction.done,
                           keyboardType: TextInputType.emailAddress,
                           controller: _emailController,
@@ -515,7 +533,9 @@ Function confirmDialog(
                           color: Colors.white.withOpacity(0),
                           child: ElevatedButton(
                             onPressed: () async {
+                              HapticFeedback.heavyImpact();
                               if (_tryValidation()) {
+                                HapticFeedback.heavyImpact();
                                 executableFuc1();
                                 executableFuc2();
                                 showDialog(
@@ -532,7 +552,7 @@ Function confirmDialog(
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                                onPrimary: Colors.white,
+                                onPrimary: Colors.blueAccent,
                                 elevation: 0,
                                 primary: Colors.deepPurpleAccent,
                                 shape: RoundedRectangleBorder(
@@ -541,7 +561,7 @@ Function confirmDialog(
                                   ),
                                 )),
                             child: Text(
-                              '확인했습니다',
+                              '삭제하기',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -558,11 +578,12 @@ Function confirmDialog(
                           color: Colors.white.withOpacity(0),
                           child: ElevatedButton(
                             onPressed: () {
+                              HapticFeedback.heavyImpact();
                               //  pop the alert
                               Navigator.of(context).pop();
                             },
                             style: ElevatedButton.styleFrom(
-                                onPrimary: Colors.white,
+                                onPrimary: Colors.redAccent,
                                 elevation: 0,
                                 primary: Colors.deepPurpleAccent,
                                 shape: RoundedRectangleBorder(
@@ -596,16 +617,33 @@ Function confirmDialog(
 //  Dialog with user profile
 Container userProfile(
   BuildContext context,
-  String user_name,
-  String user_image,
-  String email,
-  String userRC,
+  String userName,
+  String userImage,
+  String message,
   String rank,
   Function executableFuc1,
   Function executableFuc2,
   Function executableFuc3,
   Function executableFuc4,
 ) {
+  final rcNamesEn = [
+    'Philadelphos',
+    'Sonyangwon',
+    'Torrey',
+    'none',
+    'Jangkiryeo',
+    'Carmichael',
+    'Kuyper'
+  ];
+  final rcNamesKo = [
+    '열송학사 RC',
+    '손양원 RC',
+    '토레이 RC',
+    '무소속',
+    '장기려 RC',
+    '카마이클 RC',
+    '카이퍼 RC'
+  ];
   return Container(
     child: Stack(
       children: [
@@ -622,13 +660,13 @@ Container userProfile(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(height: 70),
+                    Container(height: 80),
 
                     //  user name, email, RC
                     Column(
                       children: [
                         Text(
-                          '${user_name}',
+                          '${userName}',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.black,
@@ -638,28 +676,21 @@ Container userProfile(
                         ),
                         SizedBox(height: 5),
                         Text(
-                          email.lastIndexOf('@') < 3
-                              ? '${email}'
-                              : email = email.replaceRange(
-                                  3,
-                                  '${email}'.indexOf('@'),
-                                  '*' * ('${email}'.indexOf('@') - 3)),
+                          rcNamesEn.contains(message)
+                              ? rcNamesKo[rcNamesEn.indexOf(message)]
+                              : message,
                           style: TextStyle(
                             color: Colors.grey[500],
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),
-                        Container(
-                          height: userRC != '' ? 20 : 0,
-                          child: Text(
-                            '${userRC}',
-                            style: TextStyle(
-                              color: Colors.grey[500],
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+
+                          // email.lastIndexOf('@') < 3
+                          //     ? '${email}'
+                          //     : email = email.replaceRange(
+                          //         3,
+                          //         '${email}'.indexOf('@'),
+                          //         '*' * ('${email}'.indexOf('@') - 3)),
                         ),
                       ],
                     ),
@@ -674,6 +705,7 @@ Container userProfile(
                             color: Colors.white.withOpacity(0),
                             child: ElevatedButton(
                               onPressed: () async {
+                                HapticFeedback.heavyImpact();
                                 //  pop the alert
                                 Future.delayed(
                                     const Duration(milliseconds: 200), () {
@@ -745,7 +777,7 @@ Container userProfile(
                   child: CircleAvatar(
                     radius: 45,
                     backgroundColor: Colors.grey[200],
-                    foregroundImage: NetworkImage(user_image),
+                    foregroundImage: NetworkImage(userImage),
                     child: const Icon(
                       Icons.account_circle,
                       size: 75,
@@ -815,4 +847,25 @@ List<Color> rankBadge(String rank) {
   } else {
     return [];
   }
+}
+
+//  AlertDialog
+Padding customAlert(String message) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 25),
+    child: AlertDialog(
+      title: Center(
+        child: Text(
+          message,
+          style: TextStyle(
+            fontSize: 17,
+          ),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
+    ),
+  );
 }

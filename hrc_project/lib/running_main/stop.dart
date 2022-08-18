@@ -21,18 +21,17 @@ import 'package:location/location.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+
+double speed = 0;
+double _avgSpeed = 0;
+int _speedCounter = 0;
 String user_name = '';
 String email = '';
 String user_image = '';
-
-  double dist = 0;
-  late String displayTime;
-  late int _time = 0;
-  late int _lastTime = 0;
-  double speed = 0;
-  double _avgSpeed = 0;
-  int _speedCounter = 0;
-
+double dist = 0;
+late String displayTime;
+late int _time = 0;
+late int _lastTime = 0;
 
 class stop extends StatefulWidget {
   @override
@@ -45,6 +44,7 @@ class MapSampleState extends State<stop> {
 
   late GoogleMapController _mapController;
   LatLng _center = const LatLng(0, 0);
+
   List<LatLng> route = [];
 
   late String date = getToday();
@@ -63,6 +63,18 @@ class MapSampleState extends State<stop> {
     await _stopWatchTimer.dispose(); // Need to call dispose function.
   }
 
+
+  //clear Varialbe Value
+  void set_clear() {
+    dist = 0;
+    _time = 0;
+    _lastTime = 0;
+    speed = 0;
+    _avgSpeed = 0;
+    _speedCounter = 0;
+  }
+
+  //Calculating Expression [Speed, distance]
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     double appendDist;
@@ -70,7 +82,7 @@ class MapSampleState extends State<stop> {
     _location.onLocationChanged.listen((event) {
       LatLng loc = LatLng(event.latitude!, event.longitude!);
       _mapController.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: loc, zoom: 13)));
+          CameraPosition(target: loc, zoom: 16)));
 
       if (route.length > 0) {
         appendDist = Geolocator.distanceBetween(route.last.latitude,
@@ -80,7 +92,7 @@ class MapSampleState extends State<stop> {
 
         if (_lastTime != null && timeDuration != 0) {
           speed = (appendDist / (timeDuration / 100)) * 3.6;
-          if (speed>0) {
+          if (speed != 0) {
             _avgSpeed = _avgSpeed + speed;
             _speedCounter++;
           }
@@ -96,31 +108,28 @@ class MapSampleState extends State<stop> {
           width: 5,
           startCap: Cap.roundCap,
           endCap: Cap.roundCap,
-          color: Colors.deepOrange));
+          color: Color.fromARGB(255, 48, 114, 255)));
 
       setState(() {});
     });
   }
 
-  Util ut = new Util();
   @override
   Widget build(BuildContext context) {
-    ShakeDetector detector = ShakeDetector.autoStart(
-    onPhoneShake: () {
-         _stopWatchTimer.onExecute
-                                            .add(StopWatchExecute.start);// Do stuff on phone shake
-    }
-);
+    ShakeDetector detector = ShakeDetector.autoStart(onPhoneShake: () {
+      _stopWatchTimer.onExecute
+          .add(StopWatchExecute.start); // Do stuff on phone shake
+    });
     return new Scaffold(
       body: Stack(
         children: [
           Container(
               child: GoogleMap(
             polylines: polyline,
-            zoomControlsEnabled: false,
+            zoomControlsEnabled: true,
             onMapCreated: _onMapCreated,
             myLocationEnabled: true,
-            initialCameraPosition: CameraPosition(target: _center, zoom: 11),
+            initialCameraPosition: CameraPosition(target: LatLng(37.42796133580664, -122.085749655962), zoom: 13),
           )),
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 30),
@@ -170,7 +179,6 @@ class MapSampleState extends State<stop> {
               ],
             ),
           ),
-          
           Padding(
             padding: EdgeInsets.symmetric(
                 vertical: MediaQuery.of(context).size.height * 0.05),
@@ -308,7 +316,7 @@ class MapSampleState extends State<stop> {
                                   children: [
                                     Container(
                                       child: Text(
-                                      _avgSpeed.toStringAsFixed(2),
+                                        speed.toStringAsFixed(2),
                                         style: TextStyle(
                                             fontSize: 25,
                                             color: Colors.black,
@@ -328,16 +336,16 @@ class MapSampleState extends State<stop> {
                                       ),
                                     ),
                                     SizedBox(height: 10),
-                           InkWell(
+                                    InkWell(
                                       child: Image.asset('image/stop_btn.png',
                                           width: 50, height: 50),
-                                       onLongPress: (){
+                                      onLongPress: () {
                                         startcounter();
                                         _stopWatchTimer.onExecute
                                             .add(StopWatchExecute.stop);
-                                             addSubCollection();
-                                             updatePersonalRecord();
-                                             updateRCRecord();
+                                        addSubCollection();
+                                        updatePersonalRecord();
+                                        set_clear();
                                         Navigator.pop(context);
                                         Navigator.push(
                                           context,
@@ -374,32 +382,23 @@ class MapSampleState extends State<stop> {
   }
 }
 
-Future updatePersonalRecord() async {
-Util ut = new Util();
-final user = await FirebaseAuth.instance.currentUser;
 
-final userData =
+//***************Firebase
+Future updatePersonalRecord() async {
+  Util ut = new Util();
+  final user = await FirebaseAuth.instance.currentUser;
+
+  final userData =
       await FirebaseFirestore.instance.collection('users').doc(user!.uid);
 
   u_sum_time += ut.timeToInt(displayTime);
-  u_sum_dist += double.parse((dist/1000).toStringAsFixed(2));
-  
+  u_sum_dist += double.parse((dist / 1000).toStringAsFixed(2));
+
   await userData.update({
     'sum_distance': u_sum_dist,
     'sum_time': u_sum_time,
   });
-
 }
-Future updateRCRecord() async {
-Util ut = new Util();
-    final rcData =
-      await FirebaseFirestore.instance.collection('rc').doc(u_rc);
-      u_rc_distance += double.parse((dist/1000).toStringAsFixed(2))+1.1;
-await rcData.update({
-    'sum_distance': u_rc_distance,
-  });      
-}
-
 
 Future addSubCollection() async {
   Util ut = new Util();
@@ -410,11 +409,9 @@ Future addSubCollection() async {
       .doc(user?.uid)
       .collection('running record')
       .add({
-    'distance': double.parse((dist/1000).toStringAsFixed(2)),
+    'distance': double.parse((dist / 1000).toStringAsFixed(2)),
     'time': ut.timeToInt(displayTime),
     'pace': speed,
     'date': DateTime.now(),
   });
-
-
 }

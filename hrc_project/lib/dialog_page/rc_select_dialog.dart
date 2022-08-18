@@ -54,7 +54,7 @@ class _rcSelectDialogWidgetState extends State<rcSelectDialogWidget> {
     '열송학사 RC',
     '손양원 RC',
     '토레이 RC',
-    '무소속',
+    '소속 없음',
     '장기려 RC',
     '카마이클 RC',
     '카이퍼 RC'
@@ -122,6 +122,7 @@ class _rcSelectDialogWidgetState extends State<rcSelectDialogWidget> {
                       color: Colors.white.withOpacity(0),
                       child: ElevatedButton(
                         onPressed: () async {
+                          HapticFeedback.heavyImpact();
                           //  pop the alert
                           Navigator.of(context).pop();
                           widget.executableFuc1(activeIndex);
@@ -130,7 +131,7 @@ class _rcSelectDialogWidgetState extends State<rcSelectDialogWidget> {
                           widget.executableFuc4();
                         },
                         style: ElevatedButton.styleFrom(
-                            onPrimary: Colors.white,
+                            onPrimary: Colors.blueAccent,
                             elevation: 0,
                             primary: Colors.deepPurpleAccent,
                             shape: const RoundedRectangleBorder(
@@ -139,7 +140,7 @@ class _rcSelectDialogWidgetState extends State<rcSelectDialogWidget> {
                               ),
                             )),
                         child: const Text(
-                          '선택하기',
+                          '변경하기',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -156,12 +157,13 @@ class _rcSelectDialogWidgetState extends State<rcSelectDialogWidget> {
                       color: Colors.white.withOpacity(0),
                       child: ElevatedButton(
                         onPressed: () {
+                          HapticFeedback.heavyImpact();
                           widget.executableFuc5();
                           //  pop the alert
                           Navigator.of(context).pop();
                         },
                         style: ElevatedButton.styleFrom(
-                            onPrimary: Colors.white,
+                            onPrimary: Colors.redAccent,
                             elevation: 0,
                             primary: Colors.deepPurpleAccent,
                             shape: const RoundedRectangleBorder(

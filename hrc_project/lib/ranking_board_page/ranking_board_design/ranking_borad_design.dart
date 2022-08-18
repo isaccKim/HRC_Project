@@ -8,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrc_project/ranking_board_page/unit_conversion.dart';
 
 //  if there is no Data
-Widget noData(bool isTime, BuildContext context) {
+Widget noData(bool isTime, BuildContext context, GlobalKey typeKey) {
   return Padding(
     padding: const EdgeInsets.only(top: 90.0),
     child: Column(
@@ -20,6 +20,7 @@ Widget noData(bool isTime, BuildContext context) {
             children: [
               Center(
                 child: SizedBox(
+                  key: typeKey,
                   height: 400,
                   width: MediaQuery.of(context).size.width * 0.85,
                   child: RadiantGradientMask(
@@ -200,8 +201,21 @@ Widget noData(bool isTime, BuildContext context) {
 }
 
 //  1st, ranking type
-Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
-    String documentId, BuildContext context, GlobalKey typeKey) {
+Widget ranking1st(
+    Map<String, dynamic> data,
+    int number,
+    bool isTime,
+    String documentId,
+    BuildContext context,
+    GlobalKey typeKey,
+    GlobalKey userKey) {
+  bool isMe = false;
+
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (documentId == user!.uid) {
+    isMe = true;
+  }
   return Padding(
     key: typeKey,
     padding: const EdgeInsets.only(top: 90.0),
@@ -362,6 +376,7 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
           children: [
             Center(
               child: Container(
+                key: isMe ? userKey : null,
                 height: 400,
                 width: MediaQuery.of(context).size.width * 0.85,
                 child: RadiantGradientMask(
@@ -442,13 +457,21 @@ Widget ranking1st(Map<String, dynamic> data, int number, bool isTime,
 
 //  2nd
 Widget ranking2nd(Map<String, dynamic> data, int number, bool isTime,
-    String documentId, BuildContext context) {
+    String documentId, BuildContext context, GlobalKey userKey) {
+  bool isMe = false;
+
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (documentId == user!.uid) {
+    isMe = true;
+  }
   return Align(
     heightFactor: 0.4,
     child: Stack(
       children: [
         Center(
           child: Container(
+            key: isMe ? userKey : null,
             height: 400,
             width: MediaQuery.of(context).size.width * 0.85,
             child: RadiantGradientMask(
@@ -519,11 +542,19 @@ Widget ranking2nd(Map<String, dynamic> data, int number, bool isTime,
 
 //  3rd
 Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
-    String documentId, BuildContext context) {
+    String documentId, BuildContext context, GlobalKey userKey) {
+  bool isMe = false;
+
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (documentId == user!.uid) {
+    isMe = true;
+  }
   return Stack(
     children: [
       Center(
         child: Container(
+          key: isMe ? userKey : null,
           height: 400,
           width: MediaQuery.of(context).size.width * 0.85,
           child: RadiantGradientMask(
@@ -593,7 +624,7 @@ Widget ranking3rd(Map<String, dynamic> data, int number, bool isTime,
 
 //  4th or below
 Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
-    String documentId, BuildContext context) {
+    String documentId, BuildContext context, GlobalKey userKey) {
   bool isMe = false;
 
   final user = FirebaseAuth.instance.currentUser;
@@ -604,6 +635,7 @@ Widget rankingDesign(Map<String, dynamic> data, int number, bool isTime,
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 25.0),
     child: Container(
+      key: isMe ? userKey : null,
       height: 120,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(
@@ -734,7 +766,6 @@ Widget UserImage(
                 context,
                 '${data['user_name']}',
                 '${data['user_image']}',
-                '${data['email']}',
                 '${data['user_RC']}',
                 rank,
                 () {},
@@ -794,6 +825,7 @@ Widget UserNameStatic(
   Color? unitColor,
   double unitSize,
 ) {
+  String displayedDist = convertDist('${data['sum_distance']}');
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -832,13 +864,12 @@ Widget UserNameStatic(
             )
           : Text.rich(
               TextSpan(
-                text: convertDist('${data['sum_distance']}'),
+                text: displayedDist,
                 //text: '${data['sum_distance']}',
                 style: TextStyle(
                   fontFamily: 'Jost',
                   color: staticColor,
-                  fontSize:
-                      '${data['sum_distance']}'.length > 4 ? 22 : staticSize,
+                  fontSize: displayedDist.length > 4 ? 22 : staticSize,
                   //fontWeight: FontWeight.bold,
                 ),
                 children: <TextSpan>[
