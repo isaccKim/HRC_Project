@@ -504,7 +504,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                           }).toList(),
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.04,
+                          height: MediaQuery.of(context).size.height * 0.03,
                         ),
                         // Goal Container
                         FutureBuilder(
@@ -634,7 +634,7 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 24.0),
                                 height:
-                                    MediaQuery.of(context).size.height * 0.2,
+                                    MediaQuery.of(context).size.height * 0.2+20,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: numbers.length,
@@ -741,26 +741,15 @@ class _savePageState extends State<savePage> with TickerProviderStateMixin {
    allowHalfRating: true,
    itemCount: 5,
    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-   itemBuilder: (context, _) => Image.asset('image/run_blue.png'),
-  //  Icon(
-  //    Icons.star,
-  //    color: Colors.amber,
-  //  ),
+   itemBuilder: (context, _) =>// Image.asset('image/run_blue.png'),
+   Icon(
+     Icons.star,
+     color: Colors.amber,
+   ),
    onRatingUpdate: (rating) {
      running_rate = rating;
    },
 )
-                        // Image.asset('image/star.png',
-                        //     width: MediaQuery.of(context).size.width * 0.14,
-                        //     height: MediaQuery.of(context).size.width * 0.14),
-                        // Text(
-                        //   'Intensity',
-                        //   style: TextStyle(
-                        //       fontSize: 8,
-                        //       fontStyle: FontStyle.italic,
-                        //       fontWeight: FontWeight.bold,
-                        //       color: Colors.white),
-                        // )
                       ],
                     );
                   }),

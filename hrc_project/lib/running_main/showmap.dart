@@ -19,7 +19,6 @@ import 'package:percent_indicator/percent_indicator.dart';
 
 var strToday;
 late double u_sum_dist;
-late String tmep;
 late int u_sum_time;
 late int number;
 late String u_rc = ' ';
@@ -165,6 +164,7 @@ class _MapPageState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
+    Util ut = new Util();
     return Scaffold(
         body: Stack(children: [
       Container(
@@ -177,43 +177,48 @@ class _MapPageState extends State<MapSample> {
       )),
       Padding(
         padding: const EdgeInsets.only(left: 10, top: 50),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              'image/profile_1.png',
-              width: 40,
-              height: 40,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user_name,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+        child: FutureBuilder(
+          future: getUserData(),
+          builder: (context, snapshot) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  'image/profile_1.png',
+                  width: 40,
+                  height: 40,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user_name,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        getToday(),
+                        style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic),
+                      ),
+                    ],
                   ),
-                  Text(
-                    getToday(),
-                    style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          }
         ),
       ),
       Positioned(
@@ -221,7 +226,7 @@ class _MapPageState extends State<MapSample> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
+              height: MediaQuery.of(context).size.height * 0.13,
             ),
             FutureBuilder(
                 future: getUserData(),
@@ -466,6 +471,7 @@ class _MapPageState extends State<MapSample> {
                       child: Image.asset('image/run_btn.png',
                           width: 100, height: 100),
                       onTap: () {
+                        Navigator.pop(context);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -482,6 +488,7 @@ class _MapPageState extends State<MapSample> {
                       child: Image.asset('image/start_btn.png',
                           width: 60, height: 60),
                       onTap: () {
+                        Navigator.pop(context);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -593,7 +600,7 @@ class _MapPageState extends State<MapSample> {
                                                                       context)
                                                                   .size
                                                                   .height *
-                                                              0.03,
+                                                              0.022,
                                                         ),
                                                         SizedBox(
                                                           width: MediaQuery.of(
@@ -637,7 +644,6 @@ class _MapPageState extends State<MapSample> {
                                                       ],
                                                     ),
                                                   ),
-                                                  //SizedBox(width: MediaQuery.of(context).size.width*0.04,),
                                                   Column(
                                                     children: [
                                                       SizedBox(
@@ -667,7 +673,7 @@ class _MapPageState extends State<MapSample> {
                                                                     0.01,
                                                             animationDuration:
                                                                 2000,
-                                                            percent: 1,
+                                                            percent: ut.calculator_percent(u_sum_dist, 50.0),
                                                             barRadius:
                                                                 Radius.circular(
                                                                     20),
@@ -764,7 +770,7 @@ class _MapPageState extends State<MapSample> {
                                                                       context)
                                                                   .size
                                                                   .height *
-                                                              0.03,
+                                                              0.022,
                                                         ),
                                                         SizedBox(
                                                           width: MediaQuery.of(
@@ -838,7 +844,7 @@ class _MapPageState extends State<MapSample> {
                                                                     0.01,
                                                             animationDuration:
                                                                 2000,
-                                                            percent: 1,
+                                                            percent: ut.calculator_percent(u_sum_time.toDouble(), 14400),
                                                             barRadius:
                                                                 Radius.circular(
                                                                     20),
@@ -935,7 +941,7 @@ class _MapPageState extends State<MapSample> {
                                                                       context)
                                                                   .size
                                                                   .height *
-                                                              0.03,
+                                                              0.022,
                                                         ),
                                                         SizedBox(
                                                           width: MediaQuery.of(
@@ -1008,7 +1014,7 @@ class _MapPageState extends State<MapSample> {
                                                                     0.01,
                                                             animationDuration:
                                                                 2000,
-                                                            percent: 1,
+                                                            percent: ut.calculator_percent(u_rc_distance, 100),
                                                             barRadius:
                                                                 Radius.circular(
                                                                     20),
