@@ -285,14 +285,14 @@ class _WeeklyChartState extends State<WeeklyChart> {
                     Map<String, dynamic> temp =
                         snapshot.data!.data() as Map<String, dynamic>;
                     updates(result, convertTimeStamp(temp['date']),
-                        temp['distance']);
+                        temp['distance'].toDouble());
                     // print("${results.toString()} : $index");
 
-                    setState(() {
-                      Record_Weekly.dist += temp['distance'];
-                      Record_Weekly.t += int.parse(temp['time'].toString());
-                      Record_Weekly.pace += temp['pace'];
-                    });
+                    // setState(() {
+                    //   Record_Weekly.dist += temp['distance'];
+                    //   Record_Weekly.t += int.parse(temp['time'].toString());
+                    //   Record_Weekly.pace += temp['pace'];
+                    // });
 
                     if (currentIndex == testId.length - 1) {
                       mapToList(mps: results, lists: weeks);
@@ -378,8 +378,6 @@ int convertWeeksDaytoKey(String weeksday) {
 }
 
 List<String> testId = [];
-List<double> testDis = [];
-Map<String, dynamic> testMap = {};
 Map<int, double> result = {};
 
 //데이터 가공  : Map으로 저장했던 running data -> FlSpot List로 바꾸기
