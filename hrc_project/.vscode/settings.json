@@ -1,5 +1,6 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
     "git.ignoreLimitWarning": true,
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "cmake.sourceDirectory": "${workspaceFolder}/linux"
 }
