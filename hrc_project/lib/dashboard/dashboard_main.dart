@@ -1,9 +1,13 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hrc_project/dashboard/widget_source/source.dart';
 import 'package:hrc_project/dashboard/record/dailyrun.dart';
 import 'package:hrc_project/dashboard/record/monthly.dart';
 import 'package:hrc_project/dashboard/record/weekly.dart';
 import 'package:hrc_project/dashboard/record/yearly.dart';
+
+import '../dialog_page/show_dialog.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({Key? key}) : super(key: key);
@@ -13,6 +17,49 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
+  bool isExite = true;
+
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (isExite) {
+      isExite = false;
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) {
+            return alternativeDialog(
+              context,
+              200,
+              30,
+              '앱 종료하기',
+              15,
+              '앱을 종료하시겠습니까?',
+              17,
+              Navigator.of(context).pop,
+              SystemNavigator.pop,
+              () {},
+              () {},
+              () {
+                isExite = true;
+              },
+            );
+          });
+    }
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
