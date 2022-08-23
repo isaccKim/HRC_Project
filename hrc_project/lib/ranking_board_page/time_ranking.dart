@@ -253,6 +253,7 @@ class _TimeRankState extends State<TimeRank>
                             duration: const Duration(milliseconds: 600));
                       } else {
                         showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (context) {
                               Future.delayed(const Duration(milliseconds: 1100),
