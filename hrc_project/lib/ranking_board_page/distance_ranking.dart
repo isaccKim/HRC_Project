@@ -253,6 +253,7 @@ class _DistanceRankState extends State<DistanceRank>
                             duration: const Duration(milliseconds: 600));
                       } else {
                         showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (context) {
                               Future.delayed(const Duration(milliseconds: 1100),
