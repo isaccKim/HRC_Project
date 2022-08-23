@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import 'package:fl_chart/fl_chart.dart';
-import 'dart:math';
 
 import 'package:hrc_project/dashboard/widget_source/source.dart';
 import 'package:intl/intl.dart';
@@ -179,7 +177,7 @@ class _MonthlyChartState extends State<MonthlyChart> {
                       return const SizedBox.shrink();
                     }
                   } else {
-                    return Text("connecting");
+                    return SizedBox.shrink();
                   }
                 },
               );
@@ -383,10 +381,10 @@ void mapToList(Map<int, double> mp, List<FlSpot> list) {
       ? lastDayOfMonth(DateTime.now()).toInt()
       : lastDayOfMonth(_selected!).toInt();
   for (int i = 0; i < lastDay; i++) {
-    if (mp.containsKey(i)) {
-      list.add(FlSpot(i.toDouble(), mp[i]!.toDouble()));
+    if (mp.containsKey(i + 1)) {
+      list.add(FlSpot((i + 1).toDouble(), mp[i + 1]!.toDouble()));
     } else {
-      list.add(FlSpot(i.toDouble(), 0));
+      list.add(FlSpot((i + 1).toDouble(), 0));
     }
   }
 }
