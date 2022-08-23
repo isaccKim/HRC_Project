@@ -422,6 +422,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             onTap: () {
                               HapticFeedback.heavyImpact();
                               showDialog(
+                                  barrierDismissible: false,
                                   context: context,
                                   builder: (context) {
                                     return imageDialog(
