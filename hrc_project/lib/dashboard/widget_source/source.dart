@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart';
+import 'package:intl/intl.dart';
 
 BoxDecoration tapindicator = BoxDecoration(
     gradient: const LinearGradient(colors: [
@@ -72,3 +73,27 @@ BoxDecoration boxdeco = BoxDecoration(
     Radius.circular(20.0),
   ),
 );
+String timeTextFormat(int time) {
+  NumberFormat formatter = NumberFormat("00");
+  String hr, mn, sc;
+
+  if (time >= 3600) {
+    int temp = (time / 3600).toInt();
+    hr = formatter.format(temp);
+    int mnTime = ((time % 3600) / 60).toInt();
+    mn = formatter.format(mnTime);
+    sc = formatter.format(time.ceil() % 60);
+  } else if (60 < time && time < 3600) {
+    int temp = (time / 60).toInt();
+
+    hr = '00';
+    mn = formatter.format(temp);
+    sc = formatter.format(time.ceil() % 60);
+  } else {
+    hr = '00';
+    mn = '00';
+    sc = formatter.format(time.ceil() % 60);
+  }
+
+  return "$hr:$mn:$sc";
+}

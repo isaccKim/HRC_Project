@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hrc_project/dashboard/widget_source/source.dart';
 
@@ -15,8 +16,11 @@ class GetDailyData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference data =
-        FirebaseFirestore.instance.collection('test_data');
+    CollectionReference data = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('running record');
+
     return FutureBuilder<DocumentSnapshot>(
         future: data.doc(docsId).get(),
         builder: (context, snapshot) {
@@ -51,7 +55,7 @@ class GetDailyData extends StatelessWidget {
                             Divider(
                                 height: 15, color: Colors.white.withOpacity(0)),
                             Text(
-                              '${runData['distance']} km',
+                              '${runData['distance'].toStringAsFixed(2)} km',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
@@ -67,10 +71,10 @@ class GetDailyData extends StatelessWidget {
                             Divider(
                                 height: 15, color: Colors.white.withOpacity(0)),
                             Text(
-                              '${runData['time']} h',
+                              timeTextFormat(runData['time']),
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -82,7 +86,7 @@ class GetDailyData extends StatelessWidget {
                             Divider(
                                 height: 15, color: Colors.white.withOpacity(0)),
                             Text(
-                              '${runData['pace']} m/s',
+                              '${runData['pace'].toStringAsFixed(2)} m/s',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,

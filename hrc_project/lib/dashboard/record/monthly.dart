@@ -98,21 +98,14 @@ class _MonthlyState extends State<Monthly> {
               ],
             ),
           ),
+          const Divider(height: 20),
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: MediaQuery.of(context).size.width * 0.05,
             ),
             child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: MediaQuery.of(context).size.height * 0.45,
                 child: MonthlyChart()),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.05,
-            ),
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.25,
-                child: MonthlyRunRecord()),
           ),
         ],
       ),
@@ -137,9 +130,9 @@ class _MonthlyChartState extends State<MonthlyChart> {
     monthly.clear();
     runningRecord.clear();
 
-    double monthlyDistance = 0;
-    int monthlyrunningTime = 0;
-    double monthlyPace = 0;
+    double sumDist = 0;
+    int sumTime = 0;
+    double sumPace = 0;
 
     return FutureBuilder(
       future: getMonthlyIdData(),
@@ -160,17 +153,89 @@ class _MonthlyChartState extends State<MonthlyChart> {
                     recordUpdate(runningRecord, temp['date'],
                         double.parse(temp['distance'].toStringAsFixed(2)));
 
+                    sumDist +=
+                        double.parse(temp['distance'].toStringAsFixed(2));
+                    sumTime += double.parse(temp['time'].toString()).toInt();
+                    sumPace += double.parse(temp['pace'].toStringAsFixed(2));
+
                     if (currentIndex == runningId.length - 1) {
                       mapToList(runningRecord, monthly);
 
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.25,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.05),
-                          child: LineChart(mainData()),
-                        ),
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.25,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.05),
+                              child: LineChart(mainData()),
+                            ),
+                          ),
+                          Divider(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.035),
+// sum of year record
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  ChartPage_Distance(context),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  Text(
+                                    '${sumDist.toStringAsFixed(2)} km',
+                                    style: const TextStyle(
+                                        color:
+                                            // Color.fromARGB(255, 99, 214, 124),
+                                            Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  ChartPage_Running_duration(context),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  Text(
+                                    '$sumTime hr',
+                                    style: const TextStyle(
+                                        color:
+                                            // Color.fromARGB(255, 99, 214, 124),
+                                            Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  ChartPage_Running_pace(context),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  Text(
+                                    '${(double.parse(sumPace.toStringAsFixed(2)) / runningId.length).toStringAsFixed(2)} m/s',
+                                    style: const TextStyle(
+                                        color:
+                                            // Color.fromARGB(255, 99, 214, 124),
+                                            Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
                       );
                     } else {
                       currentIndex++;
@@ -401,70 +466,5 @@ double lastDayOfMonth(DateTime selectMonth) {
       return 30;
     default:
       return 31;
-  }
-}
-
-// --------------------------------- monthlyRunning Record Widget ---------------------------------
-class MonthlyRunRecord extends StatefulWidget {
-  MonthlyRunRecord({Key? key}) : super(key: key);
-
-  @override
-  State<MonthlyRunRecord> createState() => _MonthlyRunRecordState();
-}
-
-class _MonthlyRunRecordState extends State<MonthlyRunRecord> {
-  int currentIndex = 0;
-  double sumDist = 0;
-  int sumTime = 0;
-  double sumPace = 0;
-
-  Widget _MonthlyReocd(BuildContext context) {
-    return FutureBuilder(
-      future: getMonthlyIdData(),
-      builder: (context, snapshot) {
-        final data = FirebaseFirestore.instance.collection('test_data');
-        if (snapshot.connectionState == ConnectionState.done) {
-          return ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: runningId.length,
-              itemBuilder: (context, index) {
-                return FutureBuilder<DocumentSnapshot>(
-                  future: data.doc(runningId[index]).get(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      Map<String, dynamic> temp =
-                          snapshot.data!.data() as Map<String, dynamic>;
-
-                      sumDist +=
-                          double.parse(temp['distance'].toStringAsFixed(2));
-
-                      sumTime += double.parse(temp['time'].toString()).toInt();
-
-                      // sumPace += double.parse(temp['pace'].toStringAsFixed(2));
-
-                      if (currentIndex == runningId.length - 1) {
-                        sumDist = double.parse(sumDist.toStringAsFixed(2));
-                        currentIndex = -1;
-                        return Text('$sumDist : $sumTime');
-                      } else {
-                        currentIndex++;
-                        return const SizedBox.shrink();
-                      }
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                );
-              });
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _MonthlyReocd(context);
   }
 }
