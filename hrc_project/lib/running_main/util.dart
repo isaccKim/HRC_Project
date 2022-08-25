@@ -30,6 +30,16 @@ class  Util{
      }
     return percent;
   }
+  
+  String secondsToString(int n){
+    String t_time = '';
+    String sec;
+    String min;
+    String hour;
+    int temp ;
+
+    return t_time;
+  }
 }
 
   
