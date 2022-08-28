@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -28,9 +29,14 @@ double findMaxinMap(Map<int, double> mp) {
 
 Future getYearlyIdData() async {
   yearDocsId.clear();
+  final user = await FirebaseAuth.instance.currentUser;
+  final runningData = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user!.uid)
+      .collection('running record');
+
   if (_selected != null) {
-    await FirebaseFirestore.instance
-        .collection('test_data')
+    await runningData
         .orderBy('date', descending: false)
         .where('date', isGreaterThan: DateTime(_selected!.year - 1, 12, 31))
         .where('date',
@@ -42,8 +48,7 @@ Future getYearlyIdData() async {
               yearDocsId.add(element.reference.id);
             })));
   } else {
-    await FirebaseFirestore.instance
-        .collection('test_data')
+    await runningData
         .orderBy('date', descending: false)
         .where('date', isGreaterThan: DateTime(DateTime.now().year - 1, 12, 31))
         .where('date', isLessThanOrEqualTo: DateTime(DateTime.now().year + 1))
@@ -224,7 +229,10 @@ class _YearChartState extends State<YearChart> {
     return FutureBuilder(
       future: getYearlyIdData(),
       builder: (context, snapshot) {
-        final data = FirebaseFirestore.instance.collection('test_data');
+        final data = FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection('running record');
 
         if (snapshot.connectionState == ConnectionState.done) {
           return ListView.builder(
@@ -292,7 +300,7 @@ class _YearChartState extends State<YearChart> {
                                           MediaQuery.of(context).size.height *
                                               0.02),
                                   Text(
-                                    '$sumTime hr',
+                                    timeTextFormat(sumTime),
                                     style: const TextStyle(
                                         color:
                                             // Color.fromARGB(255, 99, 214, 124),

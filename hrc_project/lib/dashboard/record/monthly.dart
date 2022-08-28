@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -138,7 +139,11 @@ class _MonthlyChartState extends State<MonthlyChart> {
       future: getMonthlyIdData(),
       builder: (context, snapshot) {
         // data : test data , 실제데이터로 수정 필요
-        final data = FirebaseFirestore.instance.collection('test_data');
+        final CollectionReference data = FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection('running record');
+
         if (snapshot.connectionState == ConnectionState.done) {
           return ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
@@ -205,7 +210,7 @@ class _MonthlyChartState extends State<MonthlyChart> {
                                           MediaQuery.of(context).size.height *
                                               0.02),
                                   Text(
-                                    '$sumTime hr',
+                                    timeTextFormat(sumTime),
                                     style: const TextStyle(
                                         color:
                                             // Color.fromARGB(255, 99, 214, 124),
@@ -402,10 +407,15 @@ Map<int, double> runningRecord = {};
 List<FlSpot> monthly = [];
 
 Future getMonthlyIdData() async {
+  final user = await FirebaseAuth.instance.currentUser;
+  final runningData = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user!.uid)
+      .collection('running record');
+
   runningId.clear();
   if (_selected != null) {
-    await FirebaseFirestore.instance
-        .collection('test_data')
+    await runningData
         .orderBy('date', descending: false)
         .where('date', isGreaterThan: _selected)
         .where('date',
@@ -416,8 +426,7 @@ Future getMonthlyIdData() async {
               runningId.add(element.reference.id);
             })));
   } else {
-    await FirebaseFirestore.instance
-        .collection('test_data')
+    await runningData
         .orderBy('date', descending: false)
         .where('date',
             isGreaterThan: DateTime(DateTime.now().year, DateTime.now().month))

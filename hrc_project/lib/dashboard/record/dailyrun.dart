@@ -183,7 +183,7 @@ class DailyBoxDesign extends StatelessWidget {
               ],
             );
           }
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         },

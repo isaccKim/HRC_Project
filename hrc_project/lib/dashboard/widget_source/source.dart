@@ -73,6 +73,7 @@ BoxDecoration boxdeco = BoxDecoration(
     Radius.circular(20.0),
   ),
 );
+
 String timeTextFormat(int time) {
   NumberFormat formatter = NumberFormat("00");
   String hr, mn, sc;
