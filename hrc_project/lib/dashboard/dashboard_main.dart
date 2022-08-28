@@ -1,4 +1,6 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hrc_project/dashboard/widget_source/source.dart';
@@ -6,6 +8,7 @@ import 'package:hrc_project/dashboard/record/dailyrun.dart';
 import 'package:hrc_project/dashboard/record/monthly.dart';
 import 'package:hrc_project/dashboard/record/weekly.dart';
 import 'package:hrc_project/dashboard/record/yearly.dart';
+import 'package:intl/intl.dart';
 
 import '../dialog_page/show_dialog.dart';
 
@@ -17,6 +20,25 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
+  String getToday() {
+    DateTime now = DateTime.now();
+    DateFormat formatter = DateFormat('#yyyy-MM-dd-EEEE');
+    String strToday = formatter.format(now);
+    return strToday;
+  }
+
+  String? user_name;
+  Future getUserName() async {
+    final user = await FirebaseAuth.instance.currentUser;
+    final userData =
+        await FirebaseFirestore.instance.collection('users').doc(user!.uid);
+    await userData.get().then(
+          (value) => {
+            user_name = value['user_name'],
+          },
+        );
+  }
+
   bool isExite = true;
 
   @override
@@ -86,18 +108,28 @@ class _DashBoardState extends State<DashBoard> {
                     padding: EdgeInsets.only(top: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'test',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      children: [
+                        FutureBuilder(
+                          future: getUserName(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return Text(
+                                user_name!,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          },
                         ),
                         Text(
-                          'test',
-                          style: TextStyle(
+                          getToday(),
+                          style: const TextStyle(
                               fontSize: 10,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

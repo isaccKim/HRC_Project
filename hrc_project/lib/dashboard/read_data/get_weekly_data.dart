@@ -23,7 +23,7 @@ class _WeekSelectionInPickerState extends State<WeekSelectionInPicker> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.53,
+      height: MediaQuery.of(context).size.height * 0.4,
       child: Column(
         children: [
           SfDateRangePicker(
@@ -31,27 +31,23 @@ class _WeekSelectionInPickerState extends State<WeekSelectionInPicker> {
             view: DateRangePickerView.month,
             selectionMode: DateRangePickerSelectionMode.range,
             onSelectionChanged: selectionChanged,
-            monthViewSettings:
-                DateRangePickerMonthViewSettings(enableSwipeSelection: false),
+            monthViewSettings: const DateRangePickerMonthViewSettings(
+                enableSwipeSelection: false),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                  '${formatTimeStamp(titleFirstOfWeek)}\nEndOfWeek : ${formatTimeStamp(titleEndOfWeek)}'),
               // Button - select the weeks
               TextButton(
                 onPressed: () {
                   setState(() {
-                    // result.clear();
-
                     titleFirstOfWeek = date1;
                     titleEndOfWeek = date2;
-                    print('${formatTimeStamp(titleFirstOfWeek)}');
+
                     Navigator.of(context).pop();
                   });
                 },
-                child: Text('test'),
+                child: const Text('Select'),
               ),
             ],
           ),
@@ -122,21 +118,27 @@ class _SelectDateState extends State<SelectDate> {
             context: context,
             builder: (context) {
               return Dialog(
-                child: SizedBox(height: 500, child: WeekSelectionInPicker()),
+                child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.53,
+                    child: WeekSelectionInPicker()),
               );
             });
       },
       child: Row(
         children: [
-          grad.GradientText(
+          Text(
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-            gradient: textGradient,
             '${formatTimeStamp(titleFirstOfWeek)} ~ ${formatTimeStamp(titleEndOfWeek)}',
           ),
-          const Icon(Icons.calendar_month_rounded),
+          const SizedBox(width: 10),
+          const Icon(
+            Icons.calendar_month_rounded,
+            color: Colors.white,
+          ),
         ],
       ),
     );
