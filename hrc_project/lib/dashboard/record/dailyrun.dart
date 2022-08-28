@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hrc_project/dashboard/read_data/get_daily_data.dart';
 import 'package:hrc_project/dashboard/widget_source/source.dart';
 import 'package:intl/intl.dart';
@@ -11,19 +12,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final List<String> entries = <String>[];
-
-Future addTestData(
-  double dist,
-  double t,
-  double sp,
-) async {
-  await FirebaseFirestore.instance.collection('test_data').add({
-    'distance': dist,
-    'time': t,
-    'pace': sp,
-    'date': DateTime.now(),
-  });
-}
 
 class TextFormat extends grad.GradientText {
   TextFormat(super.data, {Key? key, super.style, required super.gradient});
@@ -40,9 +28,13 @@ class _DailyMainState extends State<DailyMain> {
   List<String> docsId = [];
 
   Future getRunDocs() async {
+    final user = await FirebaseAuth.instance.currentUser;
+    final runningData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .collection('running record');
     docsId.clear();
-    await FirebaseFirestore.instance
-        .collection('test_data')
+    await runningData
         //  데이터 정렬!!
         .orderBy('date', descending: true)
         .get()
@@ -107,8 +99,10 @@ class DailyBoxDesign extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference data =
-        FirebaseFirestore.instance.collection('test_data');
+    CollectionReference data = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('running record');
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: MediaQuery.of(context).size.width * 0.07,
@@ -127,35 +121,27 @@ class DailyBoxDesign extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        grad.GradientText(
+                        // ignore: prefer_const_constructors
+                        Text(
                           'Daily Running',
                           style: const TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          gradient: textGradient,
                         ),
                         const SizedBox(height: 10),
-                        TextFormat(
+                        Text(
                           formatTimeStamp(runData['date']),
                           style: GoogleFonts.openSans(
                               textStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
+                            color: Colors.white,
                           )),
-                          gradient: textGradient,
                         )
                       ],
                     ),
-                    IconButton(
-                        onPressed: () {
-                          double testDist = Random().nextInt(10).toDouble();
-                          double testTime = Random().nextInt(4).toDouble();
-                          double testSp = Random().nextInt(5).toDouble();
-
-                          addTestData(testDist, testTime, testSp);
-                        },
-                        icon: const Icon(Icons.add_circle)),
                   ],
                 ),
                 //traking images
@@ -175,7 +161,7 @@ class DailyBoxDesign extends StatelessWidget {
                     const Divider(height: 10),
                     //time
                     Text(
-                      'Time :    ${runData['time']} h',
+                      'Time :    ${timeTextFormat(runData['time'])}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 22,
@@ -197,7 +183,7 @@ class DailyBoxDesign extends StatelessWidget {
               ],
             );
           }
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         },

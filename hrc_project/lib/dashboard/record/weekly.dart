@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as grad;
 import 'package:fl_chart/fl_chart.dart';
@@ -78,24 +79,9 @@ class _WeeklyState extends State<Weekly> {
               horizontal: MediaQuery.of(context).size.width * 0.05,
             ),
             child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: MediaQuery.of(context).size.height * 0.45,
                 child: const WeeklyChart()),
           ),
-          Divider(height: MediaQuery.of(context).size.height * 0.035),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            Column(children: [
-              ChartPage_Distance(context),
-              Divider(height: 15, color: Colors.white.withOpacity(0))
-            ]),
-            Column(children: [
-              ChartPage_Running_duration(context),
-              Divider(height: 15, color: Colors.white.withOpacity(0))
-            ]),
-            Column(children: [
-              ChartPage_Running_pace(context),
-              Divider(height: 15, color: Colors.white.withOpacity(0))
-            ]),
-          ])
         ],
       ),
     );
@@ -251,11 +237,18 @@ class _WeeklyChartState extends State<WeeklyChart> {
 
   Future getData() async {
     testId.clear();
-    await FirebaseFirestore.instance
-        .collection('test_data')
+    final user = await FirebaseAuth.instance.currentUser;
+    final runningData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .collection('running record');
+
+    await runningData
         .orderBy('date', descending: false)
         .where('date', isGreaterThan: titleFirstOfWeek)
-        .where('date', isLessThanOrEqualTo: titleEndOfWeek)
+        .where('date',
+            isLessThanOrEqualTo: DateTime(titleEndOfWeek.year,
+                titleEndOfWeek.month, titleEndOfWeek.day + 1))
         .get()
         .then(((value) => value.docs.forEach((element) {
               testId.add(element.reference.id);
@@ -263,16 +256,21 @@ class _WeeklyChartState extends State<WeeklyChart> {
   }
 
   Widget _MakeChart(Map<int, double> results, BuildContext context) {
-    Record_Weekly.dist = 0;
-    Record_Weekly.pace = 0;
-    Record_Weekly.t = 0;
+    double sumDist = 0;
+    int sumTime = 0;
+    double sumPace = 0;
+
     int currentIndex = 0;
     results.clear();
     weeks.clear();
     return FutureBuilder(
       future: getData(),
       builder: (context, snapshot) {
-        final data = FirebaseFirestore.instance.collection('test_data');
+        final CollectionReference data = FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection('running record');
+
         if (snapshot.connectionState == ConnectionState.done) {
           return ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
@@ -286,27 +284,91 @@ class _WeeklyChartState extends State<WeeklyChart> {
                         snapshot.data!.data() as Map<String, dynamic>;
                     updates(result, convertTimeStamp(temp['date']),
                         temp['distance'].toDouble());
-                    // print("${results.toString()} : $index");
-
-                    // setState(() {
-                    //   Record_Weekly.dist += temp['distance'];
-                    //   Record_Weekly.t += int.parse(temp['time'].toString());
-                    //   Record_Weekly.pace += temp['pace'];
-                    // });
-
-                    if (currentIndex == testId.length - 1) {
+                    sumDist +=
+                        double.parse(temp['distance'].toStringAsFixed(2));
+                    sumTime += double.parse(temp['time'].toString()).toInt();
+                    sumPace += double.parse(temp['pace'].toStringAsFixed(2));
+                    if (currentIndex == testId.length - 1 || testId.isEmpty) {
                       mapToList(mps: results, lists: weeks);
-                      // print(weeks.toString());
-                      return SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.23,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.05),
-                            child: LineChart(mainData()),
-                          ));
+
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.23,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.05),
+                              child: LineChart(mainData()),
+                            ),
+                          ),
+                          Divider(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.04),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  ChartPage_Distance(context),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  Text(
+                                    '${sumDist.toStringAsFixed(2)} km',
+                                    style: const TextStyle(
+                                        color:
+                                            // Color.fromARGB(255, 99, 214, 124),
+                                            Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  ChartPage_Running_duration(context),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  Text(
+                                    timeTextFormat(sumTime),
+                                    style: const TextStyle(
+                                        color:
+                                            // Color.fromARGB(255, 99, 214, 124),
+                                            Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  ChartPage_Running_pace(context),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  Text(
+                                    '${(double.parse(sumPace.toStringAsFixed(2)) / testId.length).toStringAsFixed(2)} m/s',
+                                    style: const TextStyle(
+                                        color:
+                                            // Color.fromARGB(255, 99, 214, 124),
+                                            Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
+                      );
                     } else {
                       currentIndex++;
+
                       return const SizedBox.shrink();
                     }
                   } else {
@@ -355,8 +417,9 @@ void updates(Map<int, double> mp, String weeksday, double dist) {
   int keys = convertWeeksDaytoKey(weeksday);
   if (mp.containsKey(keys)) {
     mp.update(keys, (value) => value + dist);
-  } else
+  } else {
     mp[keys] = dist;
+  }
 }
 
 int convertWeeksDaytoKey(String weeksday) {
@@ -393,8 +456,4 @@ void mapToList({required Map<int, double> mps, required List<FlSpot> lists}) {
 
 //weekly data 가져오기
 
-class Record_Weekly {
-  static double dist = 0;
-  static double pace = 0;
-  static int t = 0;
-}
+
