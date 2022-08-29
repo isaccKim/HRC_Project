@@ -66,7 +66,7 @@ Future getUserData() async {
             running_num.add(doccument.reference.id);
           },
         ),
-      );
+      );  
 
   number = running_num.length;
   double temp_dist = 1;
