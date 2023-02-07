@@ -45,6 +45,13 @@ HRC는 한동 러닝어플로 GPS Tracking 및 RC(기숙사),거리,시간별 �
 
 <br/>
 
+## 🏃‍♂️ 기능 구현                                                                                                        
+- GPS Tracking, Marking
+- 개인 로그 차트 
+- 거리,소속,시간 별 랭킹 차트
+- RC 변경 기능
+- 로그인, 로그아웃, 회원탈퇴 
+
 ![image](https://user-images.githubusercontent.com/98035984/216911298-f36b86ff-3a7c-4b37-bdb6-82b15cf54d8c.png)
 
 ![image](https://user-images.githubusercontent.com/98035984/216911314-895889d9-4191-45ef-b222-4ddbb5a4ba6f.png)
