@@ -17,16 +17,32 @@
  <img src="https://img.shields.io/badge/Markdown-000000?style=flat-square&logo=Markdown&logoColor="white"/>
 
 </div>
+
+<br/>
+## :bulb: 소개
+HRC는 한동 러닝어플로 GPS Tracking 및 RC(기숙사),거리,시간별 랭킹차트, 개인 기록을 확인할 수 있는 어플입니다.
+
+
+## :memo: 필요성
+1. 시중에 나와있는 여러 런닝어플로 분산되어 있는 사용자들을 하나로 합쳐 활동할 수 있는 커뮤니티 형성
+2. 한동대학교에서 서로 경쟁하며 운동을 할 수 있게 하는 어플들의 부재
+3. 매해 열리는 사랑의 마라톤 행사와 런닝과 관련된 다양한 동아리들을 위한 어플 개발 
+
+
+
+<br/>
+
   
-## 🏃‍♂️ CRA 방프
- - 석원
- - 형진
- - 한결
+## 🏃‍♂️ 개발 멤버 
+ - 석원 : BackEnd/FrontEnd
+ - 형진 : BackEnd/FrontEnd
+ - 한결 : BackEnd/FrontEnd
 
 <br/>
 
 ## 🏃‍♂️ 소속
   - 한동대학교 전산전자 공학부
+  - CRA
 
 <br/>
 
@@ -39,32 +55,5 @@
 
 
 
-
-## 🏃‍♂️Code_convention
-```dart
-import 'package:flutter/material.dart';
-
-class Name_def{
-  //user
-  double ?height;
-  double ?weight;
-  String ?username;
-  String ?email;
-  String ?pw;
-  double ?sum_distance;
-  double ?sum_time;
-  String ?r_title;
-  int ?user_image;
-  String user_RC;
-  
-  //running
-  double ?r_distance;
-  double ?r_time;
-  double ?r_pace;
-  double ?r_kacl;
-  String ?r_date;
-  String ?r_title;
-  int ?r_strength;
-  
-}
-```
+## 💻 Code
+- https://github.com/isaccKim/HRC_Project/
