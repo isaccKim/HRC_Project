@@ -24,19 +24,24 @@ HRC는 한동대 러닝어플로 GPS Tracking을 이용한 런닝 기록을 측�
 
 ## :memo: 필요성
 1. 시중에 나와있는 여러 런닝어플로 분산되어 있는 사용자들을 하나로 합쳐 활동할 수 있는 커뮤니티 형성
-2. 한동대학교에서 기숙사내에 서로 경쟁하며 운동을 할 수 있게 하는 어플들의 부재
-3. 러닝 목표를 애니메이션으로 시각화 하여 흥미 증진
+2. 한동대학교에서 서로 경쟁하며 운동을 할 수 있게 하는 어플들의 부재
+3. 매해 열리는 사랑의 마라톤 행사와 런닝과 관련된 다양한 동아리들을 위한 어플 개발 
+
+
+
 <br/>
 
   
 ## 🏃‍♂️ 개발 멤버 
- - 석원 : BackEnd/FrontEnd - GPS tracking, Google map, UX/UI design
- - 영관 : BackEnd/FrontEnd - Graph Visualizaion, UX/UI design
+ - 석원 : BackEnd/FrontEnd
+ - 형진 : BackEnd/FrontEnd
+ - 한결 : BackEnd/FrontEnd
 
 <br/>
 
 ## 🏃‍♂️ 소속
   - 한동대학교 전산전자 공학부
+  - CRA
 
 <br/>
 
@@ -44,6 +49,7 @@ HRC는 한동대 러닝어플로 GPS Tracking을 이용한 런닝 기록을 측�
 - GPS Tracking, Marking
 - 개인 로그 차트 
 - 거리,소속,시간 별 랭킹 차트
+- RC 변경 기능
 - 로그인, 로그아웃, 회원탈퇴 
 
 ![image](https://user-images.githubusercontent.com/98035984/216911298-f36b86ff-3a7c-4b37-bdb6-82b15cf54d8c.png)
